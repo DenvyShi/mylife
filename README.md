@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 易經占卜 | I Ching Fortune
 
-## Getting Started
+線上易經蓍草占卜系統，完整 64 卦數據，匿名使用。
 
-First, run the development server:
+🔗 **線上訪問：** https://mylife.first.pet
+
+---
+
+## 功能
+
+- 🧙 **64 卦完整數據** — 卦辭、爻辭、象辭、五行含義
+- 🔮 **蓍草占卜法** — 模擬傳統 18 次操作，動畫演示
+- 📊 **五維分析** — 總論/財運/事業/感情/健康
+- 🔒 **完全匿名** — 客戶端計算，零數據回傳伺服器
+- 🌐 **響應式設計** — 支持桌面和移動設備
+
+---
+
+## 技術棧
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **部署:** Cloudflare Tunnel → mylife.first.pet
+
+---
+
+## 本地開發
 
 ```bash
+# 安裝依賴
+npm install
+
+# 啟動開發服務器
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# 訪問 http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 部署
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 部署到現有伺服器
 
-## Learn More
+```bash
+# 1. 安裝 Node.js 20+
+# 2. npm install
+# 3. npm run build
+# 4. 使用 PM2 啟動：
 
-To learn more about Next.js, take a look at the following resources:
+pm2 start npm --name "iching-fortune" -- start
+pm2 save
+pm2 startup
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Cloudflare Tunnel 部署
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# 1. 創建 Cloudflare Tunnel
+cloudflared tunnel create iching
 
-## Deploy on Vercel
+# 2. 配置隧道
+cat > ~/.cloudflared/config.yml << EOF
+url: http://localhost:3000
+tunnel: <TUNNEL_ID>
+credentials-file: /home/denvy/.cloudflared/<TUNNEL_ID>.json
+EOF
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 3. 啟動
+cloudflared tunnel --config ~/.cloudflared/config.yml run iching
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# 4. 配置 DNS 路由
+cloudflared tunnel route dns <TUNNEL_NAME> your-domain.com
+```
+
+---
+
+## 項目結構
+
+```
+src/
+├── app/            # Next.js App Router 頁面
+│   ├── page.tsx    # 主頁面
+│   ├── layout.tsx  # 佈局
+│   └── globals.css # 全局樣式
+├── data/
+│   └── hexagrams.ts  # 64 卦完整數據
+└── lib/
+    └── divination.ts # 蓍草占卜算法
+```
+
+---
+
+## License
+
+MIT
