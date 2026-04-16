@@ -1,35 +1,35 @@
-// 64卦完整數據 - 基於《周易》正經
-// 卦象規則：六爻從下往上數，☰ 為九（陽），☷ 為六（陰）
+// Complete 64 hexagrams data - Based on Zhouyi (周易)
+// Hexagram rules: Six lines read from bottom to top, ☰ is nine (yang), ☷ is six (yin)
 
 export interface HexagramLine {
-  judgment: string;      // 爻辭
-  luck: 'yang' | 'yin';  // 老陽(9)、少陽(7) = yang；老陰(6)、少陰(8) = yin
-  isChanging: boolean;   // 是否為動爻
+  judgment: string;      // Line judgment text
+  luck: 'yang' | 'yin';  // old-yang(9), young-yang(7) = yang; old-yin(6), young-yin(8) = yin
+  isChanging: boolean;   // Is changing line
 }
 
 export interface Hexagram {
-  id: number;           // 卦序（1-64）
-  name: string;         // 卦名
-  symbol: string;       // 卦象符號（☰☷）
-  above: string;        // 上卦（外卦）
-  below: string;        // 下卦（內卦）
-  guaMeaning: string;   // 卦象含義
-  judgment: string;     // 卦辭
-  judgmentTitle: string; // 彖曰標題
-  image: string;         // 象曰
-  trigrams: string;     // 上下卦組合含義
+  id: number;           // Hexagram number (1-64)
+  name: string;         // Hexagram name
+  symbol: string;       // Hexagram symbol (☰☷)
+  above: string;        // Upper trigram (outer卦)
+  below: string;        // Lower trigram (inner卦)
+  guaMeaning: string;   // Hexagram meaning
+  judgment: string;     // Hexagram judgment (卦辭)
+  judgmentTitle: string; // Tuan commentary title (彖曰)
+  image: string;         // Image commentary (象曰)
+  trigrams: string;     // Upper/lower trigram combination meaning
   
-  // 六爻（從初爻到上爻，index 0 = 初爻，index 5 = 上爻）
+  // Six lines (from first to sixth line, index 0 = first, index 5 = sixth)
   lines: HexagramLine[];
   
-  // 變卦信息（當某爻變化時）
-  nuclear?: string;     // 之卦（變卦）卦名
+  // Changed hexagram info (when a line changes)
+  nuclear?: string;     // Nuclear hexagram (之卦/變卦) name
   
-  fortune: string;       // 總論運勢
-  wealth: string;        // 財運
-  career: string;        // 事業
-  relationships: string; // 感情
-  health: string;        // 健康
+  fortune: string;       // Overall fortune
+  wealth: string;        // Wealth
+  career: string;        // Career
+  relationships: string; // Relationships
+  health: string;        // Health
 }
 
 export const hexagrams: Hexagram[] = [
@@ -1635,12 +1635,12 @@ export const hexagrams: Hexagram[] = [
   }
 ];
 
-// 根據卦象符號查找卦
+// Find hexagram by symbol
 export function getHexagramBySymbol(symbol: string): Hexagram | undefined {
   return hexagrams.find(h => h.symbol === symbol);
 }
 
-// 根據卦序查找卦
+// Find hexagram by number
 export function getHexagramById(id: number): Hexagram | undefined {
   return hexagrams.find(h => h.id === id);
 }

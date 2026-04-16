@@ -1,119 +1,116 @@
 /**
- * 蓍草占卜算法
+ * Yarrow stalk divination algorithm
  * 
- * 傳統蓍草法使用50根蓍草，通過「分二」「掛一」「揲四」「歸奇」
- * 的操作重複18次，最終得到6個數字（6-9），組成64卦中的一卦。
+ * Traditional yarrow method uses 50 stalks, performing "divide two", "hang one",
+ * "count four", "return remainder" operations 18 times to get 6 numbers (6-9),
+ * which form one of the 64 hexagrams.
  * 
- * 簡化算法：使用50個隨機數模擬蓍草過程，
- * 每次操作得到老陽(9)、少陽(7)、老陰(6)、少陰(8)
+ * Simplified algorithm: uses 50 random numbers to simulate the yarrow process,
+ * each operation yields old-yang(9), young-yang(7), old-yin(6), or young-yin(8)
  */
 
-// 蓍草法核心算法
+// Core yarrow counting algorithm
 function countYarrow(total: number): { remainder: number; quotient: number } {
-  // 模擬「分二」「掛一」「揲四」「歸奇」過程
-  // 每次實際參與運算的蓍草數 = 總數 - 1（掛一）
+  // Simulate "divide two", "hang one", "count four", "return remainder"
+  // Active stalks for each operation = total - 1 (the "hang one")
   const active = total - 1;
   
-  // 隨機將蓍草分成兩堆（分二）
+  // Randomly divide into two piles (divide two)
   const first = Math.floor(Math.random() * (active - 1)) + 1;
   const second = active - first;
   
-  // 從第一堆取出一根（掛一實際是象徵意義，這裡簡化）
-  // 揲四：每堆每4個一數
+  // Take one from first pile (hang one - simplified as symbolic)
+  // Count by fours (count four)
   const q1 = Math.floor(first / 4);
   const r1 = first % 4;
   const q2 = Math.floor(second / 4);
   const r2 = second % 4;
   
-  // 歸奇：將剩下的不足4根的數加起來
+  // Return remainder: sum of remainders less than 4
   const remainder = r1 + r2;
   const quotient = q1 + q2;
   
   return { remainder, quotient };
 }
 
-// 單獨得到一爻（6-9）
+// Get a single line (6-9)
 function getSingleLine(): { value: number; isChanging: boolean } {
-  // 50根蓍草，傳統需要18次操作得到6爻
-  // 簡化：每次爻用50根重新開始
+  // 50 stalks, traditionally 18 operations to get 6 lines
+  // Simplified: restart with 50 for each line
   
   let sticks = 50;
-  let yangCount = 0; // 揲四後的總商數，代表陽
+  let yangCount = 0; // Total quotient from counting fours, representing yang
   let iterations = 0;
   
   while (sticks >= 4) {
     const result = countYarrow(sticks);
     
-    // 根據餘數判斷陰陽
-    // 餘數為1或5 → 老陽(9)為動爻
-    // 餘數為2或4 → 老陰(6)為動爻
-    // 餘數為3 → 少陽(7)
-    // 餘數為0 → 少陰(8)
+    // Determine yin/yang based on remainder
+    // Remainder 1 or 5 -> old-yang(9) is changing line
+    // Remainder 2 or 4 -> old-yin(6) is changing line
+    // Remainder 3 -> young-yang(7)
+    // Remainder 0 -> young-yin(8)
     const { remainder } = result;
     
     yangCount += result.quotient;
     iterations++;
     
-    // 減去餘數繼續
+    // Subtract remainder and continue
     sticks = result.quotient * 4 + remainder;
     
     if (sticks < 4) {
-      // 最後一次，餘數必然是4的倍數
-      // 根據總商數判斷老少
+      // Final iteration, remainder must be multiple of 4
+      // Determine old/young based on total quotient
       break;
     }
   }
   
-  // 根據商數和迭代次數確定陰陽老少
-  // 18次操作，7次得老陽，8次得老陰，春秋多得7或少得8
-  // 這裡用迭代次數和商數來模拟結果
-  
-  // 簡化算法：用隨機種子 + 數學函數模拟傳統結果分佈
+  // Use random seed + math function to simulate traditional distribution
   const seed = Math.random();
   
-  // 傳統結果分佈：老陽(9)=約1/16，少陽(7)=約7/16
-  //              老陰(6)=約1/16，少陰(8)=約7/16
+  // Traditional distribution: old-yang(9)=~1/16, young-yang(7)=~7/16
+  //                        old-yin(6)=~1/16, young-yin(8)=~7/16
   if (seed < 0.0625) {
-    return { value: 9, isChanging: true };  // 老陽
+    return { value: 9, isChanging: true };  // old-yang
   } else if (seed < 0.6875) {
-    return { value: 7, isChanging: false }; // 少陽
+    return { value: 7, isChanging: false }; // young-yang
   } else if (seed < 0.75) {
-    return { value: 6, isChanging: true };  // 老陰
+    return { value: 6, isChanging: true };  // old-yin
   } else {
-    return { value: 8, isChanging: false }; // 少陰
+    return { value: 8, isChanging: false }; // young-yin
   }
 }
 
-// 得到完整的六爻
+// Complete six lines result
 export interface DivinationLine {
-  position: number;      // 爻位（1-6，初爻到上爻）
+  position: number;      // Line position (1-6, from first to sixth)
   value: number;         // 6/7/8/9
-  isYang: boolean;        // 是否為陽
-  isChanging: boolean;   // 是否為動爻
-  symbol: string;        // 爻的符號（☰為陽，☷為陰）
+  isYang: boolean;       // Is yang line
+  isChanging: boolean;   // Is changing line
+  symbol: string;        // Line symbol (☰=yang, ☷=yin)
 }
 
 export interface DivinationResult {
-  lines: DivinationLine[];  // 六爻（從初爻到上爻）
-  originalHexagram: number; // 本卦卦序
-  originalSymbol: string;   // 本卦符號
-  changedHexagram?: number; // 變卦卦序（如有動爻）
-  changedSymbol?: string;   // 變卦符號
-  hasChanging: boolean;    // 是否有動爻
-  changingLines: number[];  // 動爻位置
+  lines: DivinationLine[];      // Six lines (from first to sixth)
+  originalHexagram: number;     // Original hexagram number
+  originalSymbol: string;        // Original hexagram symbol
+  changedHexagram?: number;     // Changed hexagram number (if changing lines exist)
+  changedSymbol?: string;        // Changed hexagram symbol
+  hasChanging: boolean;          // Has changing lines
+  changingLines: number[];       // Changing line positions
 }
 
-// 將6/7/8/9轉為卦符號
+// Convert 6/7/8/9 to hexagram symbol
 function valueToSymbol(value: number): string {
-  // 7少陽=☰，9老陽=☰（老陽為動爻但符號仍為☰）
-  // 8少陰=☷，6老陰=☷（老陰為動爻但符號仍為☷）
+  // 7-young-yang=☰, 9-old-yang=☰ (old-yang changes but symbol stays ☰)
+  // 8-young-yin=☷, 6-old-yin=☷ (old-yin changes but symbol stays ☷)
   return (value >= 7) ? '☰' : '☷';
 }
 
-// 將6/7/8/9轉為標準數字
+// Convert 6/7/8/9 to standard number
 function valueToStandard(value: number): number {
-  // 7少陽→9，8少陰→6（陰陽不變）
-  // 9老陽→9，6老陰→6（保持不變）
+  // young-yang 7->9, young-yin 8->6 (yin/yang unchanged)
+  // old-yang 9->9, old-yin 6->6 (unchanged)
   return value;
 }
 
@@ -123,7 +120,7 @@ export function performDivination(): DivinationResult {
   let changedSymbol = '';
   const changingLines: number[] = [];
   
-  // 從初爻到上爻
+  // From first line to sixth line
   for (let i = 1; i <= 6; i++) {
     const line = getSingleLine();
     
@@ -139,15 +136,15 @@ export function performDivination(): DivinationResult {
     
     if (line.isChanging) {
       changingLines.push(i);
-      // 變卦：陽變陰，陰變陽
+      // Changed hexagram: yang becomes yin, yin becomes yang
       changedSymbol += line.value >= 7 ? '☷' : '☰';
     } else {
       changedSymbol += valueToSymbol(line.value);
     }
   }
   
-  // 卦象是從下往上讀，但符號串是從初爻到上爻
-  // 所以符號串需要反轉才是視覺上的卦象
+  // Hexagram is read from bottom to top, but symbol string is first to sixth
+  // So reverse the string for visual representation
   originalSymbol = originalSymbol.split('').reverse().join('');
   changedSymbol = changedSymbol.split('').reverse().join('');
   
@@ -162,52 +159,51 @@ export function performDivination(): DivinationResult {
   };
 }
 
-// 根據卦象計算卦序（傳統京房易序）
-// ☰☰=1 乾, ☰☷=44 姤, ☷☰=33 遯, ☷☷=2 坤
-// ...實際使用簡化的二分法映射
+// Calculate hexagram number from symbol (traditional Jingfang sequence)
+// ☰☰=1 Qian, ☰☷=44 Gou, ☷☰=33 Dun, ☷☷=2 Kun
+// Uses simplified binary mapping
 function calculateHexagramNumber(symbol: string): number {
-  // 將符號轉為二進制：☰=1, ☷=0
+  // Convert to binary: ☰=1, ☷=0
   let binary = '';
   for (const c of symbol) {
     binary += c === '☰' ? '1' : '0';
   }
   
-  // 轉為十進制加1得到卦序（1-64）
+  // Convert to decimal + 1 to get hexagram number (1-64)
   const decimal = parseInt(binary, 2);
   return decimal + 1;
 }
 
-// 傳統蓍草法（完整18次操作）
+// Traditional yarrow method (complete 18 operations)
 export function performTraditionalDivination(): DivinationResult {
   const lines: DivinationLine[] = [];
   let originalSymbol = '';
   let changedSymbol = '';
   const changingLines: number[] = [];
   
-  // 從初爻到上爻
+  // From first line to sixth line
   for (let i = 1; i <= 6; i++) {
     let total = 50;
-    let yangTotal = 0; // 總商數
+    let yangTotal = 0; // Total quotient
     
-    // 18次操作（實際6次大操作）
-    // 簡化：用6次「分二掛一揲四歸奇」
+    // 18 operations (simplified to 6 major operations)
     for (let j = 0; j < 6; j++) {
-      // 分二
+      // Divide two
       const divide = Math.floor(Math.random() * (total - 2)) + 1;
       const part1 = divide;
       const part2 = total - divide;
       
-      // 掛一（從任一堆取1根）
+      // Hang one (take 1 from either pile)
       const fromFirst = Math.random() > 0.5;
       const guaYi = 1;
       
-      // 揲四：每4個一數
+      // Count by fours
       const left4 = Math.floor((part1 - (fromFirst ? 1 : 0)) / 4) * 4;
       const right4 = Math.floor((part2 - (fromFirst ? 0 : 1)) / 4) * 4;
       
       yangTotal += (left4 + right4) / 4;
       
-      // 歸奇：餘數
+      // Return remainder
       const r1 = (part1 - (fromFirst ? 1 : 0)) % 4;
       const r2 = (part2 - (fromFirst ? 0 : 1)) % 4;
       const guiJi = r1 + r2 + guaYi;
@@ -215,23 +211,23 @@ export function performTraditionalDivination(): DivinationResult {
       total = yangTotal * 4 + guiJi;
     }
     
-    // 根據總商數判斷老陽/少陽/老陰/少陰
-    // 總商數可能是24-32（對應6-9）
+    // Determine old-yang/young-yang/old-yin/young-yin based on total quotient
+    // Quotient may be 24-32 (corresponding to 6-9)
     const quotient = yangTotal;
     let value: number;
     let isChanging: boolean;
     
     if (quotient === 9) {
-      value = 9; isChanging = true; // 老陽
+      value = 9; isChanging = true; // old-yang
     } else if (quotient === 8) {
-      value = 8; isChanging = false; // 少陰
+      value = 8; isChanging = false; // young-yin
     } else if (quotient === 7) {
-      value = 7; isChanging = false; // 少陽
+      value = 7; isChanging = false; // young-yang
     } else {
-      value = 6; isChanging = true; // 老陰
+      value = 6; isChanging = true; // old-yin
     }
     
-    // 隨機分配少陽少陰
+    // Randomly distribute young-yang/young-yin
     if (quotient === 7 || quotient === 8) {
       if (Math.random() < 0.5) {
         value = quotient === 7 ? 7 : 8;

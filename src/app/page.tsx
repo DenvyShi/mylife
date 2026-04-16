@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { hexagrams, Hexagram } from '@/data/hexagrams';
 import { performDivination, DivinationResult } from '@/lib/divination';
 
-// Question categories
+// Question type options
 const QUESTION_TYPES = [
   { value: '事業', label: '📊 事業前途' },
   { value: '財運', label: '💰 財運投資' },
@@ -76,7 +76,7 @@ export default function Home() {
   const [settleProgress, setSettleProgress] = useState(0);
   const [showResult, setShowResult] = useState(false);
 
-  // Settle mind sequence
+  // Settle mind breathing animation
   useEffect(() => {
     if (step === 'settle') {
       setSettleProgress(0);
@@ -481,7 +481,7 @@ export default function Home() {
     </div>
   );
 
-  // 五行計算：根據上下卦計算五行屬性
+  // Calculate wuxing (five elements) based on upper and lower trigrams
 const TRIGRAM_WUXING: Record<string, string> = {
   '乾': '金', '兌': '金',
   '坤': '土', '艮': '土',
@@ -496,7 +496,7 @@ function computeWuxing(above: string, below: string) {
   const result: Record<string, number> = { 金: 0, 木: 0, 水: 0, 火: 0, 土: 0 };
   result[aboveEl] += 1;
   result[belowEl] += 1;
-  // 根據陰陽增減
+  // Adjust based on yin/yang
   const aboveYin = ['坤', '坎', '艮', '巽', '離'].includes(above);
   const belowYin = ['坤', '坎', '艮', '巽', '離'].includes(below);
   if (aboveYin) result[aboveEl] -= 0.5;
