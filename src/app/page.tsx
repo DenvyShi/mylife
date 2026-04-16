@@ -19,7 +19,10 @@ function encodeResult(result: DivinationResult, hexagramId: number, changedId?: 
   const data = {
     h: hexagramId,
     c: changedId || 0,
-    l: result.lines.map(ln => ln.isChanging ? 1 : 0).join(''),
+    // Line symbols: 1=yang(☰), 0=yin(☷)
+    ls: result.lines.map(ln => ln.isYang ? '1' : '0').join(''),
+    // Changing lines as binary string
+    l: result.lines.map(ln => ln.isChanging ? '1' : '0').join(''),
     t: generateToken(),
   };
   return btoa(JSON.stringify(data))
