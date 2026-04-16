@@ -3,29 +3,39 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-
-const HEXAGRAM_NAMES: Record<number, string> = {
-  1: '乾', 2: '坤', 3: '屯', 4: '蒙', 5: '需', 6: '讼', 7: '师', 8: '比',
-  9: '小畜', 10: '履', 11: '泰', 12: '否', 13: '同人', 14: '大有', 15: '谦', 16: '豫',
-  17: '随', 18: '蛊', 19: '临', 20: '观', 21: '噬嗑', 22: '贲', 23: '剥', 24: '复',
-  25: '无妄', 26: '大畜', 27: '颐', 28: '大过', 29: '坎', 30: '离', 31: '咸', 32: '恒',
-  33: '遁', 34: '大壮', 35: '晋', 36: '明夷', 37: '家人', 38: '睽', 39: '蹇', 40: '解',
-  41: '损', 42: '益', 43: '夬', 44: '姤', 45: '萃', 46: '升', 47: '困', 48: '井',
-  49: '革', 50: '鼎', 51: '震', 52: '艮', 53: '渐', 54: '归妹', 55: '丰', 56: '旅',
-  57: '巽', 58: '兑', 59: '涣', 60: '节', 61: '中孚', 62: '小过', 63: '既济', 64: '未济',
-};
+import { hexagrams, Hexagram } from '@/data/hexagrams';
 
 function decodeResult(encoded: string) {
   try {
-    const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
-    const padding = base64.length % 4;
-    const data = JSON.parse(atob(base64 + '=='.slice(0, padding)));
-    const changingLines = data.l.split('').map((c: string, i: number) => c === '1' ? i + 1 : 0).filter((x: number) => x !== 0);
+    // URL-safe base64 to standard base64
+    let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+    
+    // Add padding if needed
+    const pad = base64.length % 4;
+    if (pad > 0) {
+      base64 += '='.repeat(4 - pad);
+    }
+    
+    const data = JSON.parse(atob(base64));
+    
+    if (!data.h || data.h < 1 || data.h > 64) {
+      return null;
+    }
+    
+    // Parse changing lines from binary string (positions 1-6)
+    const changingLines: number[] = [];
+    const lineStr = String(data.l || '000000');
+    for (let i = 0; i < 6; i++) {
+      if (lineStr[i] === '1') {
+        changingLines.push(i + 1);
+      }
+    }
+    
     return {
       hexagramId: data.h,
-      changedId: data.c || undefined,
+      changedId: data.c && data.c > 0 ? data.c : undefined,
       changingLines,
-      token: data.t,
+      token: data.t || '',
     };
   } catch {
     return null;
@@ -35,6 +45,8 @@ function decodeResult(encoded: string) {
 export default function ResultPage() {
   const params = useParams();
   const [data, setData] = useState<{ hexagramId: number; changedId?: number; changingLines: number[] } | null>(null);
+  const [hexagram, setHexagram] = useState<Hexagram | null>(null);
+  const [changedHexagram, setChangedHexagram] = useState<Hexagram | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -51,13 +63,20 @@ export default function ResultPage() {
     }
     
     setData(decoded);
-  }, [params.encoded]);
+    
+    // Load hexagram data
+    const h = hexagrams.find(x => x.id === decoded.hexagramId);
+    const ch = decoded.changedId ? hexagrams.find(x => x.id === decoded.changedId) : null;
+    
+    setHexagram(h || null);
+    setChangedHexagram(ch || null);
+  }, [params]);
 
-  if (error) {
+  if (error || !data) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: '#0D0D0D', color: '#F5E6D3' }}>
         <div className="text-6xl mb-6">☰☷</div>
-        <h1 className="text-2xl font-bold mb-4">{error}</h1>
+        <h1 className="text-2xl font-bold mb-4">{error || '載入中...'}</h1>
         <Link href="/" className="text-amber-400 hover:underline">
           前往占卜 →
         </Link>
@@ -65,7 +84,7 @@ export default function ResultPage() {
     );
   }
 
-  if (!data) {
+  if (!hexagram) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: '#0D0D0D', color: '#F5E6D3' }}>
         <div className="text-6xl mb-6 animate-pulse">☰☷</div>
@@ -74,71 +93,163 @@ export default function ResultPage() {
     );
   }
 
-  const hexagramName = HEXAGRAM_NAMES[data.hexagramId] || '?';
-  const changedName = data.changedId ? HEXAGRAM_NAMES[data.changedId] : null;
-  const changingCount = data.changingLines.length;
-
-  // Fortune rating
+  // Calculate fortune rating
   const isAuspicious = [1,3,5,8,14,15,16,18,24,26,27,29,30,33,35,37,38,41,42,44,45,46,47,48,49,51,52,53,54,55,56,57,58,59,60,61,62,63,64].includes(data.hexagramId);
   const isInauspicious = [2,4,7,20,21,22,23,25,28,31,32,34,36,39,40,43,50].includes(data.hexagramId);
   
-  let rating: string, color: string;
-  if (changingCount === 0) {
+  let rating: string, ratingColor: string;
+  if (data.changingLines.length === 0) {
     rating = isAuspicious ? '吉' : isInauspicious ? '凶' : '平';
-    color = isAuspicious ? '#22C55E' : isInauspicious ? '#EF4444' : '#C9A227';
-  } else if (changingCount <= 2) {
+    ratingColor = isAuspicious ? '#22C55E' : isInauspicious ? '#EF4444' : '#C9A227';
+  } else if (data.changingLines.length <= 2) {
     rating = isAuspicious ? '吉帶變' : isInauspicious ? '凶帶變' : '平帶變';
-    color = '#F59E0B';
+    ratingColor = '#F59E0B';
   } else {
     rating = '大變動';
-    color = '#8B5CF6';
+    ratingColor = '#8B5CF6';
   }
+
+  // Render hexagram lines (from bottom to top, index 5 to 0)
+  const renderLines = () => {
+    const lines = [];
+    for (let i = 5; i >= 0; i--) {
+      const line = hexagram.lines[i];
+      const isChanging = data.changingLines.includes(i + 1);
+      lines.push(
+        <div 
+          key={i}
+          className="flex items-center gap-3 py-2 px-4 rounded transition-all"
+          style={{ 
+            background: isChanging ? 'rgba(201, 162, 39, 0.15)' : 'transparent',
+            borderLeft: isChanging ? '3px solid #C9A227' : '3px solid transparent'
+          }}
+        >
+          <span className="text-sm opacity-50 w-6">{'六五四三二一'[5-i]}</span>
+          <span className="text-2xl font-bold" style={{ color: line.luck === 'yang' ? '#C9A227' : '#F5E6D3' }}>
+            {line.luck === 'yang' ? '▓' : '░'}
+          </span>
+          <span className="flex-1 text-left" style={{ color: '#F5E6D3' }}>{line.judgment}</span>
+          {isChanging && <span className="text-xs px-2 py-1 rounded" style={{ background: '#C9A227', color: '#0D0D0D' }}>動</span>}
+        </div>
+      );
+    }
+    return lines;
+  };
 
   return (
     <div className="min-h-screen px-4 py-8" style={{ background: '#0D0D0D', color: '#F5E6D3' }}>
-      <div className="max-w-xl mx-auto text-center">
+      <div className="max-w-lg mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="text-center mb-8">
           <div className="text-sm opacity-50 mb-2" style={{ color: '#C9A227' }}>朋友分享的占卜結果</div>
-          <div className="text-8xl mb-4">☰☷</div>
-          <h1 className="text-4xl font-bold mb-2">{hexagramName}卦</h1>
-          <div className="text-sm opacity-60">第{data.hexagramId}卦</div>
+          <div className="text-6xl mb-4">{hexagram.symbol}</div>
+          <h1 className="text-4xl font-bold mb-1">{hexagram.name}卦</h1>
+          <div className="text-sm opacity-60">第{hexagram.id}卦 · {hexagram.above}上{hexagram.below}下</div>
         </div>
 
         {/* Fortune Rating */}
         <div 
-          className="inline-block px-8 py-4 rounded-xl mb-8"
-          style={{ background: 'rgba(30,20,20,0.95)', border: `2px solid ${color}40` }}
+          className="text-center p-6 rounded-xl mb-6"
+          style={{ background: 'rgba(30,20,20,0.95)', border: `2px solid ${ratingColor}40` }}
         >
-          <div className="text-4xl font-bold mb-2" style={{ color }}>{rating}</div>
+          <div className="text-3xl font-bold mb-2" style={{ color: ratingColor }}>{rating}</div>
           <div className="text-sm opacity-70">
-            {changingCount === 0 && '靜卦，無變爻'}
-            {changingCount > 0 && `含 ${changingCount} 個動爻`}
+            {data.changingLines.length === 0 && '靜卦，無變爻'}
+            {data.changingLines.length > 0 && `含 ${data.changingLines.length} 個動爻`}
           </div>
         </div>
 
+        {/* Hexagram Meaning */}
+        <div className="text-center mb-6">
+          <p className="text-lg opacity-90">{hexagram.guaMeaning}</p>
+        </div>
+
+        {/* Six Lines */}
+        <div 
+          className="rounded-xl p-4 mb-6"
+          style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(201,162,39,0.25)' }}
+        >
+          <div className="text-center text-sm opacity-50 mb-4" style={{ color: '#C9A227' }}>六爻</div>
+          {renderLines()}
+        </div>
+
+        {/* Judgment */}
+        <div 
+          className="rounded-xl p-4 mb-6"
+          style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(201,162,39,0.25)' }}
+        >
+          <div className="text-center text-sm opacity-50 mb-2" style={{ color: '#C9A227' }}>卦辭</div>
+          <div className="text-xl text-center mb-2">{hexagram.judgment}</div>
+          <div className="text-sm text-center opacity-70">{hexagram.judgmentTitle}</div>
+        </div>
+
+        {/* Image */}
+        <div 
+          className="rounded-xl p-4 mb-6"
+          style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(201,162,39,0.25)' }}
+        >
+          <div className="text-center text-sm opacity-50 mb-2" style={{ color: '#C9A227' }}>象曰</div>
+          <div className="text-lg text-center">{hexagram.image}</div>
+        </div>
+
         {/* Changed Hexagram */}
-        {changedName && (
-          <div className="mb-8 pt-6 border-t border-amber-900/30">
-            <div className="text-sm opacity-50 mb-2" style={{ color: '#C9A227' }}>變卦</div>
-            <div className="text-4xl font-bold">{changedName}卦</div>
+        {changedHexagram && (
+          <div 
+            className="rounded-xl p-4 mb-6"
+            style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(139,92,246,0.4)' }}
+          >
+            <div className="text-center text-sm opacity-50 mb-2" style={{ color: '#8B5CF6' }}>變卦</div>
+            <div className="text-center mb-2">
+              <span className="text-4xl">{changedHexagram.symbol}</span>
+              <span className="text-2xl font-bold ml-3">{changedHexagram.name}卦</span>
+            </div>
+            <div className="text-center text-sm opacity-70">{changedHexagram.guaMeaning}</div>
           </div>
         )}
 
+        {/* Fortune Details */}
+        <div 
+          className="rounded-xl p-4 mb-6"
+          style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(201,162,39,0.25)' }}
+        >
+          <div className="text-center text-sm opacity-50 mb-4" style={{ color: '#C9A227' }}>綜合運勢</div>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <span className="text-sm opacity-50 w-12">整體</span>
+              <span className="flex-1">{hexagram.fortune}</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-sm opacity-50 w-12">財運</span>
+              <span className="flex-1">{hexagram.wealth}</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-sm opacity-50 w-12">事業</span>
+              <span className="flex-1">{hexagram.career}</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-sm opacity-50 w-12">感情</span>
+              <span className="flex-1">{hexagram.relationships}</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-sm opacity-50 w-12">健康</span>
+              <span className="flex-1">{hexagram.health}</span>
+            </div>
+          </div>
+        </div>
+
         {/* CTA */}
-        <div className="mt-12 p-6 rounded-xl" style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(201,162,39,0.25)' }}>
-          <p className="text-lg mb-4 opacity-80">你也想知道自己的命運嗎？</p>
+        <div className="text-center mt-8">
           <Link 
             href="/"
             className="inline-block px-8 py-3 text-lg rounded-lg transition-all hover:scale-105"
             style={{ background: 'linear-gradient(135deg, #7C1D1D 0%, #5C1515 100%)', border: '1px solid #C9A227', color: '#F5E6D3' }}
           >
-            開始占卜
+            自己也來占卜一卦 →
           </Link>
         </div>
 
         {/* Footer */}
-        <div className="mt-12 text-sm opacity-40">
+        <div className="text-center mt-8 text-sm opacity-30">
           易經占卜 · mylife.first.pet
         </div>
       </div>
