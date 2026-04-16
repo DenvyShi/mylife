@@ -87,6 +87,51 @@ function assessFortune(hexagramId: number, changingCount: number): { rating: str
   return { rating, color, summary };
 }
 
+// Trigram to Five Elements mapping
+const TRIGRAM_WUXING: Record<string, string> = {
+  '乾': '金', '兌': '金',
+  '坤': '土', '艮': '土',
+  '震': '木', '巽': '木',
+  '離': '火', '坎': '水',
+};
+
+// Compute Five Elements from trigrams
+function computeWuxing(above: string, below: string): Record<string, number> {
+  const aboveEl = TRIGRAM_WUXING[above] || '土';
+  const belowEl = TRIGRAM_WUXING[below] || '土';
+  const result: Record<string, number> = { 金: 0, 木: 0, 水: 0, 火: 0, 土: 0 };
+  result[aboveEl] += 1;
+  result[belowEl] += 1;
+  // Adjust based on yin/yang
+  const aboveYin = ['坤', '坎', '艮', '巽', '離'].includes(above);
+  const belowYin = ['坤', '坎', '艮', '巽', '離'].includes(below);
+  if (aboveYin) result[aboveEl] -= 0.5;
+  else result[aboveEl] += 0.5;
+  if (belowYin) result[belowEl] -= 0.5;
+  else result[belowEl] += 0.5;
+  return result;
+}
+
+// Interpret judgment text
+function interpretJudgment(judgment: string): string {
+  const interpretations: Record<string, string> = {
+    '元亨利貞': '「元亨利貞」為《易經》最吉祥的斷語。元者始也，亨者通也，利者適宜也，貞者正而固也。表示此卦諸事順遂，初始即佳，通達無礙，所求有利，且能堅守正道，大吉大利之兆。',
+    '大亨': '表示諸事通暢，障礙消除，進展順利。',
+    '小亨': '表示有小阻礙，但最終可通達。',
+    '不利': '表示此時行事不利，應避免主動出擊。',
+    '悔亡': '表示過去的憂悔將消除，局勢好轉。',
+    '无咎': '表示沒有大的過失，即使有小問題也能平安度過。',
+    '吝': '表示有羞辱、悔恨之事發生，需要謹慎。',
+    '厉': '表示有危險，需要小心行事。',
+  };
+  
+  for (const [key, value] of Object.entries(interpretations)) {
+    if (judgment.includes(key)) return value;
+  }
+  
+  return `此卦顯示萬物變化之理，「${judgment}」暗示當前局勢的特質。宜順應變化，不可強求。`;
+}
+
 export default function ResultPage() {
   const params = useParams();
   const [data, setData] = useState<{ hexagramId: number; changedId?: number; changingLines: number[]; lineSymbols: string[] } | null>(null);
@@ -206,9 +251,14 @@ export default function ResultPage() {
           <div className="text-center text-xs tracking-widest mb-3" style={{ color: '#C9A227' }}>
             ── 卦辭 ──
           </div>
-          <p className="text-xl text-center leading-relaxed">
+          <p className="text-xl text-center leading-relaxed mb-4">
             {hexagram.judgment}
           </p>
+          <div className="p-4 rounded-lg" style={{ background: 'rgba(201,162,39,0.08)' }}>
+            <p className="text-sm leading-relaxed opacity-90">
+              {interpretJudgment(hexagram.judgment)}
+            </p>
+          </div>
         </div>
 
         {/* 彖曰 */}
@@ -291,35 +341,32 @@ export default function ResultPage() {
           </div>
         </div>
 
-        {/* Fortune Details */}
+        {/* Five Elements */}
         <div 
           className="rounded-xl p-5 mb-5"
           style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(201,162,39,0.25)' }}
         >
           <div className="text-center text-xs tracking-widest mb-4" style={{ color: '#C9A227' }}>
-            ── 綜合運勢 ──
+            ── 五行分析 ──
           </div>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <span className="text-sm opacity-50 w-12">整體</span>
-              <span className="flex-1">{hexagram.fortune}</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-sm opacity-50 w-12">財運</span>
-              <span className="flex-1">{hexagram.wealth}</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-sm opacity-50 w-12">事業</span>
-              <span className="flex-1">{hexagram.career}</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-sm opacity-50 w-12">感情</span>
-              <span className="flex-1">{hexagram.relationships}</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-sm opacity-50 w-12">健康</span>
-              <span className="flex-1">{hexagram.health}</span>
-            </div>
+          <div className="grid grid-cols-5 gap-3 text-center">
+            {[
+              { label: '金', value: computeWuxing(hexagram.above, hexagram.below)['金'], desc: '性情剛毅' },
+              { label: '木', value: computeWuxing(hexagram.above, hexagram.below)['木'], desc: '仁慈惻隱' },
+              { label: '水', value: computeWuxing(hexagram.above, hexagram.below)['水'], desc: '聰明智慧' },
+              { label: '火', value: computeWuxing(hexagram.above, hexagram.below)['火'], desc: '禮貌熱情' },
+              { label: '土', value: computeWuxing(hexagram.above, hexagram.below)['土'], desc: '忠信誠實' },
+            ].map((w, i) => (
+              <div key={i} className="p-2 rounded-lg" style={{ background: 'rgba(30,30,30,0.8)' }}>
+                <div className="text-xl font-bold mb-1" style={{ color: w.value > 0 ? '#C9A227' : '#F5E6D3' }}>
+                  {w.label}
+                </div>
+                <div className={`text-lg font-bold ${w.value > 0 ? 'text-green-400' : w.value < 0 ? 'text-red-400' : 'text-gray-400'}`}>
+                  {w.value > 0 ? '+' : ''}{w.value}
+                </div>
+                <div className="text-xs opacity-60">{w.desc}</div>
+              </div>
+            ))}
           </div>
         </div>
 
