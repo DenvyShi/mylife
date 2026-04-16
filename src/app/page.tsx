@@ -118,6 +118,20 @@ export default function Home() {
       setChangedHexagram(ch || null);
       setStep('result');
       
+      // Send analytics (non-blocking)
+      fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'divination_complete',
+          hexagramId: divResult.originalHexagram,
+          hexagramName: h?.name,
+          questionType: userInfo.questionType,
+          hasChangedHexagram: divResult.hasChanging,
+          changingLinesCount: divResult.changingLines.length,
+        }),
+      }).catch(() => {}); // Ignore errors
+      
       setTimeout(() => setShowResult(true), 300);
     }, (CASTING_STEPS.length + 1) * 900);
   };
