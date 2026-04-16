@@ -227,62 +227,99 @@ export default function Home() {
 
   // Capture with watermark then share directly
   const captureAndShare = async () => {
-    if (!resultRef.current) return;
+    if (!resultRef.current) {
+      alert('截圖失敗：找不到結果元素');
+      return;
+    }
     setIsCapturing(true);
     try {
+      // First ensure result is visible for capture
+      const resultEl = resultRef.current;
+      const originalOpacity = resultEl.style.opacity;
+      resultEl.style.opacity = '1';
+      
       // Capture with watermark
-      const canvas = await html2canvas(resultRef.current, {
+      const canvas = await html2canvas(resultEl, {
         backgroundColor: '#0D0D0D',
         scale: 2,
         useCORS: true,
         logging: false,
+        allowTaint: true,
       });
       
+      resultEl.style.opacity = originalOpacity;
+      
       // Add footer with URL
-      const ctx = canvas.getContext('2d');
-      const footerHeight = 60;
+      const footerHeight = 70;
       const resizedCanvas = document.createElement('canvas');
       resizedCanvas.width = canvas.width;
       resizedCanvas.height = canvas.height + footerHeight;
       const rctx = resizedCanvas.getContext('2d');
-      if (rctx) {
-        rctx.fillStyle = '#0D0D0D';
-        rctx.fillRect(0, 0, resizedCanvas.width, resizedCanvas.height);
-        rctx.drawImage(canvas, 0, 0);
-        rctx.fillStyle = 'rgba(201, 162, 39, 0.8)';
-        rctx.font = 'bold 28px "Noto Serif TC", serif';
-        rctx.textAlign = 'center';
-        rctx.fillText('易經占卜 · mylife.first.pet', resizedCanvas.width / 2, canvas.height + 38);
+      
+      if (!rctx) {
+        throw new Error('Failed to get canvas context');
       }
       
-      // Convert to blob and share
-      const blob = await new Promise<Blob>((resolve) => {
-        resizedCanvas.toBlob((b) => resolve(b!), 'image/png', 1.0);
+      // Fill background
+      rctx.fillStyle = '#0D0D0D';
+      rctx.fillRect(0, 0, resizedCanvas.width, resizedCanvas.height);
+      
+      // Draw original image
+      rctx.drawImage(canvas, 0, 0);
+      
+      // Add watermark text
+      rctx.fillStyle = '#C9A227';
+      rctx.font = 'bold 32px sans-serif';
+      rctx.textAlign = 'center';
+      rctx.fillText('易經占卜 · mylife.first.pet', resizedCanvas.width / 2, canvas.height + 45);
+      
+      // Convert to blob
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        resizedCanvas.toBlob((b) => {
+          if (b) resolve(b);
+          else reject(new Error('Failed to create blob'));
+        }, 'image/png', 1.0);
       });
+      
       const file = new File([blob], `易經占卜_${hexagram?.name}卦.png`, { type: 'image/png' });
       
-      if (navigator.share && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: `易經占卜 - ${hexagram?.name}卦`,
-          text: `我在 mylife.first.pet 占卜得到了${hexagram?.name}卦，結果大吉！${hexagram?.guaMeaning}`,
-          files: [file],
-        });
+      // Try Web Share API
+      if (navigator.share) {
+        try {
+          // iOS Safari and some browsers require user gesture and specific format
+          await navigator.share({
+            title: `易經占卜 - ${hexagram?.name}卦`,
+            text: `我在 mylife.first.pet 占卜得到了${hexagram?.name}卦，「${hexagram?.guaMeaning}」`,
+          });
+          // If share succeeds without files, still try to share with file
+          setCapturedImage(resizedCanvas.toDataURL('image/png', 1.0));
+        } catch (shareErr) {
+          // If share was aborted or failed, offer download
+          if ((shareErr as Error).name !== 'AbortError') {
+            console.log('Share API failed, offering download:', shareErr);
+          }
+          downloadImageWithCanvas(resizedCanvas);
+        }
       } else {
-        // Fallback to download
-        const dataUrl = resizedCanvas.toDataURL('image/png', 1.0);
-        const link = document.createElement('a');
-        link.download = `易經占卜_${hexagram?.name}卦_${Date.now()}.png`;
-        link.href = dataUrl;
-        link.click();
+        // No share API - download directly
+        downloadImageWithCanvas(resizedCanvas);
       }
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
-        console.error('Share failed:', err);
-        alert('分享失敗，請重試');
-      }
+      console.error('Capture/share error:', err);
+      alert('分享失敗，請稍後重試');
     } finally {
       setIsCapturing(false);
     }
+  };
+  
+  // Download image from canvas
+  const downloadImageWithCanvas = (canvas: HTMLCanvasElement) => {
+    const dataUrl = canvas.toDataURL('image/png', 1.0);
+    setCapturedImage(dataUrl);
+    const link = document.createElement('a');
+    link.download = `易經占卜_${hexagram?.name}卦_${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
   };
 
   const renderHome = () => (
