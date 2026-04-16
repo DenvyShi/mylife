@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { hexagrams, Hexagram } from '@/data/hexagrams';
 import { performDivination, DivinationResult } from '@/lib/divination';
+import html2canvas from 'html2canvas';
 
 // Question type options
 const QUESTION_TYPES = [
@@ -75,6 +76,9 @@ export default function Home() {
   const [castingStep, setCastingStep] = useState(0);
   const [settleProgress, setSettleProgress] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   // Settle mind breathing animation
   useEffect(() => {
@@ -149,6 +153,67 @@ export default function Home() {
     setCastingStep(0);
     setSettleProgress(0);
     setShowResult(false);
+    setCapturedImage(null);
+  };
+
+  // Capture result as image
+  const captureResultImage = async () => {
+    if (!resultRef.current) return;
+    setIsCapturing(true);
+    try {
+      const canvas = await html2canvas(resultRef.current, {
+        backgroundColor: '#0D0D0D',
+        scale: 2, // Higher quality
+        useCORS: true,
+        logging: false,
+      });
+      const dataUrl = canvas.toDataURL('image/png', 1.0);
+      setCapturedImage(dataUrl);
+    } catch (err) {
+      console.error('Failed to capture:', err);
+      alert('截圖失敗，請重試');
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  // Download captured image
+  const downloadImage = () => {
+    if (!capturedImage) return;
+    const link = document.createElement('a');
+    link.download = `易經占卜_${hexagram?.name}卦_${Date.now()}.png`;
+    link.href = capturedImage;
+    link.click();
+  };
+
+  // Share image using Web Share API
+  const shareImage = async () => {
+    if (!capturedImage) {
+      await captureResultImage();
+      if (!capturedImage) return;
+    }
+    try {
+      // Convert data URL to blob
+      const res = await fetch(capturedImage);
+      const blob = await res.blob();
+      const file = new File([blob], `易經占卜_${hexagram?.name}卦.png`, { type: 'image/png' });
+      
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: `易經占卜 - ${hexagram?.name}卦`,
+          text: `我在易經占卜得到了${hexagram?.name}卦，${hexagram?.guaMeaning}`,
+          files: [file],
+        });
+      } else {
+        // Fallback to download
+        downloadImage();
+      }
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        console.error('Share failed:', err);
+        downloadImage();
+      }
+    }
   };
 
   const renderHome = () => (
@@ -615,7 +680,7 @@ function interpretImage(image: string): string {
     const imageInterpretation = interpretImage(hexagram.image);
 
     return (
-      <div className={`min-h-screen px-4 py-8 transition-all duration-700 ${showResult ? 'opacity-100' : 'opacity-0'}`}>
+      <div ref={resultRef} className={`min-h-screen px-4 py-8 transition-all duration-700 ${showResult ? 'opacity-100' : 'opacity-0'}`}>
         {/* User info reminder */}
         {(userInfo.name || userInfo.questionType) && (
           <div className="text-center mb-6">
@@ -814,13 +879,40 @@ function interpretImage(image: string): string {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-4 justify-center pt-4 pb-8">
+          <div className="flex flex-wrap gap-4 justify-center pt-4 pb-8">
             <button
               onClick={handleReset}
               className="trad-btn"
             >
               重新占卜
             </button>
+            {!capturedImage ? (
+              <button
+                onClick={captureResultImage}
+                disabled={isCapturing}
+                className="trad-btn"
+                style={{ background: 'linear-gradient(135deg, #2D5A27 0%, #1a3a18 100%)' }}
+              >
+                {isCapturing ? '處理中...' : '📸 保存圖片'}
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={downloadImage}
+                  className="trad-btn"
+                  style={{ background: 'linear-gradient(135deg, var(--gold) 0%, #8B6914 100%)', color: 'var(--ink)' }}
+                >
+                  ⬇️ 下載圖片
+                </button>
+                <button
+                  onClick={shareImage}
+                  className="trad-btn"
+                  style={{ background: 'linear-gradient(135deg, #1E3A5F 0%, #0f1f33 100%)' }}
+                >
+                  📤 分享
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
