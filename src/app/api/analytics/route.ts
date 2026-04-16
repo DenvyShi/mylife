@@ -64,13 +64,17 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     ensureDataDir();
 
+    // Check if requesting all records
+    const { searchParams } = new URL(request.url);
+    const allRecords = searchParams.get('all') === 'true';
+
     // Read and parse log file
     if (!existsSync(LOG_FILE)) {
-      return NextResponse.json({ stats: generateEmptyStats() });
+      return NextResponse.json({ stats: generateEmptyStats(), records: [] });
     }
 
     const content = readFileSync(LOG_FILE, 'utf-8');
@@ -78,7 +82,23 @@ export async function GET() {
     const events = lines.map(line => JSON.parse(line)).filter(Boolean);
 
     const stats = generateStats(events);
-    return NextResponse.json(stats);
+    
+    // Return all divination records if requested
+    if (allRecords) {
+      const divinationEvents = events.filter(e => e.event === 'divination_complete');
+      const records = divinationEvents.reverse().map((e, idx) => ({
+        id: idx + 1,
+        timestamp: e.timestamp,
+        hexagramId: e.hexagramId,
+        hexagramName: e.hexagramName,
+        questionType: e.questionType,
+        hasChangedHexagram: e.hasChangedHexagram,
+        changingLinesCount: e.changingLinesCount,
+      }));
+      return NextResponse.json({ stats, records });
+    }
+    
+    return NextResponse.json({ stats, records: [] });
   } catch (error) {
     console.error('Analytics read error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });

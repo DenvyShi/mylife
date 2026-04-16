@@ -186,8 +186,11 @@ export default function AdminPage() {
           </>
         )}
 
-        <div className="text-center mt-8">
-          <Link href="/" className="text-amber-400 hover:underline">
+        <div className="text-center mt-8 flex flex-wrap gap-4 justify-center">
+          <Link href="/admin/snapshots" className="px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors">
+            📋 查看所有卜卦記錄
+          </Link>
+          <Link href="/" className="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
             ← 返回占卜
           </Link>
         </div>
