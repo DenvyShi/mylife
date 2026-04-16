@@ -3,7 +3,47 @@
 import { useState, useEffect, useRef } from 'react';
 import { hexagrams, Hexagram } from '@/data/hexagrams';
 import { performDivination, DivinationResult } from '@/lib/divination';
-import html2canvas from 'html2canvas';
+
+// Generate unique token for sharing
+function generateToken(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let token = '';
+  for (let i = 0; i < 16; i++) {
+    token += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return token;
+}
+
+// Encode divination result to URL-safe string
+function encodeResult(result: DivinationResult, hexagramId: number, changedId?: number): string {
+  const data = {
+    h: hexagramId,
+    c: changedId || 0,
+    l: result.lines.map(ln => ln.isChanging ? 1 : 0).join(''),
+    t: generateToken(),
+  };
+  return btoa(JSON.stringify(data))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+// Decode result from URL string
+function decodeResult(encoded: string): { hexagramId: number; changedId?: number; changingLines: number[] } | null {
+  try {
+    const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+    const padding = base64.length % 4;
+    const data = JSON.parse(atob(base64 + '=='.slice(0, padding)));
+    const changingLines = data.l.split('').map((c: string, i: number) => c === '1' ? i + 1 : 0).filter((x: number) => x !== 0);
+    return {
+      hexagramId: data.h,
+      changedId: data.c || undefined,
+      changingLines,
+    };
+  } catch {
+    return null;
+  }
+}
 
 // Question type options
 const QUESTION_TYPES = [
@@ -76,8 +116,9 @@ export default function Home() {
   const [castingStep, setCastingStep] = useState(0);
   const [settleProgress, setSettleProgress] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [isCapturing, setIsCapturing] = useState(false);
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  
+  
+  const [shareableUrl, setShareableUrl] = useState<string>('');
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Settle mind breathing animation
@@ -117,6 +158,12 @@ export default function Home() {
       setHexagram(h || null);
       setChangedHexagram(ch || null);
       setStep('result');
+      
+      // Generate shareable URL
+      const encoded = encodeResult(divResult, divResult.originalHexagram, divResult.changedHexagram);
+      const url = `https://mylife.first.pet/r/${encoded}`;
+      setShareableUrl(url);
+      window.history.replaceState({}, '', url);
       
       // Send analytics (non-blocking)
       fetch('/api/analytics', {
@@ -167,169 +214,48 @@ export default function Home() {
     setCastingStep(0);
     setSettleProgress(0);
     setShowResult(false);
-    setCapturedImage(null);
+    
   };
 
-  // Capture result as image with watermark
-  const captureResultImage = async () => {
-    if (!resultRef.current) return;
-    setIsCapturing(true);
-    try {
-      const canvas = await html2canvas(resultRef.current, {
-        backgroundColor: '#0D0D0D',
-        scale: 2, // Higher quality
-        useCORS: true,
-        logging: false,
-      });
-      
-      // Add watermark with website URL
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const footerHeight = 50;
-        const resizedCanvas = document.createElement('canvas');
-        resizedCanvas.width = canvas.width;
-        resizedCanvas.height = canvas.height + footerHeight;
-        const rctx = resizedCanvas.getContext('2d');
-        if (rctx) {
-          // Fill background
-          rctx.fillStyle = '#0D0D0D';
-          rctx.fillRect(0, 0, resizedCanvas.width, resizedCanvas.height);
-          // Draw original image
-          rctx.drawImage(canvas, 0, 0);
-          // Add footer with URL
-          rctx.fillStyle = 'rgba(201, 162, 39, 0.7)';
-          rctx.font = '24px "Noto Serif TC", serif';
-          rctx.textAlign = 'center';
-          rctx.fillText('易經占卜 · mylife.first.pet', resizedCanvas.width / 2, canvas.height + 35);
-        }
-        const dataUrl = resizedCanvas.toDataURL('image/png', 1.0);
-        setCapturedImage(dataUrl);
-      } else {
-        const dataUrl = canvas.toDataURL('image/png', 1.0);
-        setCapturedImage(dataUrl);
-      }
-    } catch (err) {
-      console.error('Failed to capture:', err);
-      alert('截圖失敗，請重試');
-    } finally {
-      setIsCapturing(false);
+
+
+  // Share with native share dialog
+  // Share URL using native share dialog
+  const shareUrl = async () => {
+    if (!shareableUrl) {
+      alert('分享連結未生成');
+      return;
     }
-  };
-
-  // Download captured image
-  const downloadImage = () => {
-    if (!capturedImage) return;
-    const link = document.createElement('a');
-    link.download = `易經占卜_${hexagram?.name}卦_${Date.now()}.png`;
-    link.href = capturedImage;
-    link.click();
-  };
-
-  // Share with native share dialog (supports files on iOS 16+/Android)
-  const shareNative = async () => {
-    setIsCapturing(true);
-    try {
-      const resultEl = resultRef.current;
-      if (!resultEl) throw new Error('Result element not found');
-      
-      // Force opacity to 1 for capture
-      resultEl.style.opacity = '1';
-      
-      const canvas = await html2canvas(resultEl, {
-        backgroundColor: '#0D0D0D',
-        scale: 2,
-        useCORS: true,
-        logging: false,
-      });
-      
-      resultEl.style.opacity = '';
-      
-      // Add footer with URL
-      const footerHeight = 70;
-      const shareCanvas = document.createElement('canvas');
-      shareCanvas.width = canvas.width;
-      shareCanvas.height = canvas.height + footerHeight;
-      const sctx = shareCanvas.getContext('2d');
-      if (!sctx) throw new Error('Canvas context failed');
-      
-      sctx.fillStyle = '#0D0D0D';
-      sctx.fillRect(0, 0, shareCanvas.width, shareCanvas.height);
-      sctx.drawImage(canvas, 0, 0);
-      sctx.fillStyle = '#C9A227';
-      sctx.font = 'bold 32px sans-serif';
-      sctx.textAlign = 'center';
-      sctx.fillText('易經占卜 · mylife.first.pet', shareCanvas.width / 2, canvas.height + 45);
-      
-      // Get blob for sharing
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        shareCanvas.toBlob((b) => b ? resolve(b) : reject(new Error('Blob creation failed')), 'image/png', 1.0);
-      });
-      const file = new File([blob], `易經占卜_${hexagram?.name}卦.png`, { type: 'image/png' });
-      
-      // Build share data with URL in text
-      const shareText = `我在 mylife.first.pet 占卜得到了${hexagram?.name}卦，「${hexagram?.guaMeaning}」易經占卜 · mylife.first.pet`;
-      
-      // Check if Web Share with files is supported
-      const canShareFiles = navigator.canShare ? navigator.canShare({ files: [file] }) : false;
-      
-      if (navigator.share && canShareFiles) {
-        // Try sharing with file (iOS 16+ and Android)
-        try {
-          await navigator.share({
-            title: `易經占卜 - ${hexagram?.name}卦`,
-            text: shareText,
-            files: [file],
-          });
-          return; // Success
-        } catch (e) {
-          if ((e as Error).name === 'AbortError') return; // User cancelled
-          // Fall through to try without files
-        }
+    
+    const shareText = `我在 mylife.first.pet 占卜得到了${hexagram?.name}卦，「${hexagram?.guaMeaning}」`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `易經占卜 - ${hexagram?.name}卦`,
+          text: shareText,
+          url: shareableUrl,
+        });
+      } catch (e) {
+        if ((e as Error).name === 'AbortError') return;
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(shareableUrl);
+        alert('連結已複製，請手動分享');
       }
-      
-      if (navigator.share) {
-        // Try sharing without files (desktop browsers, some mobile)
-        try {
-          await navigator.share({
-            title: `易經占卜 - ${hexagram?.name}卦`,
-            text: shareText,
-            url: 'https://mylife.first.pet',
-          });
-          return;
-        } catch (e) {
-          if ((e as Error).name === 'AbortError') return;
-        }
-      }
-      
-      // Fallback: download image
-      downloadFromCanvas(shareCanvas);
-    } catch (err) {
-      console.error('Share error:', err);
-      alert('分享失敗，請稍後重試');
-    } finally {
-      setIsCapturing(false);
+    } else {
+      // Fallback: copy to clipboard
+      await navigator.clipboard.writeText(shareableUrl);
+      alert('連結已複製到剪貼板');
     }
   };
   
-  // Download image from canvas
-  const downloadFromCanvas = (canvas: HTMLCanvasElement) => {
-    const dataUrl = canvas.toDataURL('image/png', 1.0);
-    setCapturedImage(dataUrl);
-    const link = document.createElement('a');
-    link.download = `易經占卜_${hexagram?.name}卦_${Date.now()}.png`;
-    link.href = dataUrl;
-    link.click();
+  // Copy URL to clipboard
+  const copyUrl = async () => {
+    if (!shareableUrl) return;
+    await navigator.clipboard.writeText(shareableUrl);
+    alert('連結已複製');
   };
   
-  // Download image from canvas
-  const downloadImageWithCanvas = (canvas: HTMLCanvasElement) => {
-    const dataUrl = canvas.toDataURL('image/png', 1.0);
-    setCapturedImage(dataUrl);
-    const link = document.createElement('a');
-    link.download = `易經占卜_${hexagram?.name}卦_${Date.now()}.png`;
-    link.href = dataUrl;
-    link.click();
-  };
 
   const renderHome = () => (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-12">
@@ -1002,12 +928,12 @@ function interpretImage(image: string): string {
               重新占卜
             </button>
             <button
-              onClick={shareNative}
-              disabled={isCapturing}
+              onClick={shareUrl}
+              
               className="trad-btn"
               style={{ background: 'linear-gradient(135deg, #1E3A5F 0%, #0f1f33 100%)' }}
             >
-              {isCapturing ? '處理中...' : '📤 直接分享'}
+              📤 分享連結
             </button>
           </div>
         </div>
