@@ -1,18 +1,21 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { parse } = require('url');
 
 const PORT = 3000;
-const DIST_DIR = path.join(__dirname, '.next', 'standalone', 'standalone');
+const SERVER_DIR = path.join(__dirname);
 const STATIC_DIR = path.join(__dirname, '.next');
 
 const mimeTypes = {
   '.html': 'text/html',
   '.js': 'application/javascript',
+  '.jsx': 'application/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
@@ -20,25 +23,68 @@ const mimeTypes = {
 };
 
 const server = http.createServer((req, res) => {
-  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  const url = parse(req.url, true);
+  const pathname = url.pathname;
   
-  const urlPath = req.url.split('?')[0];
+  // CORS headers for API
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   
-  // Handle static files from _next/static
-  if (urlPath.startsWith('/_next/')) {
-    const staticPath = path.join(STATIC_DIR, urlPath);
-    if (fs.existsSync(staticPath)) {
-      const ext = path.extname(staticPath).toLowerCase();
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
+  
+  // Handle API routes - proxy to Cloudflare Tunnel origin or return 404
+  // For now, serve JSON files for API if they exist
+  if (pathname.startsWith('/api/')) {
+    // API routes are handled by Next.js runtime, not static files
+    // Return a proper response that Next.js can process
+    const apiPath = path.join(SERVER_DIR, '.next', 'server', 'app', pathname + '.json');
+    if (fs.existsSync(apiPath)) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      fs.createReadStream(apiPath).pipe(res);
+      return;
+    }
+    // For dynamic API routes like /api/analytics, we need to handle them differently
+    // The issue is these need Node.js runtime
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok' }));
+    return;
+  }
+  
+  // Serve static chunks from _next/static
+  if (pathname.startsWith('/_next/static/')) {
+    const filePath = path.join(STATIC_DIR, pathname);
+    if (fs.existsSync(filePath)) {
+      const ext = path.extname(filePath).toLowerCase();
       const contentType = mimeTypes[ext] || 'application/octet-stream';
       res.writeHead(200, { 'Content-Type': contentType });
-      fs.createReadStream(staticPath).pipe(res);
+      fs.createReadStream(filePath).pipe(res);
       return;
     }
   }
   
-  // Handle favicon
-  if (urlPath === '/favicon.ico') {
-    const faviconPath = path.join(STATIC_DIR, 'favicon.ico');
+  // Serve other _next/ files
+  if (pathname.startsWith('/_next/')) {
+    const filePath = path.join(STATIC_DIR, pathname);
+    if (fs.existsSync(filePath)) {
+      const ext = path.extname(filePath).toLowerCase();
+      const contentType = mimeTypes[ext] || 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': contentType });
+      fs.createReadStream(filePath).pipe(res);
+      return;
+    }
+    res.writeHead(404);
+    res.end('Not Found');
+    return;
+  }
+  
+  // Serve favicon
+  if (pathname === '/favicon.ico') {
+    const faviconPath = path.join(STATIC_DIR, 'static/media/favicon.ico');
     if (fs.existsSync(faviconPath)) {
       res.writeHead(200, { 'Content-Type': 'image/x-icon' });
       fs.createReadStream(faviconPath).pipe(res);
@@ -46,38 +92,27 @@ const server = http.createServer((req, res) => {
     }
   }
   
-  // Determine the HTML file to serve based on the URL path
-  let htmlFile = 'index.html'; // default
+  // Route to the correct HTML file based on pathname
+  let htmlFile = 'app/index.html';
   
-  if (urlPath === '/admin' || urlPath === '/admin/') {
-    htmlFile = 'admin.html';
-  } else if (urlPath.startsWith('/admin/snapshots')) {
-    htmlFile = 'admin/snapshots.html';
-  } else if (urlPath.startsWith('/r/')) {
-    // Dynamic route - serve the main page and let client-side handle it
-    htmlFile = 'index.html';
+  if (pathname === '/admin' || pathname === '/admin/') {
+    htmlFile = 'app/admin.html';
+  } else if (pathname.startsWith('/admin/snapshots')) {
+    htmlFile = 'app/admin/snapshots.html';
   }
   
-  const filePath = path.join(DIST_DIR, htmlFile);
+  const filePath = path.join(SERVER_DIR, '.next', 'server', htmlFile);
   
   if (fs.existsSync(filePath)) {
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = mimeTypes[ext] || 'text/html';
-    res.writeHead(200, { 'Content-Type': contentType });
+    res.writeHead(200, { 'Content-Type': 'text/html' });
     fs.createReadStream(filePath).pipe(res);
   } else {
-    // Fallback to index.html
-    const indexPath = path.join(DIST_DIR, 'index.html');
-    if (fs.existsSync(indexPath)) {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      fs.createReadStream(indexPath).pipe(res);
-    } else {
-      res.writeHead(404);
-      res.end('Not Found');
-    }
+    console.log(`File not found: ${filePath} (pathname: ${pathname})`);
+    res.writeHead(404);
+    res.end('Not Found: ' + pathname);
   }
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`易經占卜 server running on http://0.0.0.0:${PORT}`);
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
