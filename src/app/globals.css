@@ -1,43 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 251, 191, 36;
-  --background-start-rgb: 30, 27, 27;
-  --background-end-rgb: 15, 23, 42;
+  --cinnabar: #7C1D1D;
+  --cinnabar-light: #9B2C2C;
+  --gold: #C9A227;
+  --gold-light: #D4AF37;
+  --gold-dark: #8B7355;
+  --ink: #0D0D0D;
+  --cream: #F5E6D3;
+  --cream-dark: #E8D4B8;
+  --jade: #2D5A27;
+  --azure: #1E3A5F;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: 'Noto Serif TC', 'Songti SC', 'SimSun', serif;
+  background: var(--ink);
+  color: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Traditional pattern background */
+.trad-bg {
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(124, 29, 29, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(196, 162, 39, 0.08) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A227' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Gold border ornament */
+.gold-border {
+  border: 2px solid var(--gold);
+  position: relative;
+}
+
+.gold-border::before,
+.gold-border::after {
+  content: '◈';
+  position: absolute;
+  color: var(--gold);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.gold-border::before {
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  padding: 0 8px;
+}
+
+.gold-border::after {
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  padding: 0 8px;
+}
+
+/* Decorative corner ornaments */
+.corner-ornament {
+  position: relative;
+}
+
+.corner-ornament::before {
+  content: '═══════════';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0.6;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(217, 119, 6, 0.4);
-  border-radius: 4px;
+  background: rgba(201, 162, 39, 0.4);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(217, 119, 6, 0.6);
+  background: rgba(201, 162, 39, 0.6);
 }
 
 /* Selection */
 ::selection {
-  background: rgba(217, 119, 6, 0.3);
-  color: #fef3c7;
+  background: rgba(201, 162, 39, 0.3);
+  color: var(--cream);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(201, 162, 39, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(201, 162, 39, 0.4); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-breathe { animation: breathe 4s ease-in-out infinite; }
+.animate-slide-up { animation: slideUp 0.6s ease-out forwards; }
+.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+.animate-rotate-slow { animation: rotateSlow 60s linear infinite; }
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Traditional button */
+.trad-btn {
+  background: linear-gradient(135deg, var(--cinnabar) 0%, #5C1515 100%);
+  border: 1px solid var(--gold);
+  color: var(--cream);
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  letter-spacing: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.trad-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.trad-btn:hover::before {
+  left: 100%;
+}
+
+.trad-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 29, 29, 0.5), 0 0 15px rgba(201, 162, 39, 0.3);
+  border-color: var(--gold-light);
+}
+
+.trad-btn:active {
+  transform: translateY(0);
+}
+
+.trad-btn-gold {
+  background: linear-gradient(135deg, var(--gold) 0%, #8B6914 100%);
+  color: var(--ink);
+}
+
+.trad-btn-gold:hover {
+  box-shadow: 0 8px 25px rgba(201, 162, 39, 0.4);
+}
+
+/* Input styling */
+.trad-input {
+  background: rgba(13, 13, 13, 0.8);
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  color: var(--cream);
+  padding: 12px 16px;
+  width: 100%;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.trad-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(201, 162, 39, 0.15);
+  background: rgba(13, 13, 13, 0.95);
+}
+
+.trad-input::placeholder {
+  color: rgba(245, 230, 211, 0.35);
+}
+
+/* Card styling */
+.trad-card {
+  background: linear-gradient(145deg, rgba(30, 20, 20, 0.95) 0%, rgba(13, 13, 13, 0.98) 100%);
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  position: relative;
+}
+
+.trad-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.5;
+}
+
+/* Result hexagram display */
+.hexagram-display {
+  font-size: 5rem;
+  line-height: 1;
+  letter-spacing: 0.5rem;
+  text-shadow: 0 0 30px rgba(201, 162, 39, 0.5);
+}
+
+/* Line indicators */
+.line-yang { color: var(--gold); }
+.line-yin { color: var(--cinnabar-light); }
+.line-changing { 
+  color: #EF4444; 
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* Ornamental divider */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--gold);
+  opacity: 0.5;
+  font-size: 0.8rem;
+  letter-spacing: 8px;
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* Progress indicator */
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  transition: all 0.3s ease;
+}
+
+.step-dot.active {
+  background: var(--gold);
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.5);
+}
+
+.step-dot.completed {
+  background: var(--gold);
+}
+
+/* Breathing circle for meditation */
+.breathe-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: breathe 6s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 70%);
+}
+
+/* Yarrow stalk animation */
+.yarrow-stalk {
+  width: 4px;
+  height: 80px;
+  background: linear-gradient(to top, #8B7355, #C9A227);
+  border-radius: 2px;
+  position: relative;
+}
+
+.yarrow-stalk::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
 }
