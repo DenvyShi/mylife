@@ -49,11 +49,13 @@ export default function StatsPage() {
   const fetchStats = async () => {
     try {
       const res = await fetch('/api/analytics');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setStats(data);
       setError(null);
     } catch (err) {
-      setError('Failed to load statistics');
+      console.error('Stats fetch error:', err);
+      setError('載入失敗: ' + (err instanceof Error ? err.message : String(err)));
     } finally {
       setLoading(false);
     }
@@ -67,16 +69,39 @@ export default function StatsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+      <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center">
+        <div className="text-xl mb-4">載入中...</div>
+        <button 
+          onClick={() => { setLoading(false); setError('點擊取消'); }}
+          className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
+        >
+          取消
+        </button>
       </div>
     );
   }
 
-  if (error || !stats) {
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-8">
+        <div className="text-xl text-red-400 mb-4">{error}</div>
+        <button 
+          onClick={() => { setLoading(true); setError(null); fetchStats(); }}
+          className="px-6 py-3 bg-amber-600 rounded-lg hover:bg-amber-500 mb-4"
+        >
+          重試
+        </button>
+        <div className="text-gray-500 text-sm">
+          API 測試: <a href="/api/analytics" target="_blank" className="underline">/api/analytics</a>
+        </div>
+      </div>
+    );
+  }
+
+  if (!stats) {
     return (
       <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="text-xl text-red-400">{error || 'No data'}</div>
+        <div className="text-xl text-gray-400">暫無數據</div>
       </div>
     );
   }
