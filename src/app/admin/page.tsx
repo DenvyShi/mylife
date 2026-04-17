@@ -2,30 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-
-interface Stats {
-  totalDivinations: number;
-  hexagramCounts: Record<number, number>;
-  questionTypeCounts: Record<string, number>;
-  changedHexagramRatio: number;
-  avgChangingLines: string;
-  recentDivinations: Array<{
-    timestamp: string;
-    hexagramName?: string;
-    questionType?: string;
-    hexagramId?: number;
-  }>;
-  topHexagrams: Array<{ id: number; count: number }>;
-  // Extended analytics
-  genderCounts: Record<string, number>;
-  timeBucketCounts: Record<string, number>;
-  dayOfWeekCounts: Record<string, number>;
-  deviceTypeCounts: Record<string, number>;
-  avgQuestionLength: number;
-  topBirthYears: Array<{ decade: string; count: number }>;
-  periodStart: string | null;
-  periodEnd: string | null;
-}
+import { assessFortune } from '@/lib/interpretation';
 
 const HEXAGRAM_NAMES: Record<number, string> = {
   1: '乾', 2: '坤', 3: '屯', 4: '蒙', 5: '需', 6: '讼', 7: '师', 8: '比',
@@ -38,13 +15,45 @@ const HEXAGRAM_NAMES: Record<number, string> = {
   57: '巽', 58: '兌', 59: '渙', 60: '節', 61: '中孚', 62: '小過', 63: '既濟', 64: '未濟',
 };
 
-const QUESTION_TYPE_LABELS: Record<string, string> = {
-  '事業': '事業', '財運': '財運', '感情': '感情',
-  '學業': '學業', '健康': '健康', '人際': '人際',
-  '出行': '出行', '決策': '決策', '其他': '其他',
+const QUESTION_LABELS: Record<string, string> = {
+  '事業': '📊', '財運': '💰', '感情': '💕', '學業': '📚',
+  '健康': '🏥', '人際': '👥', '出行': '✈️', '決策': '⚖️', '其他': '🔮',
 };
 
-function formatDate(iso: string): string {
+interface DivinationRecord {
+  id: number;
+  timestamp: string;
+  hexagramId: number;
+  hexagramName: string;
+  questionType?: string;
+  hasChangedHexagram: boolean;
+  changingLinesCount: number;
+  shareUrl?: string;
+  gender?: string;
+  birthYear?: number;
+  timeBucket?: string;
+  dayOfWeek?: string;
+  deviceType?: string;
+}
+
+interface Stats {
+  totalDivinations: number;
+  hexagramCounts: Record<number, number>;
+  questionTypeCounts: Record<string, number>;
+  changedHexagramRatio: number;
+  avgChangingLines: string;
+  topHexagrams: Array<{ id: number; count: number }>;
+  genderCounts: Record<string, number>;
+  timeBucketCounts: Record<string, number>;
+  dayOfWeekCounts: Record<string, number>;
+  deviceTypeCounts: Record<string, number>;
+  avgQuestionLength: number;
+  topBirthYears: Array<{ decade: string; count: number }>;
+}
+
+type Tab = 'recent' | 'stats' | 'analytics';
+
+function formatTime(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleString('zh-TW', {
     timeZone: 'Asia/Hong_Kong',
@@ -53,30 +62,43 @@ function formatDate(iso: string): string {
   });
 }
 
-function StatCard({ label, value, color }: { label: string; value: string | number; color: string }) {
-  return (
-    <div className="bg-white/5 rounded-xl p-3 sm:p-4 flex flex-col items-center justify-center min-w-0">
-      <div className={`text-2xl sm:text-3xl md:text-4xl font-bold ${color} truncate`}>{value}</div>
-      <div className="text-gray-400 text-[10px] sm:text-xs mt-1 text-center leading-tight">{label}</div>
-    </div>
-  );
+function getFortuneClass(rating: string): string {
+  if (rating.includes('吉') && !rating.includes('凶')) return 'fortune-legendary';
+  if (rating.includes('平') && !rating.includes('凶')) return 'fortune-rare';
+  if (rating.includes('凶')) return 'fortune-poor';
+  return 'fortune-default';
+}
+
+function getFortuneEmoji(rating: string): string {
+  if (rating.includes('大吉')) return '⭐';
+  if (rating.includes('吉')) return '✔';
+  if (rating.includes('平')) return '○';
+  if (rating.includes('凶') && !rating.includes('大')) return '✘';
+  if (rating.includes('大凶')) return '💀';
+  return '◐';
 }
 
 export default function AdminPage() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [records, setRecords] = useState<DivinationRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>('recent');
   const [showSettings, setShowSettings] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const fetchStats = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch('/api/analytics');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setStats(data.stats || data);
+      const [statsRes, recordsRes] = await Promise.all([
+        fetch('/api/analytics'),
+        fetch('/api/analytics?all=true'),
+      ]);
+      if (!statsRes.ok || !recordsRes.ok) throw new Error('Fetch failed');
+      const statsData = await statsRes.json();
+      const recordsData = await recordsRes.json();
+      setStats(statsData.stats || statsData);
+      setRecords(recordsData.records || []);
     } catch (err) {
       setError(String(err));
     } finally {
@@ -84,342 +106,444 @@ export default function AdminPage() {
     }
   };
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
+  useEffect(() => { fetchData(); }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     document.cookie = 'admin_auth=; Max-Age=0; path=/';
     window.location.href = '/admin/login';
   };
 
-  const maxHexCount = stats ? Math.max(...Object.values(stats.hexagramCounts), 1) : 1;
+  const copyUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch { /* ignore */ }
+  };
+
+  const topHexCount = stats ? Math.max(...Object.values(stats.hexagramCounts), 1) : 1;
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white overflow-x-hidden">
-      {/* Top Navigation */}
-      <nav className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur border-b border-gray-800">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4">
-          <div className="flex items-center justify-between h-12 sm:h-14">
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <span className="text-xl sm:text-2xl shrink-0">📊</span>
-              <div className="min-w-0">
-                <h1 className="text-sm sm:text-base md:text-lg font-bold text-amber-400 leading-tight truncate">易經占卜後台</h1>
-                <p className="text-gray-500 text-[10px] sm:text-xs hidden sm:block">系統使用統計</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Link href="/admin/snapshots" className="px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs md:text-sm bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors whitespace-nowrap">
-                📋 記錄
-              </Link>
-              <button
-                onClick={() => setShowSettings(true)}
-                className="p-1.5 sm:p-2 text-gray-400 hover:text-white transition-colors text-sm"
-                title="設置"
-              >
-                ⚙️
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs md:text-sm text-gray-400 hover:text-white transition-colors whitespace-nowrap"
-              >
-                登出
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-1.5 sm:p-2 text-gray-400"
-              >
-                {mobileMenuOpen ? '✕' : '☰'}
-              </button>
+    <div className="min-h-screen" style={{ background: '#0a0806', color: '#F0D060' }}>
+      {/* ── Top Navigation ── */}
+      <nav className="wow-nav sticky top-0 z-50">
+        <div className="flex items-center justify-between px-3 h-12">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-lg shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(201,162,39,0.5))' }}>⚔️</span>
+            <div className="min-w-0">
+              <div className="wow-title text-xs leading-tight truncate">易經占卜</div>
+              <div className="text-[9px] text-[#5c4a2a] tracking-wider">GUILD MANAGEMENT</div>
             </div>
           </div>
+          <div className="flex items-center gap-1.5">
+            <button onClick={() => setShowSettings(true)} className="wow-btn text-[10px] px-2 py-1 rounded-sm">
+              ⚙
+            </button>
+            <button onClick={handleLogout} className="wow-btn text-[10px] px-2 py-1 rounded-sm">
+              登出
+            </button>
+          </div>
+        </div>
+
+        {/* Tab bar */}
+        <div className="flex border-t border-[#3d2e1a]">
+          {([
+            ['recent', '📋 最近'],
+            ['stats', '📊 統計'],
+            ['analytics', '📈 分析'],
+          ] as [Tab, string][]).map(([tab, label]) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`wow-tab flex-1 text-center ${activeTab === tab ? 'active' : ''}`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-gray-900 border-b border-gray-800 px-4 py-3 space-y-2">
-          <Link href="/admin/snapshots" className="block py-2 text-gray-300 hover:text-amber-400" onClick={() => setMobileMenuOpen(false)}>
-            📋 卜卦記錄
-          </Link>
-          <button onClick={handleLogout} className="block w-full text-left py-2 text-gray-400 hover:text-white">
-            登出
-          </button>
-        </div>
-      )}
+      {/* ── Main Content ── */}
+      <div className="p-3 space-y-3 max-w-2xl mx-auto">
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-5">
-
+        {/* Loading */}
         {loading && (
-          <div className="flex flex-col items-center justify-center py-20 sm:py-24 text-gray-400">
-            <div className="text-4xl mb-4 animate-pulse">⏳</div>
-            <div className="text-base sm:text-lg">載入中...</div>
+          <div className="space-y-2">
+            {[1,2,3].map(i => (
+              <div key={i} className="wow-panel p-4 space-y-2">
+                <div className="wow-skeleton h-4 w-3/4" />
+                <div className="wow-skeleton h-3 w-1/2" />
+              </div>
+            ))}
           </div>
         )}
 
+        {/* Error */}
         {error && !loading && (
-          <div className="text-center py-16">
-            <div className="text-red-400 mb-4 text-base sm:text-lg">載入失敗：{error}</div>
-            <button onClick={fetchStats} className="px-6 py-3 bg-amber-600 hover:bg-amber-500 rounded-xl transition-colors">
-              重試
-            </button>
+          <div className="wow-panel p-5 text-center">
+            <div className="text-[#FCA5A5] text-sm mb-3">載入失敗：{error}</div>
+            <button onClick={fetchData} className="wow-btn wow-btn-gold rounded-sm text-xs">重新載入</button>
           </div>
         )}
 
-        {stats && !loading && !error && (
+        {/* ── TAB: RECENT DIVINATIONS ── */}
+        {!loading && !error && activeTab === 'recent' && (
           <>
-            {/* KPI Cards */}
-            <section>
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-                <StatCard label="占卜總次數" value={stats.totalDivinations} color="text-amber-400" />
-                <StatCard label="有變卦比例" value={`${stats.changedHexagramRatio}%`} color="text-green-400" />
-                <StatCard label="平均動爻數" value={stats.avgChangingLines} color="text-blue-400" />
-                <StatCard label="不同卦象數" value={Object.keys(stats.hexagramCounts).length} color="text-purple-400" />
-              </div>
-            </section>
-
-            {/* Recent + Question Types */}
-            <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-              {/* Recent */}
-              <div className="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-5">
-                <h2 className="text-sm sm:text-base font-bold text-amber-400 mb-3 sm:mb-4">最近占卜</h2>
-                {stats.recentDivinations.length === 0 ? (
-                  <div className="text-gray-500 py-6 sm:py-8 text-center text-xs sm:text-sm">暫無記錄</div>
-                ) : (
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {stats.recentDivinations.map((r, i) => (
-                      <div key={i} className="flex items-center justify-between py-1.5 sm:py-2 border-b border-gray-800 last:border-0 min-w-0">
-                        <div className="flex items-center gap-1 sm:gap-2 min-w-0">
-                          <span className="text-[10px] sm:text-xs text-gray-500 shrink-0">{formatDate(r.timestamp)}</span>
-                          <span className="text-amber-400 font-bold text-sm sm:text-base shrink-0">
-                            {HEXAGRAM_NAMES[r.hexagramId!] || '?'}卦
-                          </span>
-                        </div>
-                        <span className="text-gray-400 text-[10px] sm:text-xs shrink-0 ml-1 sm:ml-2">
-                          {r.questionType ? `問${r.questionType}` : ''}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Question Types */}
-              <div className="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-5">
-                <h2 className="text-sm sm:text-base font-bold text-amber-400 mb-3 sm:mb-4">問題類別分佈</h2>
-                {Object.keys(stats.questionTypeCounts).length === 0 ? (
-                  <div className="text-gray-500 py-6 sm:py-8 text-center text-xs sm:text-sm">暫無數據</div>
-                ) : (
-                  <div className="space-y-2 sm:space-y-3 max-h-60 overflow-y-auto">
-                    {Object.entries(stats.questionTypeCounts)
-                      .sort(([, a], [, b]) => b - a)
-                      .map(([type, count]) => (
-                        <div key={type} className="flex items-center gap-2 sm:gap-3 min-w-0">
-                          <span className="w-10 sm:w-14 text-gray-300 text-xs sm:text-sm shrink-0 truncate">{QUESTION_TYPE_LABELS[type] || type}</span>
-                          <div className="flex-1 h-1.5 sm:h-2 bg-gray-800 rounded-full overflow-hidden min-w-0">
-                            <div
-                              className="h-full bg-blue-500 rounded-full transition-all"
-                              style={{
-                                width: `${(count / Math.max(...Object.values(stats.questionTypeCounts))) * 100}%`
-                              }}
-                            />
-                          </div>
-                          <span className="text-gray-400 text-[10px] sm:text-xs w-8 sm:w-10 text-right shrink-0">{count}次</span>
-                        </div>
-                      ))
-                    }
-                  </div>
-                )}
-              </div>
-            </section>
-
-            {/* Top Hexagrams */}
-            <section className="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-5">
-              <h2 className="text-sm sm:text-base font-bold text-amber-400 mb-3 sm:mb-4">熱門卦象 Top 5</h2>
-              {stats.topHexagrams.length === 0 ? (
-                <div className="text-gray-500 py-6 sm:py-8 text-center text-xs sm:text-sm">暫無數據</div>
-              ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
-                  {stats.topHexagrams.map((item) => (
-                    <div key={item.id} className="bg-gray-800/50 rounded-xl p-2 sm:p-3 text-center min-w-0">
-                      <div className="text-xl sm:text-2xl mb-0.5 sm:mb-1">{HEXAGRAM_NAMES[item.id] || '?'}</div>
-                      <div className="text-gray-500 text-[10px] sm:text-xs mb-1 sm:mb-2">第{item.id}卦</div>
-                      <div className="h-1 sm:h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-amber-500 rounded-full"
-                          style={{ width: `${(item.count / maxHexCount) * 100}%` }}
-                        />
-                      </div>
-                      <div className="text-amber-400 text-xs sm:text-sm font-bold mt-1">{item.count}次</div>
+            {/* Header stats strip */}
+            {stats && (
+              <div className="wow-panel">
+                <div className="wow-panel-header py-2">
+                  <span className="wow-title text-[10px] tracking-widest">占卜概覽</span>
+                </div>
+                <div className="p-3 grid grid-cols-3 gap-2">
+                  {[
+                    { label: '總次數', value: stats.totalDivinations, color: '#F0D060' },
+                    { label: '變卦率', value: `${stats.changedHexagramRatio}%`, color: '#A335EE' },
+                    { label: '平均動爻', value: stats.avgChangingLines, color: '#0070DD' },
+                  ].map(({ label, value, color }) => (
+                    <div key={label} className="text-center p-2 rounded-sm" style={{ background: 'rgba(0,0,0,0.2)' }}>
+                      <div className="text-base font-bold" style={{ color }}>{value}</div>
+                      <div className="text-[9px] text-[#5c4a2a] mt-0.5 tracking-wider">{label}</div>
                     </div>
                   ))}
                 </div>
-              )}
-            </section>
-
-            {/* 64 Hexagram Heatmap — 移動端左右滑動 */}
-            <section className="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-5">
-              <h2 className="text-sm sm:text-base font-bold text-amber-400 mb-3 sm:mb-4">六十四卦分佈圖</h2>
-
-              {/* 移動端：可滑動；桌面端：自適應 */}
-              <div className="overflow-x-auto rounded-lg">
-                <div
-                  className="grid gap-[2px] w-max mx-auto"
-                  style={{
-                    gridTemplateColumns: 'repeat(8, minmax(28px, 36px))',
-                  }}
-                >
-                  {Array.from({ length: 64 }, (_, i) => {
-                    const id = i + 1;
-                    const count = stats.hexagramCounts[id] || 0;
-                    const intensity = count / maxHexCount;
-                    return (
-                      <div
-                        key={id}
-                        className="aspect-square rounded flex items-center justify-center text-[10px] sm:text-xs cursor-default select-none"
-                        style={{
-                          backgroundColor: count > 0
-                            ? `rgba(201, 162, 39, ${0.15 + intensity * 0.6})`
-                            : 'rgba(75, 85, 99, 0.2)',
-                          color: count > 0 ? '#F5E6D3' : '#4B5563',
-                          minWidth: 28,
-                          minHeight: 28,
-                        }}
-                        title={`${HEXAGRAM_NAMES[id]}（第${id}卦）：${count}次`}
-                      >
-                        {count > 0 ? count : '·'}
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
+            )}
 
-              {/* Legend */}
-              <div className="flex items-center justify-center gap-4 sm:gap-6 mt-3 sm:mt-4">
+            {/* Recent list */}
+            {records.length === 0 ? (
+              <div className="wow-panel p-8 text-center">
+                <div className="text-3xl mb-3 opacity-30">☰☷</div>
+                <div className="text-[#5c4a2a] text-xs tracking-wider">暫無占卜記錄</div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-[10px] text-[#5c4a2a] tracking-widest">最近 {Math.min(records.length, 20)} 條記錄</span>
+                  <span className="text-[10px] text-[#5c4a2a]">共 {records.length} 條</span>
+                </div>
+                {records.slice(0, 20).map((r) => {
+                  const fortune = assessFortune(r.hexagramId, r.changingLinesCount);
+                  const hexName = HEXAGRAM_NAMES[r.hexagramId] || '?';
+                  return (
+                    <div key={r.id} className="wow-panel overflow-hidden">
+                      <div className="wow-panel-header py-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          {/* Fortune badge */}
+                          <span className={`text-xs font-bold shrink-0 ${getFortuneClass(fortune.rating)}`}>
+                            {getFortuneEmoji(fortune.rating)} {fortune.rating}
+                          </span>
+                          {/* Hexagram */}
+                          <span className="hex-symbol text-sm shrink-0" style={{ color: '#F0D060' }}>
+                            {hexName}卦
+                          </span>
+                          {/* Meta */}
+                          <span className="text-[10px] text-[#5c4a2a] truncate">
+                            {r.questionType ? `${QUESTION_LABELS[r.questionType] || ''} ${r.questionType}` : ''}
+                          </span>
+                          {r.hasChangedHexagram && (
+                            <span className="text-[9px] px-1 py-0.5 rounded-sm shrink-0" style={{ background: 'rgba(163,53,238,0.15)', color: '#A335EE', border: '1px solid rgba(163,53,238,0.3)' }}>
+                              變
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-[9px] text-[#3d2e1a] mt-0.5">{formatTime(r.timestamp)}</div>
+                      </div>
+
+                      {/* Share URL row */}
+                      {r.shareUrl && (
+                        <div className="px-3 py-2 border-t border-[#2a1f14] flex items-center gap-2">
+                          <div className="flex-1 min-w-0">
+                            <input
+                              type="text"
+                              readOnly
+                              value={r.shareUrl}
+                              className="w-full text-[10px] bg-transparent border-none outline-none text-[#5c4a2a] truncate cursor-pointer"
+                              onClick={() => { if (r.shareUrl) copyUrl(r.shareUrl); }}
+                              title="點擊複製"
+                            />
+                          </div>
+                          <div className="flex gap-1 shrink-0">
+                            <a
+                              href={r.shareUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="wow-btn text-[10px] px-2 py-1 rounded-sm"
+                              style={{ fontSize: '10px', padding: '3px 8px' }}
+                            >
+                              查看
+                            </a>
+                            <button
+                              onClick={() => { if (r.shareUrl) copyUrl(r.shareUrl); }}
+                              className="wow-btn text-[10px] px-2 py-1 rounded-sm"
+                              style={{ fontSize: '10px', padding: '3px 8px' }}
+                            >
+                              複製
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {!r.shareUrl && (
+                        <div className="px-3 py-2 border-t border-[#2a1f14]">
+                          <a
+                            href={`/r/${btoa(JSON.stringify({ h: r.hexagramId, c: 0, l: '0'.repeat(r.changingLinesCount).padStart(6,'0'), ls: '0'.repeat(6) })).replace(/=/g,'')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="wow-btn text-[10px] inline-block"
+                            style={{ fontSize: '10px', padding: '3px 10px' }}
+                          >
+                            查看卦象
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ── TAB: STATS ── */}
+        {!loading && !error && activeTab === 'stats' && stats && (
+          <div className="space-y-3">
+            {/* KPI */}
+            <div className="wow-panel">
+              <div className="wow-panel-header">
+                <span className="wow-title text-[10px] tracking-widest">關鍵指標</span>
+              </div>
+              <div className="p-3 grid grid-cols-2 gap-2">
                 {[
-                  { color: 'rgba(75, 85, 99, 0.2)', label: '無記錄' },
-                  { color: 'rgba(201,162,39,0.3)', label: '較少' },
-                  { color: 'rgba(201,162,39,0.75)', label: '較多' },
-                ].map(({ color, label }) => (
-                  <div key={label} className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm shrink-0" style={{ backgroundColor: color }} />
-                    <span className="text-gray-500 text-[10px] sm:text-xs whitespace-nowrap">{label}</span>
+                  { label: '占卜總次數', value: stats.totalDivinations, color: '#F0D060' },
+                  { label: '有變卦比例', value: `${stats.changedHexagramRatio}%`, color: '#A335EE' },
+                  { label: '平均動爻數', value: stats.avgChangingLines, color: '#0070DD' },
+                  { label: '不同卦象', value: Object.keys(stats.hexagramCounts).length, color: '#1EFF00' },
+                ].map(({ label, value, color }) => (
+                  <div key={label} className="p-3 rounded-sm text-center" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid #2a1f14' }}>
+                    <div className="text-xl font-bold" style={{ color }}>{value}</div>
+                    <div className="text-[9px] text-[#5c4a2a] mt-0.5 tracking-wider">{label}</div>
                   </div>
                 ))}
               </div>
-            </section>
+            </div>
 
-            {/* Extended Analytics */}
-            <section className="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-5">
-              <h2 className="text-sm sm:text-base font-bold text-amber-400 mb-3 sm:mb-4">使用分析</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                {/* Time Buckets */}
-                <div>
-                  <div className="text-[10px] sm:text-xs text-gray-500 mb-2">時段分佈</div>
-                  <div className="space-y-1">
-                    {Object.entries(stats.timeBucketCounts || {}).map(([bucket, count]) => {
-                      const labels: Record<string,string> = { morning: '🌅 早晨', afternoon: '☀️ 午後', evening: '🌆 傍晚', night: '🌙 深夜' };
+            {/* Hexagram heatmap */}
+            <div className="wow-panel">
+              <div className="wow-panel-header">
+                <span className="wow-title text-[10px] tracking-widest">六十四卦分佈</span>
+              </div>
+              <div className="p-3">
+                <div className="overflow-x-auto">
+                  <div className="grid gap-[2px] w-max mx-auto" style={{ gridTemplateColumns: 'repeat(8, minmax(24px, 32px))' }}>
+                    {Array.from({ length: 64 }, (_, i) => {
+                      const id = i + 1;
+                      const count = stats.hexagramCounts[id] || 0;
+                      const intensity = count / topHexCount;
                       return (
-                        <div key={bucket} className="flex items-center gap-1.5 text-[10px] sm:text-xs">
-                          <span className="text-gray-400 w-14 sm:w-16 shrink-0">{labels[bucket] || bucket}</span>
-                          <div className="flex-1 h-1 bg-gray-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-amber-500 rounded-full" style={{ width: `${(count / Math.max(...Object.values(stats.timeBucketCounts || {}), 1)) * 100}%` }} />
+                        <div
+                          key={id}
+                          className="aspect-square rounded-sm flex items-center justify-center text-[9px] cursor-default select-none"
+                          style={{
+                            backgroundColor: count > 0 ? `rgba(201,162,39,${0.15 + intensity * 0.6})` : 'rgba(42,31,20,0.3)',
+                            color: count > 0 ? '#F0D060' : '#3d2e1a',
+                            minWidth: 24,
+                            minHeight: 24,
+                          }}
+                          title={`${HEXAGRAM_NAMES[id]}第${id}卦：${count}次`}
+                        >
+                          {count > 0 ? count : '·'}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="flex items-center justify-center gap-4 mt-2">
+                  {[
+                    { color: 'rgba(42,31,20,0.3)', label: '無' },
+                    { color: 'rgba(201,162,39,0.3)', label: '少' },
+                    { color: 'rgba(201,162,39,0.75)', label: '多' },
+                  ].map(({ color, label }) => (
+                    <div key={label} className="flex items-center gap-1">
+                      <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: color }} />
+                      <span className="text-[9px] text-[#5c4a2a]">{label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Top hexagrams */}
+            <div className="wow-panel">
+              <div className="wow-panel-header">
+                <span className="wow-title text-[10px] tracking-widest">熱門卦象 TOP 5</span>
+              </div>
+              <div className="p-3">
+                {stats.topHexagrams.length === 0 ? (
+                  <div className="text-center text-[#3d2e1a] text-xs py-4">暫無數據</div>
+                ) : (
+                  <div className="space-y-2">
+                    {stats.topHexagrams.map((item) => (
+                      <div key={item.id} className="flex items-center gap-3 p-2 rounded-sm" style={{ background: 'rgba(0,0,0,0.2)' }}>
+                        <div className="text-lg w-7 text-center" style={{ color: '#F0D060' }}>{HEXAGRAM_NAMES[item.id]}</div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[10px] text-[#5c4a2a]">第{item.id}卦</span>
+                            <span className="text-xs font-bold" style={{ color: '#F0D060' }}>{item.count}次</span>
                           </div>
-                          <span className="text-gray-500 w-4 text-right">{count}</span>
-                        </div>
-                      );
-                    })}
-                    {Object.keys(stats.timeBucketCounts || {}).length === 0 && <div className="text-gray-600 text-[10px]">暫無數據</div>}
-                  </div>
-                </div>
-
-                {/* Day of Week */}
-                <div>
-                  <div className="text-[10px] sm:text-xs text-gray-500 mb-2">星期分佈</div>
-                  <div className="space-y-1">
-                    {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => {
-                      const count = stats.dayOfWeekCounts?.[d] || 0;
-                      return (
-                        <div key={d} className="flex items-center gap-1.5 text-[10px] sm:text-xs">
-                          <span className="text-gray-400 w-6 shrink-0">{d}</span>
-                          <div className="flex-1 h-1 bg-gray-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-blue-500 rounded-full" style={{ width: `${(count / Math.max(...Object.values(stats.dayOfWeekCounts || {}), 1)) * 100}%` }} />
+                          <div className="h-1 rounded-full overflow-hidden" style={{ background: '#2a1f14' }}>
+                            <div className="h-full rounded-full" style={{ width: `${(item.count / topHexCount) * 100}%`, background: 'linear-gradient(90deg, #8B6914, #D4AF37)' }} />
                           </div>
-                          <span className="text-gray-500 w-4 text-right">{count}</span>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Device Types */}
-                <div>
-                  <div className="text-[10px] sm:text-xs text-gray-500 mb-2">裝置類型</div>
-                  <div className="space-y-1.5">
-                    {Object.entries(stats.deviceTypeCounts || {}).map(([device, count]) => {
-                      const icons: Record<string,string> = { mobile: '📱', tablet: '📲', desktop: '💻', unknown: '❓' };
-                      return (
-                        <div key={device} className="flex items-center gap-1.5 text-[10px] sm:text-xs">
-                          <span className="text-base">{icons[device] || '📱'}</span>
-                          <span className="text-gray-400 capitalize">{device}</span>
-                          <span className="text-gray-600 ml-auto">{count}</span>
-                        </div>
-                      );
-                    })}
-                    {Object.keys(stats.deviceTypeCounts || {}).length === 0 && <div className="text-gray-600 text-[10px]">暫無數據</div>}
-                  </div>
-                </div>
-
-                {/* Gender & Question Length */}
-                <div>
-                  <div className="text-[10px] sm:text-xs text-gray-500 mb-2">性別 / 問題長度</div>
-                  <div className="space-y-1.5 text-[10px] sm:text-xs">
-                    {Object.entries(stats.genderCounts || {}).map(([g, count]) => (
-                      <div key={g} className="flex items-center gap-1.5">
-                        <span>{g === '男' ? '♂' : g === '女' ? '♀' : '⚪'}</span>
-                        <span className="text-gray-400">{g || '未知'}</span>
-                        <span className="text-gray-600 ml-auto">{count}</span>
                       </div>
                     ))}
-                    <div className="pt-1 border-t border-gray-800">
-                      <span className="text-gray-500">平均問題長度：</span>
-                      <span className="text-amber-400 ml-1">{stats.avgQuestionLength || 0}字</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Question types */}
+            <div className="wow-panel">
+              <div className="wow-panel-header">
+                <span className="wow-title text-[10px] tracking-widest">問題類別</span>
+              </div>
+              <div className="p-3 space-y-2">
+                {Object.entries(stats.questionTypeCounts).sort(([,a],[,b]) => b-a).length === 0 ? (
+                  <div className="text-center text-[#3d2e1a] text-xs py-4">暫無數據</div>
+                ) : (
+                  Object.entries(stats.questionTypeCounts).sort(([,a],[,b]) => b-a).map(([type, count]) => {
+                    const max = Math.max(...Object.values(stats.questionTypeCounts));
+                    return (
+                      <div key={type} className="flex items-center gap-2">
+                        <span className="text-sm w-6 text-center shrink-0">{QUESTION_LABELS[type] || '🔮'}</span>
+                        <span className="text-[10px] text-[#5c4a2a] w-12 shrink-0">{type}</span>
+                        <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#2a1f14' }}>
+                          <div className="h-full rounded-full" style={{ width: `${(count/max)*100}%`, background: '#0070DD' }} />
+                        </div>
+                        <span className="text-[10px] text-[#5c4a2a] w-6 text-right shrink-0">{count}</span>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── TAB: ANALYTICS ── */}
+        {!loading && !error && activeTab === 'analytics' && stats && (
+          <div className="space-y-3">
+            {/* Time / Device / Gender */}
+            <div className="wow-panel">
+              <div className="wow-panel-header">
+                <span className="wow-title text-[10px] tracking-widest">使用分析</span>
+              </div>
+              <div className="p-3 space-y-4">
+                {/* Time buckets */}
+                <div>
+                  <div className="text-[10px] text-[#5c4a2a] tracking-wider mb-2">時段分佈</div>
+                  <div className="space-y-1.5">
+                    {Object.entries({ morning: '🌅 早晨', afternoon: '☀️ 午後', evening: '🌆 傍晚', night: '🌙 深夜' }).map(([bucket, label]) => {
+                      const count = stats.timeBucketCounts?.[bucket] || 0;
+                      const total = Object.values(stats.timeBucketCounts || {}).reduce((a,b) => a+b, 1);
+                      return (
+                        <div key={bucket} className="flex items-center gap-2 text-[10px]">
+                          <span className="w-14 shrink-0 text-[#8B6914]">{label}</span>
+                          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#2a1f14' }}>
+                            <div className="h-full rounded-full" style={{ width: `${(count/total)*100}%`, background: '#D4AF37' }} />
+                          </div>
+                          <span className="w-4 text-right text-[#5c4a2a]">{count}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Day of week */}
+                <div>
+                  <div className="text-[10px] text-[#5c4a2a] tracking-wider mb-2">星期分佈</div>
+                  <div className="flex gap-1">
+                    {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => {
+                      const count = stats.dayOfWeekCounts?.[d] || 0;
+                      const max = Math.max(...Object.values(stats.dayOfWeekCounts || {}), 1);
+                      return (
+                        <div key={d} className="flex-1 text-center">
+                          <div className="h-8 rounded-sm overflow-hidden flex flex-col justify-end" style={{ background: '#2a1f14' }}>
+                            <div className="rounded-sm" style={{ height: `${Math.max((count/max)*100, 4)}%`, background: '#0070DD' }} />
+                          </div>
+                          <div className="text-[8px] text-[#5c4a2a] mt-1">{d}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Device / Gender */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <div className="text-[10px] text-[#5c4a2a] tracking-wider mb-2">裝置</div>
+                    <div className="space-y-1">
+                      {Object.entries(stats.deviceTypeCounts || {}).map(([d, c]) => {
+                        const icons: Record<string,string> = { mobile: '📱', tablet: '📲', desktop: '💻', unknown: '❓' };
+                        return (
+                          <div key={d} className="flex items-center gap-1.5 text-[10px]">
+                            <span>{icons[d] || '📱'}</span>
+                            <span className="capitalize text-[#8B6914]">{d}</span>
+                            <span className="ml-auto text-[#5c4a2a]">{c}</span>
+                          </div>
+                        );
+                      })}
+                      {Object.keys(stats.deviceTypeCounts || {}).length === 0 && <div className="text-[9px] text-[#3d2e1a]">暫無</div>}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] text-[#5c4a2a] tracking-wider mb-2">性別</div>
+                    <div className="space-y-1">
+                      {Object.entries(stats.genderCounts || {}).map(([g, c]) => (
+                        <div key={g} className="flex items-center gap-1.5 text-[10px]">
+                          <span>{g === '男' ? '♂' : g === '女' ? '♀' : '⚪'}</span>
+                          <span className="text-[#8B6914]">{g || '未知'}</span>
+                          <span className="ml-auto text-[#5c4a2a]">{c}</span>
+                        </div>
+                      ))}
+                      {Object.keys(stats.genderCounts || {}).length === 0 && <div className="text-[9px] text-[#3d2e1a]">暫無</div>}
+                      <div className="pt-1 border-t border-[#2a1f14] text-[10px]">
+                        <span className="text-[#5c4a2a]">平均問題：</span>
+                        <span className="text-[#F0D060]">{stats.avgQuestionLength}字</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </section>
-          </>
+            </div>
+          </div>
         )}
-      </main>
+      </div>
 
-      {/* Settings Modal */}
+      {/* Settings modal */}
       {showSettings && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)' }}
           onClick={(e) => e.target === e.currentTarget && setShowSettings(false)}
         >
-          <div className="bg-gray-900 rounded-2xl w-full max-w-sm sm:max-w-md p-5 sm:p-6 space-y-4 sm:space-y-5 border border-gray-700 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base sm:text-lg font-bold text-amber-400">⚙️ 設置</h2>
-              <button onClick={() => setShowSettings(false)} className="text-gray-400 hover:text-white text-lg sm:text-xl p-1">✕</button>
+          <div className="wow-panel w-full max-w-xs rounded-sm overflow-hidden">
+            <div className="wow-ornament-corner tl" />
+            <div className="wow-ornament-corner tr" />
+            <div className="wow-ornament-corner bl" />
+            <div className="wow-ornament-corner br" />
+            <div className="wow-panel-header">
+              <span className="wow-title text-xs tracking-widest">設置</span>
+              <button onClick={() => setShowSettings(false)} className="ml-auto text-[#5c4a2a] hover:text-[#D4AF37] text-sm">✕</button>
             </div>
-
-            {/* Environment Config */}
-            <div className="bg-gray-800/50 rounded-xl p-3 sm:p-4 text-[11px] sm:text-xs text-gray-400 leading-relaxed space-y-2">
-              <p className="font-semibold text-gray-300">⚙️ 環境配置</p>
-              <p>管理員密碼由伺服器環境變量 <code className="text-amber-400">ADMIN_PASSWORD</code> 控制。如需更改密碼，請更新伺服器上的環境變量後重啟服務。</p>
-              <p className="text-gray-500">預設密碼：<code className="text-amber-400">mylife-admin-2026</code>（請在生產環境修改）</p>
+            <div className="p-4 space-y-3 text-xs text-[#8B6914] leading-relaxed">
+              <p>管理員密碼由伺服器環境變量 <span className="text-[#F0D060]">ADMIN_PASSWORD</span> 控制。更改密碼請更新伺服器環境變量後重啟服務。</p>
+              <p className="text-[#5c4a2a]">預設密碼：<span className="text-[#F0D060]">mylife-admin-2026</span></p>
             </div>
-
-            {/* Links */}
-            <div className="flex gap-2 sm:gap-3">
-              <Link href="/admin/snapshots" className="flex-1 py-2 sm:py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl text-center text-xs sm:text-sm transition-colors">
-                📋 卜卦記錄
+            <div className="p-4 pt-0 flex gap-2">
+              <Link href="/admin/snapshots" className="wow-btn flex-1 text-center text-[10px] rounded-sm">
+                📋 記錄
               </Link>
-              <Link href="/" className="flex-1 py-2 sm:py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl text-center text-xs sm:text-sm transition-colors">
-                ← 占卜首頁
+              <Link href="/" className="wow-btn flex-1 text-center text-[10px] rounded-sm">
+                ← 占卜
               </Link>
             </div>
           </div>

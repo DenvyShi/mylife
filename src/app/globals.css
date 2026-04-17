@@ -337,3 +337,201 @@ body {
   background: var(--gold);
   border-radius: 50%;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   WoW-Style Admin UI
+   Guild Management Panel Aesthetic
+═══════════════════════════════════════════════════════════ */
+
+/* Stone frame panel */
+.wow-panel {
+  background: linear-gradient(180deg, #1a1410 0%, #0f0c09 100%);
+  border: 1px solid #5c4a2a;
+  box-shadow:
+    inset 0 1px 0 rgba(201,162,39,0.15),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 4px 16px rgba(0,0,0,0.6);
+  position: relative;
+}
+
+.wow-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C9A227' fill-opacity='0.02'%3E%3Cpath d='M0 0h40v40H0zM20 20h20v20H20z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Panel header - WoW guild crest style */
+.wow-panel-header {
+  background: linear-gradient(180deg, #2a1f14 0%, #1a140d 100%);
+  border-bottom: 1px solid #5c4a2a;
+  padding: 10px 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wow-panel-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,162,39,0.4), transparent);
+}
+
+/* Golden title text */
+.wow-title {
+  font-family: 'Noto Serif TC', serif;
+  color: #D4AF37;
+  text-shadow: 0 0 10px rgba(212,175,55,0.4), 0 2px 4px rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+}
+
+/* Corner rune ornaments */
+.wow-ornament-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: #8B6914;
+  opacity: 0.7;
+}
+.wow-ornament-corner.tl { top: 4px; left: 4px; border-top: 2px solid; border-left: 2px solid; }
+.wow-ornament-corner.tr { top: 4px; right: 4px; border-top: 2px solid; border-right: 2px solid; }
+.wow-ornament-corner.bl { bottom: 4px; left: 4px; border-bottom: 2px solid; border-left: 2px solid; }
+.wow-ornament-corner.br { bottom: 4px; right: 4px; border-bottom: 2px solid; border-right: 2px solid; }
+
+/* WoW-style stat row */
+.wow-stat {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(92,74,42,0.3);
+  gap: 10px;
+}
+.wow-stat:last-child { border-bottom: none; }
+
+/* WoW button - bronze/gold */
+.wow-btn {
+  background: linear-gradient(180deg, #3d2e1a 0%, #2a1f14 50%, #1a140d 100%);
+  border: 1px solid #8B6914;
+  color: #D4AF37;
+  padding: 8px 18px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  box-shadow: inset 0 1px 0 rgba(201,162,39,0.1);
+}
+.wow-btn:hover {
+  background: linear-gradient(180deg, #4a3820 0%, #3d2e1a 50%, #2a1f14 100%);
+  border-color: #D4AF37;
+  color: #F0D060;
+  box-shadow: inset 0 1px 0 rgba(201,162,39,0.2), 0 0 8px rgba(201,162,39,0.2);
+}
+.wow-btn:active {
+  background: linear-gradient(180deg, #1a140d 0%, #2a1f14 50%, #3d2e1a 100%);
+}
+
+.wow-btn-gold {
+  background: linear-gradient(180deg, #8B6914 0%, #6B4f10 50%, #4a3810 100%);
+  border-color: #D4AF37;
+  color: #FFF8DC;
+}
+.wow-btn-gold:hover {
+  background: linear-gradient(180deg, #A07A18 0%, #8B6914 50%, #6B4f10 100%);
+  border-color: #F0D060;
+}
+
+/* WoW input */
+.wow-input {
+  background: linear-gradient(180deg, #0a0806 0%, #14100c 100%);
+  border: 1px solid #5c4a2a;
+  color: #F0D060;
+  padding: 10px 14px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 14px;
+  width: 100%;
+  transition: all 0.2s;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+.wow-input:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 8px rgba(201,162,39,0.15);
+}
+.wow-input::placeholder { color: rgba(201,162,39,0.35); }
+
+/* Fortune badge - WoW quality colors */
+.fortune-legendary { color: #FF8000; text-shadow: 0 0 6px rgba(255,128,0,0.4); }
+.fortune-epic { color: #A335EE; text-shadow: 0 0 6px rgba(163,53,238,0.4); }
+.fortune-rare { color: #0070DD; text-shadow: 0 0 6px rgba(0,112,221,0.4); }
+.fortune-uncommon { color: #1EFF00; text-shadow: 0 0 6px rgba(30,255,1,0.4); }
+.fortune-poor { color: #9D9D9D; }
+.fortune-default { color: #FFFFFF; }
+
+/* Share link row */
+.share-link-row {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(92,74,42,0.4);
+  border-radius: 2px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+  overflow: hidden;
+}
+.share-link-row:hover {
+  background: rgba(201,162,39,0.05);
+  border-color: rgba(201,162,39,0.3);
+}
+
+/* Hexagram symbol in admin */
+.hex-symbol {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Mobile nav bar */
+.wow-nav {
+  background: linear-gradient(180deg, #1a140d 0%, #0f0c09 100%);
+  border-bottom: 1px solid #5c4a2a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* Tab-style section toggle */
+.wow-tab {
+  padding: 6px 14px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: rgba(201,162,39,0.6);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.wow-tab:hover { color: #D4AF37; }
+.wow-tab.active {
+  color: #F0D060;
+  border-bottom-color: #D4AF37;
+}
+
+/* Loading shimmer */
+@keyframes wow-shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+.wow-skeleton {
+  background: linear-gradient(90deg, #1a1410 0%, #2a2018 50%, #1a1410 100%);
+  background-size: 200px 100%;
+  animation: wow-shimmer 1.5s infinite;
+  border-radius: 2px;
+}
