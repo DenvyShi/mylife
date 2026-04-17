@@ -136,7 +136,7 @@ function symbolToHexagramNumber(symbol: string): number {
  * @returns 占卜結果
  */
 export function performDivination(seed?: number): DivinationResult {
-  // Establish RNG — Math.random() for production, deterministic LCG for seeded tests
+  // Establish RNG — Use high-precision entropy for production, deterministic LCG for seeded tests
   const rng: () => number = seed !== undefined
     ? (() => {
         let s = seed;
@@ -145,7 +145,12 @@ export function performDivination(seed?: number): DivinationResult {
           return (s >>> 0) / 0x80000000;
         };
       })()
-    : Math.random;
+    : () => {
+        // Combine Math.random with high-precision timestamp to increase entropy
+        const entropy = performance.now() * 1000 + Date.now();
+        const seed = (entropy % 1) * Math.random();
+        return seed;
+      };
 
   const lines: DivinationLine[] = [];
   let originalSymbol = '';
