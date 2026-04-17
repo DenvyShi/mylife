@@ -6,6 +6,7 @@ export interface DecodedResult {
   changedId?: number;
   changingLines: number[];
   lineSymbols: string[]; // ☰ = yang, ☷ = yin
+  hexSymbols: string;   // '111000' format for SVG rendering
   questionType?: string;
 }
 
@@ -17,6 +18,9 @@ export interface SharedResultData {
   questionType?: string;
   fortuneRating: string;
   fortuneSummary: string;
+  fortuneAdvice: string;
+  fortuneScore: number;
+  fortuneScoreLabel: string;
   judgment: string;
   judgmentTitle: string;
   image: string;
@@ -56,6 +60,7 @@ export function decodeResult(encoded: string): DecodedResult | null {
       changedId: data.c && data.c > 0 ? data.c : undefined,
       changingLines,
       lineSymbols,
+      hexSymbols: symbolStr,
       questionType: data.q,
     };
   } catch {
@@ -81,6 +86,9 @@ export function buildResultData(decoded: DecodedResult): SharedResultData | null
     questionType: decoded.questionType,
     fortuneRating: fortune.rating,
     fortuneSummary: fortune.summary,
+    fortuneAdvice: fortune.advice,
+    fortuneScore: fortune.score,
+    fortuneScoreLabel: fortune.scoreLabel,
     judgment: hexagram.judgment,
     judgmentTitle: hexagram.judgmentTitle,
     image: hexagram.image,

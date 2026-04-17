@@ -12,6 +12,8 @@ interface DecodedData {
   changedId?: number;
   changingLines: number[];
   lineSymbols: string[];
+  hexSymbols: string;
+  questionType?: string;
 }
 
 export default function ResultClient() {
@@ -90,15 +92,57 @@ export default function ResultClient() {
           <div className="text-xs tracking-widest mb-3" style={{ color: '#C9A227' }}>
             ── 整體點評 ──
           </div>
-          <div className="text-4xl font-bold mb-3" style={{ color: fortune.color }}>
-            {fortune.rating}
+          <div className="text-4xl font-bold mb-2" style={{ color: fortune.color }}>
+            {fortune.emoji} {fortune.rating}
           </div>
-          <p className="text-base leading-relaxed opacity-90">
+          <p className="text-base leading-relaxed opacity-90 mb-2">
             {fortune.summary}
           </p>
-          <div className="mt-4 text-sm opacity-60">
+          <div className="mt-3 text-sm opacity-60">
             {data.changingLines.length === 0 && '靜卦，無變爻'}
             {data.changingLines.length > 0 && `含 ${data.changingLines.length} 個動爻`}
+          </div>
+
+          {/* Score + Save image */}
+          <div className="mt-5 pt-5 border-t flex items-center justify-center gap-6 flex-wrap" style={{ borderColor: 'rgba(201,162,39,0.15)' }}>
+            {/* Score circle */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-20 h-20">
+                <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(201,162,39,0.15)" strokeWidth="8"/>
+                  <circle
+                    cx="50" cy="50" r="40" fill="none"
+                    stroke={fortune.color}
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={`${(fortune.score || 50) * 2.513} 251.3`}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="text-xs font-bold" style={{ color: fortune.color }}>{fortune.scoreLabel}</div>
+                  <div className="text-xl font-bold" style={{ color: fortune.color, lineHeight: 1 }}>{fortune.score}</div>
+                </div>
+              </div>
+              <div className="text-[10px] mt-1 text-amber-600/60">綜合評分</div>
+            </div>
+
+            {/* Save image button */}
+            <div className="flex flex-col items-center gap-1">
+              <a
+                href={`/api/share-image?hex=${encodeURIComponent(hexagram.name)}&hexId=${hexagram.id}&changed=${encodeURIComponent(changedHexagram?.name || '')}&changedId=${changedHexagram?.id || ''}&rating=${encodeURIComponent(fortune.rating)}&score=${fortune.score}&scoreLabel=${encodeURIComponent(fortune.scoreLabel)}&judgment=${encodeURIComponent(hexagram.judgment)}&image=${encodeURIComponent(hexagram.image)}&advice=${encodeURIComponent(fortune.advice)}&symbols=${data.hexSymbols || '000000'}&lines=${Array.from({length:6},(_,i)=>data.changingLines.includes(i+1)?'1':'0').join('')}&questionType=${encodeURIComponent(data.questionType || '')}`}
+                download
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:scale-105"
+                style={{
+                  background: 'linear-gradient(135deg, #8B6914, #D4AF37)',
+                  color: '#0a0806',
+                  boxShadow: '0 2px 12px rgba(201,162,39,0.3)',
+                }}
+              >
+                <span>💾</span>
+                <span>保存卦象圖</span>
+              </a>
+              <div className="text-[10px] text-amber-600/60">點擊下載 SVG 圖片</div>
+            </div>
           </div>
         </div>
 
