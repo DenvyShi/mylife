@@ -293,13 +293,13 @@ export default function Home() {
           ◆
         </div>
         {/* 4. 白話副說明 */}
-        <p className="text-base max-w-lg mx-auto leading-relaxed opacity-80" style={{ color: 'var(--cream-dark)', fontSize: '1.05rem' }}>
+        <p className="text-base max-w-lg mx-auto opacity-80" style={{ color: 'var(--cream-dark)', fontSize: '1.05rem', lineHeight: 1.8 }}>
           把你現在最想問的一件事，交給傳統易經方法起卦，獲得一份解讀參考。
         </p>
       </div>
 
       {/* 3. 隱私信任標籤 */}
-      <div className="flex flex-wrap justify-center gap-3 mb-10 animate-slide-up" style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
+      <div className="flex flex-wrap justify-center gap-3 mb-8 animate-slide-up" style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
         {[
           { icon: '🔒', label: '匿名使用' },
           { icon: '💻', label: '本地計算' },
@@ -319,7 +319,7 @@ export default function Home() {
           { icon: '🔮', title: '六爻成卦', desc: '顯示事情當下與後續變化。' },
           { icon: '📿', title: '象辭解讀', desc: '先看白話重點，再讀詳細解意。' },
         ].map((item, i) => (
-          <div key={i} className={`text-center p-5 rounded-lg animate-slide-up`}
+          <div key={i} className={`text-center p-6 rounded-lg animate-slide-up`}
                style={{ 
                  animationFillMode: 'forwards',
                  animationDelay: `${0.25 + i * 0.15}s`,
