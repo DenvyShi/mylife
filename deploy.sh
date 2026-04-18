@@ -3,7 +3,8 @@
 
 set -e
 
-APP_SERVER="denvy@172.31.254.165"
+APP_SERVER="denvy@127.0.0.1"
+SSH_PORT="6022"
 APP_DIR="/home/denvy/workspace/iching-fortune"
 LOCAL_DIR="./iching-fortune"
 
@@ -36,35 +37,44 @@ rsync -avz --delete \
     --exclude '.next' \
     --exclude '.git' \
     --exclude '.gitignore' \
-    -e "ssh -o StrictHostKeyChecking=no" \
+    -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" \
+    "$LOCAL_DIR/" \
+    "$APP_SERVER:$APP_DIR/"
     "$LOCAL_DIR/" \
     "$APP_SERVER:$APP_DIR/"
 echo "✅ 文件同步完成"
 
 # 5. 在遠程服務器上安裝依賴並構建
 echo "🔧 安裝依賴..."
-ssh $APP_SERVER "cd $APP_DIR && npm install 2>&1 | tail -5"
+ssh -p $SSH_PORT $APP_SERVER "cd $APP_DIR && npm install 2>&1 | tail -5"
 echo "✅ 依賴安裝完成"
 
 echo "🏗️  構建項目..."
-ssh $APP_SERVER "cd $APP_DIR && npm run build 2>&1 | tail -10"
+ssh -p $SSH_PORT $APP_SERVER "cd $APP_DIR && npm run build 2>&1 | tail -10"
 echo "✅ 構建完成"
 
-# 6. 安裝 PM2 並啟動
+# 6. 複製靜態文件到 standalone 目錄（next standalone 模式需要）
+echo "📦 複製靜態文件到 standalone 目錄..."
+ssh -p $SSH_PORT $APP_SERVER "cp -r $APP_DIR/.next/static $APP_DIR/.next/standalone/.next/static 2>/dev/null && echo 'done'"
+echo "✅ 靜態文件就緒"
+
+# 7. 安裝 PM2 並啟動
 echo "🚀 配置 PM2..."
-ssh $APP_SERVER << 'ENDPM2'
+ssh -p $SSH_PORT $APP_SERVER << 'ENDPM2'
 cd /home/denvy/workspace/iching-fortune
-npm install -g pm2 2>/dev/null || true
+export PATH=$HOME/node/bin:$HOME/.local/bin:$PATH
 pm2 delete iching-fortune 2>/dev/null || true
-pm2 start npm --name "iching-fortune" -- start
+pm2 start ecosystem.config.js
 pm2 save 2>/dev/null || true
-pm2 startup 2>/dev/null || true
 ENDPM2
 echo "✅ PM2 配置完成"
 
-# 7. 檢查狀態
+# 8. 檢查狀態
 echo "📊 服務狀態："
-ssh $APP_SERVER "pm2 status iching-fortune 2>/dev/null | head -10"
+ssh -p $SSH_PORT $APP_SERVER "pm2 status iching-fortune 2>/dev/null | head -10"
+
+echo "📊 測試頁面..."
+ssh -p $SSH_PORT $APP_SERVER "curl -s -o /dev/null -w '首頁: HTTP %{http_code}\n' http://localhost:3000/ && curl -s -o /dev/null -w 'JS chunks: HTTP %{http_code}\n' http://localhost:3000/_next/static/chunks/0-4j8cocr_f33.js"
 
 echo ""
 echo "=== ✅ 部署完成 ==="
