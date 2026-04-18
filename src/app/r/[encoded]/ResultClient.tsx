@@ -94,13 +94,14 @@ export default function ResultClient() {
             qrImg.onerror = reject;
             qrImg.src = qrUrl;
           });
-          const qrSize = 80;
-          const qrX = (canvas.width - qrSize) / 2;
-          ctx.drawImage(qrImg, qrX, 8, qrSize, qrSize);
-          ctx.font = '12px "Noto Serif TC", serif';
-          ctx.fillStyle = 'rgba(201,162,39,0.7)';
-          ctx.textAlign = 'center';
-          ctx.fillText('mylife.first.pet', canvas.width / 2, 8 + qrSize + 16);
+          const qrSize = 60;
+          const qrX = 12;
+          const qrY = canvas.height - qrSize - 12;
+          ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+          ctx.font = '11px "Noto Serif TC", serif';
+          ctx.fillStyle = 'rgba(201,162,39,0.6)';
+          ctx.textAlign = 'left';
+          ctx.fillText('mylife.first.pet', qrX, qrY - 6);
         } catch(e) {
           console.error('QR Code載入失敗', e);
         }

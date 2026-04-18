@@ -931,14 +931,15 @@ export default function Home() {
                           qrImg.src = qrUrl;
                         });
                         // 畫在截圖頂部居中，預留空間
-                        const qrSize = 80;
-                        const qrX = (canvas.width - qrSize) / 2;
-                        ctx.drawImage(qrImg, qrX, 8, qrSize, qrSize);
+                        const qrSize = 60;
+                        const qrX = 12;
+                        const qrY = canvas.height - qrSize - 12;
+                        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
                         // 在QR code下方加網址文字
-                        ctx.font = '12px "Noto Serif TC", serif';
-                        ctx.fillStyle = 'rgba(201,162,39,0.7)';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('mylife.first.pet', canvas.width / 2, 8 + qrSize + 16);
+                        ctx.font = '11px "Noto Serif TC", serif';
+                        ctx.fillStyle = 'rgba(201,162,39,0.6)';
+                        ctx.textAlign = 'left';
+                        ctx.fillText('mylife.first.pet', qrX, qrY - 6);
                       } catch(e) {
                         console.error('QR Code載入失敗', e);
                       }
