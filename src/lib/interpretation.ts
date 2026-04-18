@@ -275,3 +275,220 @@ export function getLineLabel(position: number): string {
   if (position === 6) return '上爻';
   return `六${['', '二', '三', '四', '五'][position - 1]}爻`;
 }
+
+// ============================================================
+// 高亮結論卡片（Phase 1 新增）
+// ============================================================
+
+export interface HighlightConclusions {
+  represents: string;   // 這一卦代表
+  attention: string;    // 你現在較應注意
+  suggestion: string;   // 建議方向
+}
+
+// 根據卦象屬性生成三句白話結論
+function getHexagramTrait(hexagramId: number): string {
+  const traits: Record<number, string> = {
+    1: '目前形勢不錯，行動力強。',
+    2: '適合低調行事，不要強出頭。',
+    3: '萬事起頭難，先慢慢來。',
+    4: '還需要更多準備，先學習。',
+    5: '運勢不錯，但需要耐心等。',
+    6: '目前容易有爭執或口舌。',
+    7: '適合當領頭的人，帶領團隊。',
+    8: '有人支持你，可以找人商量。',
+    9: '有小積蓄，可以慢慢累積。',
+    10: '出門做事要小心，穩妥為上。',
+    11: '運勢很旺，諸事順利。',
+    12: '運勢不暢，遇到阻礙。',
+    13: '適合找人合作，志同道合。',
+    14: '運勢大旺，大有收穫。',
+    15: '低調謙虛，會帶來好運。',
+    16: '心情愉快，事情進展順。',
+    17: '跟隨時機行動，有人支持。',
+    18: '適合整頓、處理積壓問題。',
+    19: '形勢不錯，可以積極行動。',
+    20: '看清楚再行動，不要急。',
+    21: '有是非糾紛，要公平處理。',
+    22: '先充實內在，不要只做表面。',
+    23: '運勢正在走下坡，要保守。',
+    24: '壞事到頭了，開始好轉。',
+    25: '不要投機，自然會有收穫。',
+    26: '積蓄實力，等待好時機。',
+    27: '注意健康，飲食要節制。',
+    28: '壓力過大，不要硬撐。',
+    29: '陷入困境，要沉著應對。',
+    30: '運勢不錯，名聲好轉。',
+    31: '感情有感應，單身者有姻緣。',
+    32: '事情需要持之以恆。',
+    33: '適合隱退或休息。',
+    34: '運勢很強，但要適可而止。',
+    35: '前途光明，進展順利。',
+    36: '運勢受制，行事要低調。',
+    37: '家庭和諧，有利遠行。',
+    38: '容易有分歧，要多溝通。',
+    39: '前路有險阻，要小心前進。',
+    40: '困難即將過去，開始好轉。',
+    41: '肯付出讓利，反而有收穫。',
+    42: '大膽行動，大有利益。',
+    43: '事情將有結果，決定果斷。',
+    44: '遇到好機會，好好把握。',
+    45: '人緣好，有利於聚集人脈。',
+    46: '步步高升，運勢上升。',
+    47: '目前困頓，但能磨練心志。',
+    48: '找對方向做事，有利發展。',
+    49: '適合改革創新，轉機出現。',
+    50: '內部問題浮現，要有決心。',
+    51: '保持警惕，沉著應對變化。',
+    52: '局勢明朗，適合暫時休息。',
+    53: '按部就班，逐步前進。',
+    54: '感情有歸屬，利於婚姻。',
+    55: '運勢旺盛，紅紅火火。',
+    56: '變動较大，奔波勞碌。',
+    57: '運勢上揚，利於服眾。',
+    58: '心情愉快，人際關係和諧。',
+    59: '運勢渙散，要重新凝聚。',
+    60: '凡事要有節制，不能過頭。',
+    61: '待人真誠，人緣佳。',
+    62: '做小事可成，大事先緩緩。',
+    63: '事情已定，大局已明。',
+    64: '事情未成，還需努力。',
+  };
+  return traits[hexagramId] || '目前局勢還在變化中。';
+}
+
+// 根據吉凶和變爻數生成"应注意"的內容
+function getAttentionTip(rating: string, changingCount: number): string {
+  if (changingCount >= 3) {
+    return '變數較多，局勢未穩，行動要特別小心。';
+  }
+  if (changingCount >= 1) {
+    return '有變化在發生，注意時機和方向。';
+  }
+  if (rating === '吉' || rating === '中吉' || rating === '小吉') {
+    return '運勢不錯，但不要過度樂觀。';
+  }
+  if (rating === '凶' || rating === '中凶' || rating === '小凶') {
+    return '形勢不太有利，穩守為上。';
+  }
+  return '形勢沒有明顯好壞，靜觀其變。';
+}
+
+// 根據吉凶和變爻數生成"建議方向"
+function getSuggestion(rating: string, changingCount: number, advice: string): string {
+  if (changingCount >= 3) {
+    return '先等形勢明朗，再決定下一步行動。';
+  }
+  if (changingCount >= 1) {
+    return '順應變化，靈活調整計劃。';
+  }
+  if (rating === '吉' || rating === '中吉' || rating === '小吉') {
+    return '把握時機，可以積極行動。';
+  }
+  if (rating === '凶' || rating === '中凶' || rating === '小凶') {
+    return '保守行事，不宜大動作。';
+  }
+  return '先整理現況，再決定是否推進。';
+}
+
+export function generateHighlightConclusions(
+  hexagramId: number,
+  hexagramName: string,
+  rating: string,
+  summary: string,
+  advice: string,
+  changingCount: number
+): HighlightConclusions {
+  return {
+    represents: getHexagramTrait(hexagramId),
+    attention: getAttentionTip(rating, changingCount),
+    suggestion: getSuggestion(rating, changingCount, advice),
+  };
+}
+
+// ============================================================
+// 四段式白話解讀（Phase 1 新增）
+// ============================================================
+
+export interface PlainInterpretation {
+  overall: string;      // 整體來看
+  reminder: string;     // 對這件事的提醒
+  actionAdvice: string; // 如果你正準備行動
+  watchAdvice: string;  // 如果你仍在觀望
+}
+
+function getOverallStatement(hexagramId: number, rating: string, fortune: string): string {
+  const overallMap: Record<string, string> = {
+    '吉': '目前運勢不錯，事情朝好的方向發展。',
+    '中吉': '運勢還可以，穩步推進會有收穫。',
+    '小吉': '有些小利，慢慢來會有成果。',
+    '平': '局勢沒有明顯好壞，成敗看自己作為。',
+    '小凶': '形勢不太配合，要多花心力應對。',
+    '中凶': '阻礙明顯，行事要特別小心。',
+    '大凶': '運勢極差，強行行動恐有不利。',
+  };
+  return overallMap[rating] || '局勢還在變化中，需要耐心觀察。';
+}
+
+function getReminder(hexagramId: number, rating: string, changingCount: number): string {
+  if (changingCount >= 3) {
+    return '局勢變化大，別急著做決定，先看清楚再行動。';
+  }
+  if (changingCount >= 1) {
+    return '有變化在醞釀，時機和方向是關鍵。';
+  }
+  if (rating.includes('吉')) {
+    return '運勢好的时候更要看清方向，不要錯過機會。';
+  }
+  if (rating.includes('凶')) {
+    return '形勢不利時，耐心等待比盲目行動更聰明。';
+  }
+  return '不確定的時候，先收集更多訊息再說。';
+}
+
+function getActionAdvice(hexagramId: number, rating: string, changingCount: number): string {
+  if (changingCount >= 3) {
+    return '先做準備功課，例如整理資料、評估風險，再決定是否行動。';
+  }
+  if (changingCount >= 1) {
+    return '行動可以，但要留意變化，準備好備案。';
+  }
+  if (rating.includes('吉')) {
+    return '現在是行動的好時機，積極一點會有收穫。';
+  }
+  if (rating.includes('凶')) {
+    return '如果可以延後行動，就先等一等。如果不能拖，就先處理最確定的部分。';
+  }
+  return '先列出行動的選項，選風險最小的先做。';
+}
+
+function getWatchAdvice(hexagramId: number, rating: string, changingCount: number): string {
+  if (changingCount >= 3) {
+    return '靜觀其變是明智的選擇，等局勢明朗再出手。';
+  }
+  if (changingCount >= 1) {
+    return '持續留意身邊的變化，捕捉時機的信號。';
+  }
+  if (rating.includes('吉')) {
+    return '運勢好的時候繼續觀察，等最佳時機再出手。';
+  }
+  if (rating.includes('凶')) {
+    return '繼續等待，不要被焦慮推著走，注意形勢何時好轉。';
+  }
+  return '保持現狀，繼續留意相關資訊，等待訊號。';
+}
+
+export function generatePlainInterpretation(
+  hexagramId: number,
+  hexagramName: string,
+  rating: string,
+  fortune: string,
+  changingCount: number
+): PlainInterpretation {
+  return {
+    overall: getOverallStatement(hexagramId, rating, fortune),
+    reminder: getReminder(hexagramId, rating, changingCount),
+    actionAdvice: getActionAdvice(hexagramId, rating, changingCount),
+    watchAdvice: getWatchAdvice(hexagramId, rating, changingCount),
+  };
+}
