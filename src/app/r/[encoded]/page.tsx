@@ -7,7 +7,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const encoded = typeof params.encoded === 'string' ? params.encoded : '';
+  const resolved = await params;
+  const encoded = typeof resolved.encoded === 'string' ? resolved.encoded : '';
 
   const decoded = decodeResult(encoded);
   if (!decoded) {
