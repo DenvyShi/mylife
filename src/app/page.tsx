@@ -904,9 +904,34 @@ export default function Home() {
           </div>
 
           {/* ── 操作區 ── */}
-          <div className="trad-card p-5">
-            <div className="text-xs tracking-widest text-center mb-4" style={{ color: 'var(--gold)' }}>── 接下來你可以 ──</div>
+          <div className="trad-card p-6">
+            <div className="text-xs tracking-widest text-center mb-5" style={{ color: 'var(--gold)' }}>── 接下來你可以 ──</div>
             <div className="flex flex-wrap gap-3 justify-center">
+              <button
+                onClick={async () => {
+                  if (!resultRef.current) return;
+                  try {
+                    const canvas = await html2canvas(resultRef.current, {
+                      backgroundColor: '#0D0D0D',
+                      scale: 2,
+                      useCORS: true,
+                      logging: false,
+                      
+                    });
+                    const url = canvas.toDataURL('image/png');
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `易經占卜_${hexagram.name}卦_${Date.now()}.png`;
+                    a.click();
+                  } catch(e) {
+                    console.error('PNG保存失敗', e);
+                  }
+                }}
+                className="trad-btn"
+                style={{ background: 'linear-gradient(135deg, #8B6914 0%, #D4AF37 100%)', color: '#0a0806', fontSize: '1rem', padding: '12px 24px' }}
+              >
+                💾 保存PNG
+              </button>
               <button
                 onClick={handleReset}
                 className="trad-btn"
@@ -914,14 +939,6 @@ export default function Home() {
               >
                 再問一題
               </button>
-              <a
-                href={`/api/share-image?hex=${encodeURIComponent(hexagram.name)}&hexId=${hexagram.id}&changed=${encodeURIComponent(changedHexagram?.name || '')}&changedId=${changedHexagram?.id || ''}&rating=${encodeURIComponent(fortune.rating)}&score=${fortune.score}&scoreLabel=${encodeURIComponent(fortune.scoreLabel)}&judgment=${encodeURIComponent(hexagram.judgment)}&image=${encodeURIComponent(hexagram.image)}&advice=${encodeURIComponent(fortune.advice)}&symbols=${Array.from({length:6},(_,i)=>result.lines[i]?.value % 2 === 1 ? '1' : '0').join('')}&lines=${Array.from({length:6},(_,i)=>result.changingLines.includes(i+1)?'1':'0').join('')}&questionType=${encodeURIComponent(userInfo.questionType || '')}&question=${encodeURIComponent(userInfo.question)}`}
-                download
-                className="trad-btn"
-                style={{ background: 'linear-gradient(135deg, #8B6914 0%, #D4AF37 100%)', color: '#0a0806', fontSize: '1rem', padding: '12px 24px' }}
-              >
-                💾 保存卦象
-              </a>
               <button
                 onClick={shareUrl}
                 className="trad-btn"
