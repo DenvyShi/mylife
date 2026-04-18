@@ -661,9 +661,9 @@ export default function Home() {
         {/* Judgment */}
         <div className="max-w-xl mx-auto space-y-6">
           {/* Fortune Assessment */}
-          <div 
+          <div
             className="trad-card p-6 text-center animate-slide-up"
-            style={{ 
+            style={{
               borderColor: fortune.color + '40',
               background: `linear-gradient(145deg, rgba(30,20,20,0.95), ${fortune.color}08)`
             }}
@@ -671,7 +671,7 @@ export default function Home() {
             <div className="text-xs tracking-widest mb-3" style={{ color: 'var(--gold)' }}>
               ── 整體點評 ──
             </div>
-            <div 
+            <div
               className="text-5xl font-bold mb-3"
               style={{ color: fortune.color }}
             >
@@ -680,54 +680,33 @@ export default function Home() {
             <p className="text-base leading-relaxed opacity-90 mb-4">
               {fortune.summary}
             </p>
-            <div 
+            <div
               className="text-sm p-3 rounded-lg inline-block"
               style={{ background: 'rgba(201,162,39,0.1)', color: 'var(--gold-light)' }}
             >
               💡 {fortune.advice}
             </div>
 
-            {/* Score + Save image */}
-            <div className="mt-5 pt-5 border-t" style={{ borderColor: 'rgba(201,162,39,0.15)' }}>
-              <div className="flex items-center justify-center gap-6 flex-wrap">
-                {/* Score circle */}
-                <div className="flex flex-col items-center">
-                  <div className="relative w-20 h-20">
-                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                      <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(201,162,39,0.15)" strokeWidth="8"/>
-                      <circle
-                        cx="50" cy="50" r="40" fill="none"
-                        stroke={fortune.color}
-                        strokeWidth="8"
-                        strokeLinecap="round"
-                        strokeDasharray={`${(fortune.score || 50) * 2.513} 251.3`}
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <div className="text-xs font-bold" style={{ color: fortune.color }}>{fortune.scoreLabel}</div>
-                      <div className="text-xl font-bold" style={{ color: fortune.color, lineHeight: 1 }}>{fortune.score}</div>
-                    </div>
+            {/* Score circle */}
+            <div className="mt-5 pt-5 border-t flex items-center justify-center" style={{ borderColor: 'rgba(201,162,39,0.15)' }}>
+              <div className="flex flex-col items-center">
+                <div className="relative w-20 h-20">
+                  <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(201,162,39,0.15)" strokeWidth="8"/>
+                    <circle
+                      cx="50" cy="50" r="40" fill="none"
+                      stroke={fortune.color}
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      strokeDasharray={`${(fortune.score || 50) * 2.513} 251.3`}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <div className="text-xs font-bold" style={{ color: fortune.color }}>{fortune.scoreLabel}</div>
+                    <div className="text-xl font-bold" style={{ color: fortune.color, lineHeight: 1 }}>{fortune.score}</div>
                   </div>
-                  <div className="text-[10px] mt-1 text-gold-dim">綜合評分</div>
                 </div>
-
-                {/* Save image button */}
-                <div className="flex flex-col items-center gap-1">
-                  <a
-                    href={`/api/share-image?hex=${encodeURIComponent(hexagram.name)}&hexId=${hexagram.id}&changed=${encodeURIComponent(changedHexagram?.name || '')}&changedId=${changedHexagram?.id || ''}&rating=${encodeURIComponent(fortune.rating)}&score=${fortune.score}&scoreLabel=${encodeURIComponent(fortune.scoreLabel)}&judgment=${encodeURIComponent(hexagram.judgment)}&image=${encodeURIComponent(hexagram.image)}&advice=${encodeURIComponent(fortune.advice)}&symbols=${Array.from({length:6},(_,i)=>result.lines[i]?.value % 2 === 1 ? '1' : '0').join('')}&lines=${Array.from({length:6},(_,i)=>result.changingLines.includes(i+1)?'1':'0').join('')}&questionType=${encodeURIComponent(userInfo.questionType || '')}&question=${encodeURIComponent(userInfo.question)}`}
-                    download
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:scale-105"
-                    style={{
-                      background: 'linear-gradient(135deg, #8B6914, #D4AF37)',
-                      color: '#0a0806',
-                      boxShadow: '0 2px 12px rgba(201,162,39,0.3)',
-                    }}
-                  >
-                    <span>💾</span>
-                    <span>保存卦象圖</span>
-                  </a>
-                  <div className="text-[10px] text-gold-dim">點擊下載 SVG 圖片</div>
-                </div>
+                <div className="text-[10px] mt-1 text-gold-dim">綜合評分</div>
               </div>
             </div>
           </div>
@@ -852,19 +831,26 @@ export default function Home() {
 
           {/* Action buttons */}
           <div className="flex flex-wrap gap-4 justify-center pt-4 pb-8">
+            <a
+              href={`/api/share-image?hex=${encodeURIComponent(hexagram.name)}&hexId=${hexagram.id}&changed=${encodeURIComponent(changedHexagram?.name || '')}&changedId=${changedHexagram?.id || ''}&rating=${encodeURIComponent(fortune.rating)}&score=${fortune.score}&scoreLabel=${encodeURIComponent(fortune.scoreLabel)}&judgment=${encodeURIComponent(hexagram.judgment)}&image=${encodeURIComponent(hexagram.image)}&advice=${encodeURIComponent(fortune.advice)}&symbols=${Array.from({length:6},(_,i)=>result.lines[i]?.value % 2 === 1 ? '1' : '0').join('')}&lines=${Array.from({length:6},(_,i)=>result.changingLines.includes(i+1)?'1':'0').join('')}&questionType=${encodeURIComponent(userInfo.questionType || '')}&question=${encodeURIComponent(userInfo.question)}`}
+              download
+              className="trad-btn"
+              style={{ background: 'linear-gradient(135deg, #8B6914 0%, #D4AF37 100%)', color: '#0a0806' }}
+            >
+              💾 保存卦象
+            </a>
+            <button
+              onClick={shareUrl}
+              className="trad-btn"
+              style={{ background: 'linear-gradient(135deg, #1E3A5F 0%, #0f1f33 100%)' }}
+            >
+              📤 分享連結
+            </button>
             <button
               onClick={handleReset}
               className="trad-btn"
             >
               重新占卜
-            </button>
-            <button
-              onClick={shareUrl}
-              
-              className="trad-btn"
-              style={{ background: 'linear-gradient(135deg, #1E3A5F 0%, #0f1f33 100%)' }}
-            >
-              📤 分享連結
             </button>
           </div>
         </div>

@@ -125,24 +125,6 @@ export default function ResultClient() {
               </div>
               <div className="text-[10px] mt-1 text-amber-600/60">綜合評分</div>
             </div>
-
-            {/* Save image button */}
-            <div className="flex flex-col items-center gap-1">
-              <a
-                href={`/api/share-image?hex=${encodeURIComponent(hexagram.name)}&hexId=${hexagram.id}&changed=${encodeURIComponent(changedHexagram?.name || '')}&changedId=${changedHexagram?.id || ''}&rating=${encodeURIComponent(fortune.rating)}&score=${fortune.score}&scoreLabel=${encodeURIComponent(fortune.scoreLabel)}&judgment=${encodeURIComponent(hexagram.judgment)}&image=${encodeURIComponent(hexagram.image)}&advice=${encodeURIComponent(fortune.advice)}&symbols=${data.hexSymbols || '000000'}&lines=${Array.from({length:6},(_,i)=>data.changingLines.includes(i+1)?'1':'0').join('')}&questionType=${encodeURIComponent(data.questionType || '')}`}
-                download
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:scale-105"
-                style={{
-                  background: 'linear-gradient(135deg, #8B6914, #D4AF37)',
-                  color: '#0a0806',
-                  boxShadow: '0 2px 12px rgba(201,162,39,0.3)',
-                }}
-              >
-                <span>💾</span>
-                <span>保存卦象圖</span>
-              </a>
-              <div className="text-[10px] text-amber-600/60">點擊下載 SVG 圖片</div>
-            </div>
           </div>
         </div>
 
