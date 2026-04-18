@@ -798,7 +798,7 @@ export default function Home() {
                   onClick={() => toggleAccordion('judgment')}
                   className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
                 >
-                  <span className="text-sm font-medium">查看卦辭原文</span>
+                  <span className="text-base font-medium">查看卦辭原文</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'judgment' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'judgment' && (
@@ -825,7 +825,7 @@ export default function Home() {
                   onClick={() => toggleAccordion('image')}
                   className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
                 >
-                  <span className="text-sm font-medium">查看象義說明</span>
+                  <span className="text-base font-medium">查看象義說明</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'image' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'image' && (
@@ -848,7 +848,7 @@ export default function Home() {
                   onClick={() => toggleAccordion('lines')}
                   className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
                 >
-                  <span className="text-sm font-medium">查看逐爻解讀</span>
+                  <span className="text-base font-medium">查看逐爻解讀</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'lines' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'lines' && (
