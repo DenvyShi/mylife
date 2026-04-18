@@ -89,16 +89,15 @@ export default function ResultClient() {
         const qrImg = new Image();
         qrImg.crossOrigin = 'anonymous';
         qrImg.src = qrUrl;
-        qrImg.onload = () => {
-          const qrSize = 60;
-          const qrX = (canvas.width - qrSize) / 2;
-          const qrY = 10;
-          ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
-          ctx.font = '11px "Noto Serif TC", serif';
-          ctx.fillStyle = 'rgba(201,162,39,0.6)';
-          ctx.textAlign = 'center';
-          ctx.fillText('mylife.first.pet', canvas.width / 2, qrY + qrSize + 14);
-        };
+        await new Promise(resolve => { qrImg.onload = resolve; qrImg.onerror = resolve; });
+        const qrSize = 60;
+        const qrX = (canvas.width - qrSize) / 2;
+        const qrY = 10;
+        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+        ctx.font = '11px "Noto Serif TC", serif';
+        ctx.fillStyle = 'rgba(201,162,39,0.6)';
+        ctx.textAlign = 'center';
+        ctx.fillText('mylife.first.pet', canvas.width / 2, qrY + qrSize + 14);
       }
       const url = canvas.toDataURL('image/png');
       const a = document.createElement('a');
