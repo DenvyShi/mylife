@@ -802,7 +802,7 @@ export default function Home() {
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'judgment' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'judgment' && (
-                  <div className="px-5 pb-5 space-y-4">
+                  <div className="px-6 pb-6 space-y-4">
                     <div>
                       <div className="text-xs opacity-60 mb-2">卦辭</div>
                       <p className="text-base leading-relaxed" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.judgment}</p>
@@ -829,7 +829,7 @@ export default function Home() {
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'image' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'image' && (
-                  <div className="px-5 pb-5 space-y-4">
+                  <div className="px-6 pb-6 space-y-4">
                     <div>
                       <div className="text-xs opacity-60 mb-2">象曰</div>
                       <p className="text-base leading-relaxed" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.image}</p>
@@ -852,7 +852,7 @@ export default function Home() {
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'lines' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'lines' && (
-                  <div className="px-5 pb-5 space-y-3">
+                  <div className="px-6 pb-6 space-y-4">
                     {[...result.lines].reverse().map((line, idx) => {
                       const realIdx = 5 - idx;
                       return (

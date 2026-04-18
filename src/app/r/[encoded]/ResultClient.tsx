@@ -175,10 +175,10 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
                 <span className="text-lg" style={{ transform: accordionOpen === 'judgment' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {accordionOpen === 'judgment' && (
-                <div className="px-5 pb-5 space-y-4">
-                  <div><div className="text-xs opacity-60 mb-2">卦辭</div><p className="text-base" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.judgment}</p></div>
-                  <div><div className="text-xs opacity-60 mb-2">白話解說</div><p className="text-sm opacity-80" style={{ lineHeight: 1.8 }}>{interpretJudgment(hexagram.judgment)}</p></div>
-                  <div><div className="text-xs opacity-60 mb-2">彖曰</div><p className="text-sm opacity-80" style={{ lineHeight: 1.8 }}>{hexagram.judgmentTitle}</p></div>
+                <div className="px-6 pb-6 space-y-4">
+                  <div><div className="text-sm opacity-70 mb-2">卦辭</div><p className="text-lg" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.judgment}</p></div>
+                  <div><div className="text-sm opacity-70 mb-2">白話解說</div><p className="text-base opacity-90" style={{ lineHeight: 1.8 }}>{interpretJudgment(hexagram.judgment)}</p></div>
+                  <div><div className="text-sm opacity-70 mb-2">彖曰</div><p className="text-base opacity-90" style={{ lineHeight: 1.8 }}>{hexagram.judgmentTitle}</p></div>
                 </div>
               )}
             </div>
@@ -188,8 +188,8 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
                 <span className="text-lg" style={{ transform: accordionOpen === 'image' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {accordionOpen === 'image' && (
-                <div className="px-5 pb-5 space-y-4">
-                  <div><div className="text-xs opacity-60 mb-2">象曰</div><p className="text-base" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.image}</p></div>
+                <div className="px-6 pb-6 space-y-4">
+                  <div><div className="text-sm opacity-70 mb-2">象曰</div><p className="text-lg" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.image}</p></div>
                 </div>
               )}
             </div>
@@ -199,7 +199,7 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
                 <span className="text-lg" style={{ transform: accordionOpen === 'lines' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {accordionOpen === 'lines' && (
-                <div className="px-5 pb-5 space-y-3">
+                <div className="px-6 pb-6 space-y-4">
                   {[...decoded.lineSymbols].reverse().map((symbol, idx) => {
                     const position = 6 - idx;
                     const isChanging = decoded.changingLines.includes(position);
@@ -207,7 +207,7 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
                     return (
                       <div key={position} className="p-4 rounded-lg" style={isChanging ? { background: 'rgba(201,162,39,0.08)', border: '1px solid rgba(201,162,39,0.3)' } : { background: 'rgba(30,30,30,0.5)' }}>
                         <div className="flex items-center gap-3 mb-2">
-                          <span className="text-sm opacity-60">{getLineLabel(position)}</span>
+                          <span className="text-base opacity-70">{getLineLabel(position)}</span>
                           <span style={{ color: symbol === '☰' ? '#C9A227' : '#F5E6D3', fontSize: '1.5rem' }}>{symbol}</span>
                           {isChanging && <span className="text-xs px-2 py-1 rounded" style={{ background: 'rgba(239,68,68,0.3)', color: '#FCA5A5' }}>動</span>}
                         </div>
