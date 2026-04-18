@@ -82,29 +82,23 @@ export default function ResultClient() {
         useCORS: true,
         logging: false,
       });
-      // 加入網站QR Code
+      // 加入網站QR Code（位於圖片頂部中央）
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        try {
-          const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://mylife.first.pet';
-          const qrImg = new Image();
-          qrImg.crossOrigin = 'anonymous';
-          await new Promise((resolve, reject) => {
-            qrImg.onload = resolve;
-            qrImg.onerror = reject;
-            qrImg.src = qrUrl;
-          });
+        const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://mylife.first.pet';
+        const qrImg = new Image();
+        qrImg.crossOrigin = 'anonymous';
+        qrImg.src = qrUrl;
+        qrImg.onload = () => {
           const qrSize = 60;
-          const qrX = 12;
-          const qrY = canvas.height - qrSize - 12;
+          const qrX = (canvas.width - qrSize) / 2;
+          const qrY = 10;
           ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
           ctx.font = '11px "Noto Serif TC", serif';
           ctx.fillStyle = 'rgba(201,162,39,0.6)';
-          ctx.textAlign = 'left';
-          ctx.fillText('mylife.first.pet', qrX, qrY - 6);
-        } catch(e) {
-          console.error('QR Code載入失敗', e);
-        }
+          ctx.textAlign = 'center';
+          ctx.fillText('mylife.first.pet', canvas.width / 2, qrY + qrSize + 14);
+        };
       }
       const url = canvas.toDataURL('image/png');
       const a = document.createElement('a');
