@@ -394,39 +394,40 @@ export default function Home() {
   const renderInfo = () => (
     <div className="min-h-screen px-4 py-8 flex flex-col items-center">
       {/* Header */}
-      <div className="text-center mb-8 w-full max-w-lg">
-        <div className="text-sm opacity-50 tracking-widest mb-2" style={{ color: 'var(--gold)' }}>
+      <div className="text-center mb-10 w-full max-w-lg">
+        <div className="text-sm opacity-50 tracking-widest mb-3" style={{ color: 'var(--gold)' }}>
           第二步 · 稟告天地
         </div>
-        <h2 className="text-3xl font-bold mb-2">輸入占卜資訊</h2>
+        <h2 className="text-3xl font-bold mb-3">輸入占卜資訊</h2>
         <div className="ornament-divider max-w-xs mx-auto">◆</div>
       </div>
 
-      <form onSubmit={handleInfoSubmit} className="w-full max-w-lg space-y-6">
+      <form onSubmit={handleInfoSubmit} className="w-full max-w-lg space-y-8">
         {/* Basic Info */}
-        <div className="trad-card p-6 space-y-4">
+        <div className="trad-card p-8 space-y-6">
           <h3 className="text-lg font-medium" style={{ color: 'var(--gold)' }}>基本資料</h3>
           
           <div>
-            <label className="block text-sm opacity-70 mb-2">姓名（可选）</label>
+            <label className="block text-sm opacity-70 mb-3">姓名（可選）</label>
             <input
               type="text"
               value={userInfo.name}
               onChange={e => setUserInfo({...userInfo, name: e.target.value})}
               placeholder="輸入姓名"
-              className="trad-input rounded-lg"
+              className="trad-input rounded-lg w-full"
+              style={{ padding: '12px 16px', fontSize: '1rem' }}
             />
           </div>
 
           <div>
-            <label className="block text-sm opacity-70 mb-2">性別</label>
-            <div className="grid grid-cols-2 gap-3">
+            <label className="block text-sm opacity-70 mb-3">性別</label>
+            <div className="grid grid-cols-2 gap-4">
               {['男', '女'].map(g => (
                 <button
                   key={g}
                   type="button"
                   onClick={() => setUserInfo({...userInfo, gender: g})}
-                  className={`p-3 rounded-lg border transition-all ${
+                  className={`p-4 rounded-lg border transition-all ${
                     userInfo.gender === g 
                       ? 'border-gold bg-gold/10' 
                       : 'border-gold/30 hover:border-gold/50'
@@ -434,7 +435,8 @@ export default function Home() {
                   style={{ 
                     borderColor: userInfo.gender === g ? 'var(--gold)' : undefined,
                     background: userInfo.gender === g ? 'rgba(201,162,39,0.1)' : undefined,
-                    color: userInfo.gender === g ? 'var(--gold)' : undefined
+                    color: userInfo.gender === g ? 'var(--gold)' : undefined,
+                    fontSize: '1rem'
                   }}
                 >
                   {g}
@@ -444,8 +446,8 @@ export default function Home() {
           </div>
 
           <div>
-            <label className="block text-sm opacity-70 mb-2">出生時間</label>
-            <div className="grid grid-cols-3 gap-2">
+            <label className="block text-sm opacity-70 mb-3">出生時間</label>
+            <div className="grid grid-cols-3 gap-3">
               <input
                 type="number"
                 value={userInfo.birthYear}
@@ -454,6 +456,7 @@ export default function Home() {
                 min="1900"
                 max="2025"
                 className="trad-input rounded-lg text-center"
+                style={{ padding: '12px 8px', fontSize: '1rem' }}
               />
               <input
                 type="number"
@@ -463,6 +466,7 @@ export default function Home() {
                 min="1"
                 max="12"
                 className="trad-input rounded-lg text-center"
+                style={{ padding: '12px 8px', fontSize: '1rem' }}
               />
               <input
                 type="number"
@@ -472,16 +476,18 @@ export default function Home() {
                 min="1"
                 max="31"
                 className="trad-input rounded-lg text-center"
+                style={{ padding: '12px 8px', fontSize: '1rem' }}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm opacity-70 mb-2">出生時辰</label>
+            <label className="block text-sm opacity-70 mb-3">出生時辰</label>
             <select
               value={userInfo.birthHour}
               onChange={e => setUserInfo({...userInfo, birthHour: e.target.value})}
-              className="trad-input rounded-lg"
+              className="trad-input rounded-lg w-full"
+              style={{ padding: '12px 16px', fontSize: '1rem' }}
             >
               <option value="">選擇時辰</option>
               {TIME_PERIODS.map(t => (
@@ -492,15 +498,16 @@ export default function Home() {
         </div>
 
         {/* Question */}
-        <div className="trad-card p-6 space-y-4">
+        <div className="trad-card p-8 space-y-6">
           <h3 className="text-lg font-medium" style={{ color: 'var(--gold)' }}>占問事項</h3>
           
           <div>
-            <label className="block text-sm opacity-70 mb-2">問題類別</label>
+            <label className="block text-sm opacity-70 mb-3">問題類別</label>
             <select
               value={userInfo.questionType}
               onChange={e => setUserInfo({...userInfo, questionType: e.target.value})}
-              className="trad-input rounded-lg"
+              className="trad-input rounded-lg w-full"
+              style={{ padding: '12px 16px', fontSize: '1rem' }}
               required
             >
               <option value="">選擇類別</option>
@@ -511,37 +518,39 @@ export default function Home() {
           </div>
 
           <div>
-            <label className="block text-sm opacity-70 mb-2">
+            <label className="block text-sm opacity-70 mb-3">
               心中所問之事 <span className="text-red-400">*</span>
             </label>
             <textarea
               value={userInfo.question}
               onChange={e => setUserInfo({...userInfo, question: e.target.value})}
               placeholder="誠心默念所問之事，心中切勿疑惑..."
-              className="trad-input rounded-lg h-32 resize-none"
+              className="trad-input rounded-lg w-full resize-none"
+              style={{ padding: '14px 16px', fontSize: '1rem', minHeight: '140px' }}
               required
             />
           </div>
         </div>
 
         {/* Info notice */}
-        <div className="text-center text-sm opacity-50">
+        <div className="text-center text-sm opacity-50 py-2">
           <p>以上資料僅用於本次占卜，不會上傳或儲存</p>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4 justify-center pt-4">
+        <div className="flex gap-4 justify-center pt-2 pb-4">
           <button
             type="button"
             onClick={handleReset}
             className="px-8 py-3 border border-gold/50 rounded-lg hover:bg-gold/5 transition-all"
-            style={{ borderColor: 'rgba(201,162,39,0.3)' }}
+            style={{ borderColor: 'rgba(201,162,39,0.3)', fontSize: '1rem' }}
           >
             返回首頁
           </button>
           <button
             type="submit"
             className="trad-btn trad-btn-gold"
+            style={{ fontSize: '1rem', padding: '12px 32px' }}
           >
             稟告天地
           </button>
