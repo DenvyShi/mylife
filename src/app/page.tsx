@@ -276,7 +276,7 @@ export default function Home() {
       {/* ── Hero 區 ── */}
       <div className="text-center mb-10 animate-fade-in">
         <div className="text-sm tracking-widest mb-4 opacity-60" style={{ color: 'var(--gold)' }}>
-          三步開啟你的占卜之旅
+          ── 古法起卦 · 靜心而問 ──
         </div>
         <div className="text-7xl mb-6 animate-float">☰</div>
         <h1 className="text-5xl md:text-6xl font-bold tracking-wider mb-3" style={{
@@ -287,13 +287,14 @@ export default function Home() {
           易經占卜
         </h1>
         <div className="text-lg tracking-widest mb-6 opacity-60" style={{ color: 'var(--gold)' }}>
-          蓍草法 · 傳承千年
+          蓍草起卦 · 依古法而演
         </div>
         <div className="ornament-divider max-w-xs mx-auto mb-6">
           ◆
         </div>
-        <p className="text-base max-w-lg mx-auto leading-relaxed opacity-80 mb-2" style={{ color: 'var(--cream-dark)', fontSize: '1rem' }}>
-          輸入你的問題，系統自動擲筊，馬上為你解讀卦象含義。
+        <p className="text-base max-w-lg mx-auto leading-relaxed opacity-80" style={{ color: 'var(--cream-dark)', fontSize: '1rem' }}>
+          靜下心來，想一件你現在最想問的事。<br/>
+          系統將依傳統蓍草之法起卦，為你呈現當下的變化與提示。
         </p>
       </div>
 
@@ -314,32 +315,25 @@ export default function Home() {
         ))}
       </div>
 
-      {/* ── 使用步驟指引 ── */}
-      <div className="w-full max-w-2xl mb-10">
-        <div className="text-xs tracking-widest text-center mb-6 opacity-60" style={{ color: 'var(--gold)' }}>── 如何使用 ──</div>
-        <div className="space-y-4">
-          {[
-            { step: '1', title: '選擇問題', desc: '選擇你想問的事情類型，輸入問題內容' },
-            { step: '2', title: '稟告天地', desc: '按鈕擲筊，系統自動計算六次陰陽' },
-            { step: '3', title: '獲得解讀', desc: '馬上看到卦象含義和分析建議' },
-          ].map((item, i) => (
-            <div key={i} className={`flex items-start gap-4 p-4 rounded-lg animate-slide-up`}
-                 style={{ 
-                   background: 'rgba(30,20,20,0.95)', 
-                   border: '1px solid rgba(201,162,39,0.2)',
-                   animationDelay: `${0.3 + i * 0.15}s`,
-                   animationFillMode: 'forwards'
-                 }}>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-lg font-bold" style={{ background: 'rgba(201,162,39,0.15)', color: 'var(--gold)' }}>
-                {item.step}
-              </div>
-              <div className="pt-1">
-                <div className="font-medium mb-1" style={{ color: 'var(--gold)', fontSize: '1rem' }}>{item.title}</div>
-                <div className="text-sm opacity-70" style={{ fontSize: '0.95rem' }}>{item.desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* ── 三張卡片 ── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mb-10">
+        {[
+          { icon: '🌿', title: '五十蓍草', desc: '依傳統方法演算起卦。' },
+          { icon: '🔮', title: '六爻成卦', desc: '顯示事情當下與後續變化。' },
+          { icon: '📿', title: '象辭解讀', desc: '先看白話重點，再讀詳細解意。' },
+        ].map((item, i) => (
+          <div key={i} className={`text-center p-6 rounded-lg animate-slide-up stagger-${i + 1}`}
+               style={{ 
+                 animationFillMode: 'forwards',
+                 animationDelay: `${0.3 + i * 0.15}s`,
+                 background: 'rgba(30,20,20,0.95)',
+                 border: '1px solid rgba(201,162,39,0.2)'
+               }}>
+            <div className="text-4xl mb-3">{item.icon}</div>
+            <div className="font-medium mb-2" style={{ color: 'var(--gold)', fontSize: '1.05rem' }}>{item.title}</div>
+            <div className="text-sm opacity-70">{item.desc}</div>
+          </div>
+        ))}
       </div>
 
       {/* ── CTA 按鈕 ── */}
@@ -353,7 +347,7 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <div className="mt-12 text-center opacity-40 text-xs">
-        <p>✓ 匿名使用　✓ 不留記錄　✓ 免費使用</p>
+        <p>匿名使用 · 本地計算 · 不保存提問內容</p>
       </div>
     </div>
   );
