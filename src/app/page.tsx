@@ -286,68 +286,107 @@ export default function Home() {
         }}>
           易經占卜
         </h1>
-        <div className="text-lg tracking-widest mb-6 opacity-60" style={{ color: 'var(--gold)' }}>
+        <div className="text-lg tracking-widest mb-3 opacity-60" style={{ color: 'var(--gold)' }}>
           蓍草起卦 · 依古法而演
         </div>
         <div className="ornament-divider max-w-xs mx-auto mb-6">
           ◆
         </div>
-        <p className="text-base max-w-lg mx-auto leading-relaxed opacity-80" style={{ color: 'var(--cream-dark)', fontSize: '1rem' }}>
-          靜下心來，想一件你現在最想問的事。<br/>
-          系統將依傳統蓍草之法起卦，為你呈現當下的變化與提示。
+        {/* 4. 白話副說明 */}
+        <p className="text-base max-w-lg mx-auto leading-relaxed opacity-80" style={{ color: 'var(--cream-dark)', fontSize: '1.05rem' }}>
+          把你現在最想問的一件事，交給傳統易經方法起卦，獲得一份解讀參考。
         </p>
       </div>
 
-      {/* ── 信任信號 ── */}
-      <div className="flex flex-wrap justify-center gap-6 mb-10 animate-slide-up" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+      {/* 3. 隱私信任標籤 */}
+      <div className="flex flex-wrap justify-center gap-3 mb-10 animate-slide-up" style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}>
         {[
-          { icon: '🔒', title: '隱私保護', desc: '不留個資、不需要註冊' },
-          { icon: '📱', title: '操作簡單', desc: '三步完成，適合新手' },
-          { icon: '⚡', title: '即時結果', desc: '立即顯示解讀，無需等待' },
+          { icon: '🔒', label: '匿名使用' },
+          { icon: '💻', label: '本地計算' },
+          { icon: '🚫', label: '不保存提問內容' },
         ].map((item, i) => (
-          <div key={i} className="flex items-center gap-3 px-4 py-2 rounded-lg" style={{ background: 'rgba(201,162,39,0.06)', border: '1px solid rgba(201,162,39,0.15)' }}>
-            <span className="text-2xl">{item.icon}</span>
-            <div className="text-left">
-              <div className="text-sm font-medium" style={{ color: 'var(--gold)' }}>{item.title}</div>
-              <div className="text-xs opacity-60">{item.desc}</div>
-            </div>
+          <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm" style={{ background: 'rgba(201,162,39,0.08)', border: '1px solid rgba(201,162,39,0.2)', color: 'var(--gold)' }}>
+            <span>{item.icon}</span>
+            <span style={{ fontSize: '0.9rem' }}>{item.label}</span>
           </div>
         ))}
       </div>
 
       {/* ── 三張卡片 ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-3xl mb-10 w-full px-4 md:px-0">
         {[
           { icon: '🌿', title: '五十蓍草', desc: '依傳統方法演算起卦。' },
           { icon: '🔮', title: '六爻成卦', desc: '顯示事情當下與後續變化。' },
           { icon: '📿', title: '象辭解讀', desc: '先看白話重點，再讀詳細解意。' },
         ].map((item, i) => (
-          <div key={i} className={`text-center p-6 rounded-lg animate-slide-up stagger-${i + 1}`}
+          <div key={i} className={`text-center p-5 rounded-lg animate-slide-up`}
                style={{ 
                  animationFillMode: 'forwards',
-                 animationDelay: `${0.3 + i * 0.15}s`,
+                 animationDelay: `${0.25 + i * 0.15}s`,
                  background: 'rgba(30,20,20,0.95)',
                  border: '1px solid rgba(201,162,39,0.2)'
                }}>
-            <div className="text-4xl mb-3">{item.icon}</div>
-            <div className="font-medium mb-2" style={{ color: 'var(--gold)', fontSize: '1.05rem' }}>{item.title}</div>
-            <div className="text-sm opacity-70">{item.desc}</div>
+            <div className="text-3xl mb-2">{item.icon}</div>
+            <div className="font-medium mb-2" style={{ color: 'var(--gold)', fontSize: '1.1rem' }}>{item.title}</div>
+            <div className="text-sm leading-relaxed opacity-80" style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{item.desc}</div>
           </div>
         ))}
       </div>
 
-      {/* ── CTA 按鈕 ── */}
-      <button
-        onClick={handleStart}
-        className="trad-btn animate-pulse-glow"
-        style={{ animationDelay: '0.8s', fontSize: '1.1rem', padding: '14px 36px' }}
-      >
-        開始占卜
-      </button>
+      {/* ── CTA 按鈕區 ── */}
+      <div className="text-center">
+        {/* 5. 流程提示 */}
+        <div className="mb-4 text-sm tracking-wide opacity-60" style={{ color: 'var(--gold)', fontSize: '0.9rem' }}>
+          想一件事&nbsp;→&nbsp;起卦&nbsp;→&nbsp;看解讀
+        </div>
+
+        <button
+          onClick={handleStart}
+          className="trad-btn animate-pulse-glow"
+          style={{ animationDelay: '0.8s', fontSize: '1.1rem', padding: '14px 36px' }}
+        >
+          開始占卜
+        </button>
+
+        {/* 1. 第一次使用提示 */}
+        <div className="mt-3">
+          <button
+            onClick={() => {
+              document.getElementById('how-to-use')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="text-sm opacity-50 hover:opacity-80 transition-opacity"
+            style={{ color: 'var(--gold)', fontSize: '0.875rem', background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            第一次使用？先看怎樣發問
+          </button>
+        </div>
+      </div>
+
+      {/* ── 如何使用說明 ── */}
+      <div id="how-to-use" className="mt-12 w-full max-w-2xl px-4">
+        <div className="text-center text-xs tracking-widest mb-6 opacity-40" style={{ color: 'var(--gold)' }}>── 如何使用 ──</div>
+        <div className="space-y-3">
+          {[
+            { num: '1', title: '選擇問題', body: '選擇你想問的事情類型，填寫問題內容。' },
+            { num: '2', title: '稟告天地', body: '點擊按鈕，系統自動計算六次陰陽。' },
+            { num: '3', title: '獲得解讀', body: '馬上看到白話解讀和深入分析。' },
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-4 p-4 rounded-lg" style={{ background: 'rgba(30,20,20,0.8)', border: '1px solid rgba(201,162,39,0.15)' }}>
+              <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold" style={{ background: 'rgba(201,162,39,0.15)', color: 'var(--gold)' }}>
+                {item.num}
+              </div>
+              <div className="pt-0.5">
+                <div className="font-medium text-sm mb-0.5" style={{ color: 'var(--gold)' }}>{item.title}</div>
+                <div className="text-sm opacity-70">{item.body}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ── Footer ── */}
-      <div className="mt-12 text-center opacity-40 text-xs">
-        <p>匿名使用 · 本地計算 · 不保存提問內容</p>
+      <div className="mt-12 text-center opacity-30 text-xs pb-4">
+        <p>易經占卜 · mylife.first.pet</p>
       </div>
     </div>
   );
