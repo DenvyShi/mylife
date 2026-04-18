@@ -921,19 +921,35 @@ export default function Home() {
                     // 加入網站QR Code（位於截圖頂部中央）
                     const ctx = canvas.getContext('2d');
                     if (ctx) {
-                      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://mylife.first.pet';
+                      // 在截圖頂部建立空白區域放 QR code
+                      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://mylife.first.pet';
                       const qrImg = new Image();
                       qrImg.crossOrigin = 'anonymous';
                       qrImg.src = qrUrl;
                       await new Promise(resolve => { qrImg.onload = resolve; qrImg.onerror = resolve; });
-                      const qrSize = 60;
-                      const qrX = (canvas.width - qrSize) / 2;
-                      const qrY = 10;
-                      ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
-                      ctx.font = '11px "Noto Serif TC", serif';
-                      ctx.fillStyle = 'rgba(201,162,39,0.6)';
-                      ctx.textAlign = 'center';
-                      ctx.fillText('mylife.first.pet', canvas.width / 2, qrY + qrSize + 14);
+                      const qrSize = 80;
+                      // 建立更大的 canvas：上方預留 QR code 區域
+                      const topSpace = qrSize + 30; // QR code 高度 + 文字空間
+                      const newCanvas = document.createElement('canvas');
+                      newCanvas.width = canvas.width;
+                      newCanvas.height = canvas.height + topSpace;
+                      const newCtx = newCanvas.getContext('2d');
+                      if (!newCtx) return;
+                      // 填滿背景
+                      newCtx.fillStyle = '#0D0D0D';
+                      newCtx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+                      // 把原本截圖往下移
+                      newCtx.drawImage(canvas, 0, topSpace);
+                      // 在頂部空白區域畫 QR code（居中）
+                      const qrX = (newCanvas.width - qrSize) / 2;
+                      const qrY = 14;
+                      newCtx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+                      // QR code 下方加網址文字
+                      newCtx.font = 'bold 13px "Noto Serif TC", serif';
+                      newCtx.fillStyle = 'rgba(201,162,39,0.8)';
+                      newCtx.textAlign = 'center';
+                      newCtx.fillText('mylife.first.pet', newCanvas.width / 2, qrY + qrSize + 18);
+                      const url = newCanvas.toDataURL('image/png');
                     }
                     const url = canvas.toDataURL('image/png');
                     const a = document.createElement('a');

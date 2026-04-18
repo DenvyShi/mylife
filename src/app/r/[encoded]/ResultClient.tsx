@@ -48,29 +48,39 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
       });
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://mylife.first.pet';
+        const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://mylife.first.pet';
         const qrImg = new Image();
         qrImg.crossOrigin = 'anonymous';
         qrImg.src = qrUrl;
         await new Promise(resolve => { qrImg.onload = resolve; qrImg.onerror = resolve; });
-        const qrSize = 60;
-        const qrX = (canvas.width - qrSize) / 2;
-        const qrY = 10;
-        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
-        ctx.font = '11px "Noto Serif TC", serif';
-        ctx.fillStyle = 'rgba(201,162,39,0.6)';
-        ctx.textAlign = 'center';
-        ctx.fillText('mylife.first.pet', canvas.width / 2, qrY + qrSize + 14);
+        const qrSize = 80;
+        const topSpace = qrSize + 30;
+        const newCanvas = document.createElement('canvas');
+        newCanvas.width = canvas.width;
+        newCanvas.height = canvas.height + topSpace;
+        const newCtx = newCanvas.getContext('2d');
+        if (!newCtx) return;
+        newCtx.fillStyle = '#0D0D0D';
+        newCtx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+        newCtx.drawImage(canvas, 0, topSpace);
+        const qrX = (newCanvas.width - qrSize) / 2;
+        const qrY = 14;
+        newCtx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+        newCtx.font = 'bold 13px "Noto Serif TC", serif';
+        newCtx.fillStyle = 'rgba(201,162,39,0.8)';
+        newCtx.textAlign = 'center';
+        newCtx.fillText('mylife.first.pet', newCanvas.width / 2, qrY + qrSize + 18);
+        const url = newCanvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `易經占卜_${hexagram.name}卦_${Date.now()}.png`;
+        a.click();
       }
-      const url = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `易經占卜_${hexagram.name}卦_${Date.now()}.png`;
-      a.click();
     } catch (e) {
       console.error('PNG capture failed', e);
     }
   };
+
 
   const fortune = assessFortune(decoded.hexagramId, decoded.changingLines.length);
   const highlights = generateHighlightConclusions(decoded.hexagramId, hexagram.name, fortune.rating, fortune.summary, fortune.advice, decoded.changingLines.length);
