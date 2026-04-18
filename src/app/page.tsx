@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import html2canvas from 'html2canvas';
 import { hexagrams, Hexagram } from '@/data/hexagrams';
 import { performDivination, DivinationResult } from '@/lib/divination';
 import { assessFortune, interpretJudgment, interpretImage, computeWuxing, generateHighlightConclusions, generatePlainInterpretation } from '@/lib/interpretation';
@@ -686,8 +687,8 @@ export default function Home() {
     };
 
     return (
-      <div ref={resultRef} className={`min-h-screen px-4 py-8 transition-all duration-700 ${showResult ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="max-w-xl mx-auto space-y-6">
+      <div className={`min-h-screen px-4 py-8 transition-all duration-700 ${showResult ? 'opacity-100' : 'opacity-0'}`}>
+        <div ref={resultRef} className="max-w-xl mx-auto space-y-6">
 
           {/* ── 頁面標題 ── */}
           <div className="text-center">
@@ -716,26 +717,26 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="p-4 rounded-lg" style={{ background: 'rgba(201,162,39,0.08)', borderLeft: `3px solid ${fortune.color}` }}>
+            <div className="space-y-5">
+              <div className="p-5 rounded-lg" style={{ background: 'rgba(201,162,39,0.08)', borderLeft: `3px solid ${fortune.color}` }}>
                 <div className="text-xs tracking-widest mb-2" style={{ color: 'var(--gold)' }}>這一卦代表</div>
-                <p className="text-lg leading-relaxed" style={{ color: 'var(--cream)', fontSize: '1.1rem' }}>{highlights.represents}</p>
+                <p className="text-lg leading-relaxed" style={{ color: 'var(--cream)', fontSize: '1.1rem', lineHeight: 1.8 }}>{highlights.represents}</p>
               </div>
               <div className="p-4 rounded-lg" style={{ background: 'rgba(201,162,39,0.08)', borderLeft: `3px solid var(--cinnabar)` }}>
                 <div className="text-xs tracking-widest mb-2" style={{ color: 'var(--gold)' }}>你現在較應注意</div>
-                <p className="text-lg leading-relaxed" style={{ color: 'var(--cream)', fontSize: '1.1rem' }}>{highlights.attention}</p>
+                <p className="text-lg leading-relaxed" style={{ color: 'var(--cream)', fontSize: '1.1rem', lineHeight: 1.8 }}>{highlights.attention}</p>
               </div>
               <div className="p-4 rounded-lg" style={{ background: 'rgba(201,162,39,0.08)', borderLeft: `3px solid var(--jade)` }}>
                 <div className="text-xs tracking-widest mb-2" style={{ color: 'var(--gold)' }}>建議方向</div>
-                <p className="text-lg leading-relaxed" style={{ color: 'var(--cream)', fontSize: '1.1rem' }}>{highlights.suggestion}</p>
+                <p className="text-lg leading-relaxed" style={{ color: 'var(--cream)', fontSize: '1.1rem', lineHeight: 1.8 }}>{highlights.suggestion}</p>
               </div>
             </div>
           </div>
 
           {/* ── 卦象資料 ── */}
-          <div className="trad-card p-5">
-            <div className="text-xs tracking-widest text-center mb-4" style={{ color: 'var(--gold)' }}>── 卦象資料 ──</div>
-            <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="trad-card p-6">
+            <div className="text-xs tracking-widest text-center mb-5" style={{ color: 'var(--gold)' }}>── 卦象資料 ──</div>
+            <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="flex justify-between">
                 <span className="opacity-60">本卦</span>
                 <span style={{ color: 'var(--cream)' }}>{hexagram.name}卦</span>
@@ -765,54 +766,54 @@ export default function Home() {
           </div>
 
           {/* ── 白話解讀 ── */}
-          <div className="trad-card p-5">
-            <div className="text-xs tracking-widest text-center mb-4" style={{ color: 'var(--gold)' }}>── 白話解讀 ──</div>
-            <div className="space-y-4 text-sm" style={{ fontSize: '1rem' }}>
+          <div className="trad-card p-6">
+            <div className="text-xs tracking-widest text-center mb-5" style={{ color: 'var(--gold)' }}>── 白話解讀 ──</div>
+            <div className="space-y-5 text-sm" style={{ fontSize: '1rem' }}>
               <div>
-                <div className="font-medium mb-1" style={{ color: 'var(--gold)' }}>整體來看</div>
-                <p className="leading-relaxed opacity-90">{plain.overall}</p>
+                <div className="font-medium mb-2" style={{ color: 'var(--gold)' }}>整體來看</div>
+                <p className="leading-relaxed opacity-90" style={{ lineHeight: 1.8 }}>{plain.overall}</p>
               </div>
               <div>
-                <div className="font-medium mb-1" style={{ color: 'var(--gold)' }}>對這件事的提醒</div>
-                <p className="leading-relaxed opacity-90">{plain.reminder}</p>
+                <div className="font-medium mb-2" style={{ color: 'var(--gold)' }}>對這件事的提醒</div>
+                <p className="leading-relaxed opacity-90" style={{ lineHeight: 1.8 }}>{plain.reminder}</p>
               </div>
               <div>
-                <div className="font-medium mb-1" style={{ color: 'var(--gold)' }}>如果你正準備行動</div>
-                <p className="leading-relaxed opacity-90">{plain.actionAdvice}</p>
+                <div className="font-medium mb-2" style={{ color: 'var(--gold)' }}>如果你正準備行動</div>
+                <p className="leading-relaxed opacity-90" style={{ lineHeight: 1.8 }}>{plain.actionAdvice}</p>
               </div>
               <div>
-                <div className="font-medium mb-1" style={{ color: 'var(--gold)' }}>如果你仍在觀望</div>
-                <p className="leading-relaxed opacity-90">{plain.watchAdvice}</p>
+                <div className="font-medium mb-2" style={{ color: 'var(--gold)' }}>如果你仍在觀望</div>
+                <p className="leading-relaxed opacity-90" style={{ lineHeight: 1.8 }}>{plain.watchAdvice}</p>
               </div>
             </div>
           </div>
 
           {/* ── 深入閱讀（Accordion） ── */}
-          <div className="trad-card p-5">
-            <div className="text-xs tracking-widest text-center mb-4" style={{ color: 'var(--gold)' }}>── 深入閱讀 ──</div>
-            <div className="space-y-2">
+          <div className="trad-card p-6">
+            <div className="text-xs tracking-widest text-center mb-5" style={{ color: 'var(--gold)' }}>── 深入閱讀 ──</div>
+            <div className="space-y-3">
               {/* 卦辭原文 */}
               <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
                 <button
                   onClick={() => toggleAccordion('judgment')}
-                  className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-gold/5"
+                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
                 >
                   <span className="text-sm font-medium">查看卦辭原文</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'judgment' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'judgment' && (
-                  <div className="px-4 pb-4 space-y-3">
+                  <div className="px-5 pb-5 space-y-4">
                     <div>
-                      <div className="text-xs opacity-60 mb-1">卦辭</div>
-                      <p className="text-lg leading-relaxed" style={{ fontFamily: "'Noto Serif TC', serif" }}>{hexagram.judgment}</p>
+                      <div className="text-xs opacity-60 mb-2">卦辭</div>
+                      <p className="text-base leading-relaxed" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.judgment}</p>
                     </div>
                     <div>
-                      <div className="text-xs opacity-60 mb-1">白話解說</div>
-                      <p className="text-sm leading-relaxed opacity-80">{judgmentInterpretation}</p>
+                      <div className="text-xs opacity-60 mb-2">白話解說</div>
+                      <p className="text-sm leading-relaxed opacity-80" style={{ lineHeight: 1.8 }}>{judgmentInterpretation}</p>
                     </div>
                     <div>
-                      <div className="text-xs opacity-60 mb-1">彖曰</div>
-                      <p className="text-sm leading-relaxed opacity-80">{hexagram.judgmentTitle}</p>
+                      <div className="text-xs opacity-60 mb-2">彖曰</div>
+                      <p className="text-sm leading-relaxed opacity-80" style={{ lineHeight: 1.8 }}>{hexagram.judgmentTitle}</p>
                     </div>
                   </div>
                 )}
@@ -822,16 +823,16 @@ export default function Home() {
               <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
                 <button
                   onClick={() => toggleAccordion('image')}
-                  className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-gold/5"
+                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
                 >
                   <span className="text-sm font-medium">查看象義說明</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'image' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'image' && (
-                  <div className="px-4 pb-4 space-y-3">
+                  <div className="px-5 pb-5 space-y-4">
                     <div>
-                      <div className="text-xs opacity-60 mb-1">象曰</div>
-                      <p className="text-lg leading-relaxed" style={{ fontFamily: "'Noto Serif TC', serif" }}>{hexagram.image}</p>
+                      <div className="text-xs opacity-60 mb-2">象曰</div>
+                      <p className="text-base leading-relaxed" style={{ fontFamily: "'Noto Serif TC', serif", lineHeight: 1.8 }}>{hexagram.image}</p>
                     </div>
                     <div>
                       <div className="text-xs opacity-60 mb-1">白話解說</div>
@@ -845,13 +846,13 @@ export default function Home() {
               <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
                 <button
                   onClick={() => toggleAccordion('lines')}
-                  className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-gold/5"
+                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
                 >
                   <span className="text-sm font-medium">查看逐爻解讀</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'lines' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'lines' && (
-                  <div className="px-4 pb-4 space-y-3">
+                  <div className="px-5 pb-5 space-y-3">
                     {[...result.lines].reverse().map((line, idx) => {
                       const realIdx = 5 - idx;
                       return (
@@ -883,8 +884,8 @@ export default function Home() {
           </div>
 
           {/* ── 五行分析 ── */}
-          <div className="trad-card p-5">
-            <div className="text-xs tracking-widest text-center mb-4" style={{ color: 'var(--gold)' }}>── 五行分析 ──</div>
+          <div className="trad-card p-6">
+            <div className="text-xs tracking-widest text-center mb-5" style={{ color: 'var(--gold)' }}>── 五行分析 ──</div>
             <div className="grid grid-cols-5 gap-2 text-center">
               {[
                 { label: '金', value: wuxing['金'], desc: '性情剛毅' },
