@@ -1,69 +1,32 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import html2canvas from 'html2canvas';
 import { hexagrams, Hexagram } from '@/data/hexagrams';
 import { assessFortune, interpretJudgment, computeWuxing, generateHighlightConclusions, generatePlainInterpretation } from '@/lib/interpretation';
-import { decodeResult } from './shared';
 
-interface DecodedData {
-  hexagramId: number;
-  changedId?: number;
-  changingLines: number[];
-  lineSymbols: string[];
-  hexSymbols: string;
-  questionType?: string;
+interface Props {
+  decoded: {
+    hexagramId: number;
+    changedId?: number;
+    changingLines: number[];
+    lineSymbols: string[];
+    hexSymbols: string;
+    questionType?: string;
+  };
+  hexagramName: string;
+  changedHexagramName?: string;
 }
 
-export default function ResultClient() {
-  const params = useParams();
-  const [data, setData] = useState<DecodedData | null>(null);
-  const [hexagram, setHexagram] = useState<Hexagram | null>(null);
-  const [changedHexagram, setChangedHexagram] = useState<Hexagram | null>(null);
-  const [error, setError] = useState<string | null>(null);
+export default function ResultClient({ decoded, hexagramName, changedHexagramName }: Props) {
+  const hexagram = hexagrams.find(x => x.id === decoded.hexagramId) || null;
+  const changedHexagram = decoded.changedId
+    ? hexagrams.find(x => x.id === decoded.changedId) || null
+    : null;
 
-  useEffect(() => {
-    const init = async () => {
-      const resolved = await params;
-      const encoded = typeof resolved.encoded === 'string'
-        ? resolved.encoded
-        : Array.isArray(resolved.encoded) ? resolved.encoded[0] : undefined;
-
-      if (!encoded) {
-        setError('無效的連結');
-        return;
-      }
-
-      const decoded = decodeResult(encoded);
-      if (!decoded) {
-        setError('無法解析占卜結果');
-        return;
-      }
-
-      setData(decoded);
-
-      const h = hexagrams.find(x => x.id === decoded.hexagramId);
-      const ch = decoded.changedId ? hexagrams.find(x => x.id === decoded.changedId) : null;
-
-      setHexagram(h || null);
-      setChangedHexagram(ch || null);
-    };
-    init();
-  }, [params]);
-
-  if (error || !data) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: '#0D0D0D', color: '#F5E6D3' }}>
-        <div className="text-6xl mb-6">☰☷</div>
-        <h1 className="text-2xl font-bold mb-4">{error || '載入中...'}</h1>
-        <Link href="/" className="text-amber-400 hover:underline">
-          前往占卜 →
-        </Link>
-      </div>
-    );
-  }
+  const [accordionOpen, setAccordionOpen] = useState<string | null>(null);
+  const resultCardRef = useRef<HTMLDivElement>(null);
 
   if (!hexagram) {
     return (
@@ -74,9 +37,6 @@ export default function ResultClient() {
     );
   }
 
-  const [accordionOpen, setAccordionOpen] = useState<string | null>(null);
-  const resultCardRef = useRef<HTMLDivElement>(null);
-
   const handleSavePng = async () => {
     if (!resultCardRef.current) return;
     try {
@@ -86,7 +46,6 @@ export default function ResultClient() {
         useCORS: true,
         logging: false,
       });
-      // 加入網站QR Code（位於圖片頂部中央）
       const ctx = canvas.getContext('2d');
       if (ctx) {
         const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://mylife.first.pet';
@@ -106,25 +65,21 @@ export default function ResultClient() {
       const url = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = url;
-      a.download = `易經占卜_${hexagram?.name}卦_${Date.now()}.png`;
+      a.download = `易經占卜_${hexagram.name}卦_${Date.now()}.png`;
       a.click();
     } catch (e) {
       console.error('PNG capture failed', e);
     }
   };
 
-  const fortune = assessFortune(data.hexagramId, data.changingLines.length);
-  const highlights = generateHighlightConclusions(data.hexagramId, hexagram.name, fortune.rating, fortune.summary, fortune.advice, data.changingLines.length);
-  const plain = generatePlainInterpretation(data.hexagramId, hexagram.name, fortune.rating, hexagram.fortune, data.changingLines.length);
+  const fortune = assessFortune(decoded.hexagramId, decoded.changingLines.length);
+  const highlights = generateHighlightConclusions(decoded.hexagramId, hexagram.name, fortune.rating, fortune.summary, fortune.advice, decoded.changingLines.length);
+  const plain = generatePlainInterpretation(decoded.hexagramId, hexagram.name, fortune.rating, hexagram.fortune, decoded.changingLines.length);
 
   const getLineLabel = (pos: number) => {
     if (pos === 1) return '初爻';
     if (pos === 6) return '上爻';
     return `六${['', '二', '三', '四', '五'][pos - 1]}爻`;
-  };
-
-  const toggleAccordion = (key: string) => {
-    setAccordionOpen(prev => prev === key ? null : key);
   };
 
   return (
@@ -172,7 +127,7 @@ export default function ResultClient() {
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="flex justify-between"><span className="opacity-60">本卦</span><span>{hexagram.name}卦</span></div>
             <div className="flex justify-between"><span className="opacity-60">變卦</span><span style={{ color: changedHexagram ? '#8B5CF6' : '#F5E6D3' }}>{changedHexagram ? changedHexagram.name + '卦' : '—'}</span></div>
-            <div className="flex justify-between col-span-2"><span className="opacity-60">問題主題</span><span style={{ color: '#C9A227' }}>{data.questionType || '未指定'}</span></div>
+            <div className="flex justify-between col-span-2"><span className="opacity-60">問題主題</span><span style={{ color: '#C9A227' }}>{decoded.questionType || '未指定'}</span></div>
           </div>
           <div className="mt-4 text-xs text-center opacity-40" style={{ color: '#C9A227' }}>本卦＝目前狀態 · 變卦＝變化方向</div>
         </div>
@@ -204,9 +159,8 @@ export default function ResultClient() {
         <div className="rounded-xl p-6" style={{ background: 'rgba(30,20,20,0.95)', border: '1px solid rgba(201,162,39,0.25)' }}>
           <div className="text-xs tracking-widest text-center mb-5" style={{ color: '#C9A227' }}>── 深入閱讀 ──</div>
           <div className="space-y-3">
-            {/* 卦辭 */}
             <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
-              <button onClick={() => toggleAccordion('judgment')} className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5">
+              <button onClick={() => setAccordionOpen(prev => prev === 'judgment' ? null : 'judgment')} className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5">
                 <span className="text-sm font-medium">查看卦辭原文</span>
                 <span className="text-lg" style={{ transform: accordionOpen === 'judgment' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
@@ -218,9 +172,8 @@ export default function ResultClient() {
                 </div>
               )}
             </div>
-            {/* 象義 */}
             <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
-              <button onClick={() => toggleAccordion('image')} className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5">
+              <button onClick={() => setAccordionOpen(prev => prev === 'image' ? null : 'image')} className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5">
                 <span className="text-sm font-medium">查看象義說明</span>
                 <span className="text-lg" style={{ transform: accordionOpen === 'image' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
@@ -230,17 +183,16 @@ export default function ResultClient() {
                 </div>
               )}
             </div>
-            {/* 逐爻 */}
             <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
-              <button onClick={() => toggleAccordion('lines')} className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5">
+              <button onClick={() => setAccordionOpen(prev => prev === 'lines' ? null : 'lines')} className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5">
                 <span className="text-sm font-medium">查看逐爻解讀</span>
                 <span className="text-lg" style={{ transform: accordionOpen === 'lines' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {accordionOpen === 'lines' && (
                 <div className="px-5 pb-5 space-y-3">
-                  {[...data.lineSymbols].reverse().map((symbol, idx) => {
+                  {[...decoded.lineSymbols].reverse().map((symbol, idx) => {
                     const position = 6 - idx;
-                    const isChanging = data.changingLines.includes(position);
+                    const isChanging = decoded.changingLines.includes(position);
                     const lineIdx = position - 1;
                     return (
                       <div key={position} className="p-4 rounded-lg" style={isChanging ? { background: 'rgba(201,162,39,0.08)', border: '1px solid rgba(201,162,39,0.3)' } : { background: 'rgba(30,30,30,0.5)' }}>
@@ -287,7 +239,6 @@ export default function ResultClient() {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="text-center text-sm opacity-30 pb-4">占卜結果僅供思考參考，不宜代替醫療、法律或財務專業判斷。</div>
       </div>
     </div>
