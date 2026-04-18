@@ -796,9 +796,9 @@ export default function Home() {
               <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
                 <button
                   onClick={() => toggleAccordion('judgment')}
-                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
+                  className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-gold/5"
                 >
-                  <span className="text-base font-medium">查看卦辭原文</span>
+                  <span className="text-lg font-medium">查看卦辭原文</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'judgment' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'judgment' && (
@@ -823,9 +823,9 @@ export default function Home() {
               <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
                 <button
                   onClick={() => toggleAccordion('image')}
-                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
+                  className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-gold/5"
                 >
-                  <span className="text-base font-medium">查看象義說明</span>
+                  <span className="text-lg font-medium">查看象義說明</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'image' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'image' && (
@@ -846,9 +846,9 @@ export default function Home() {
               <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
                 <button
                   onClick={() => toggleAccordion('lines')}
-                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-gold/5"
+                  className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-gold/5"
                 >
-                  <span className="text-base font-medium">查看逐爻解讀</span>
+                  <span className="text-lg font-medium">查看逐爻解讀</span>
                   <span className="text-lg transition-transform" style={{ transform: accordionOpen === 'lines' ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </button>
                 {accordionOpen === 'lines' && (
