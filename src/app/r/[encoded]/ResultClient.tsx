@@ -82,12 +82,28 @@ export default function ResultClient() {
         useCORS: true,
         logging: false,
       });
+      // 加入網站QR Code
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.font = '14px "Noto Serif TC", serif';
-        ctx.fillStyle = 'rgba(201,162,39,0.5)';
-        ctx.textAlign = 'right';
-        ctx.fillText('mylife.first.pet', canvas.width - 16, canvas.height - 12);
+        try {
+          const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://mylife.first.pet';
+          const qrImg = new Image();
+          qrImg.crossOrigin = 'anonymous';
+          await new Promise((resolve, reject) => {
+            qrImg.onload = resolve;
+            qrImg.onerror = reject;
+            qrImg.src = qrUrl;
+          });
+          const qrSize = 80;
+          const qrX = (canvas.width - qrSize) / 2;
+          ctx.drawImage(qrImg, qrX, 8, qrSize, qrSize);
+          ctx.font = '12px "Noto Serif TC", serif';
+          ctx.fillStyle = 'rgba(201,162,39,0.7)';
+          ctx.textAlign = 'center';
+          ctx.fillText('mylife.first.pet', canvas.width / 2, 8 + qrSize + 16);
+        } catch(e) {
+          console.error('QR Code載入失敗', e);
+        }
       }
       const url = canvas.toDataURL('image/png');
       const a = document.createElement('a');
