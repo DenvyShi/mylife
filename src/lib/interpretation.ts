@@ -90,7 +90,7 @@ const HEXAGRAM_BASE_SCORE: Record<number, number> = {
   59: 55,  // 渙 — 風水渙，渙散分離
   60: 55,  // 節 — 水澤節，節制有度
   61: 80,  // 中孚 — 風澤中孚，誠信待人
-  62: 45,  // 小過 — 雷山小過，小有过失
+  62: 45,  // 小過 — 雷山小過，小有過失
   63: 75,  // 既濟 — 水火既濟，事已成定
   64: 50,  // 未濟 — 火水未濟，事未成功
 };
@@ -228,7 +228,7 @@ export function interpretJudgment(judgment: string): string {
     '小亨': '表示有小阻礙，但最終可通達。',
     '不利': '表示此時行事不利，應避免主動出擊。',
     '悔亡': '表示過去的憂悔將消除，局勢好轉。',
-    '无咎': '表示沒有大的過失，即使有小問題也能平安度過。',
+    '無咎': '表示沒有大的過失，即使有小問題也能平安度過。',
     '吝': '表示有羞辱、悔恨之事發生，需要謹慎。',
     '厉': '表示有危險，需要小心行事。',
   };
@@ -357,7 +357,7 @@ function getHexagramTrait(hexagramId: number): string {
   return traits[hexagramId] || '目前局勢還在變化中。';
 }
 
-// 根據吉凶和變爻數生成"应注意"的內容
+// 根據吉凶和變爻數生成"應注意"的內容
 function getAttentionTip(rating: string, changingCount: number): string {
   if (changingCount >= 3) {
     return '變數較多，局勢未穩，行動要特別小心。';
@@ -438,7 +438,7 @@ function getReminder(hexagramId: number, rating: string, changingCount: number):
     return '有變化在醞釀，時機和方向是關鍵。';
   }
   if (rating.includes('吉')) {
-    return '運勢好的时候更要看清方向，不要錯過機會。';
+    return '運勢好的時候更要看清方向，不要錯過機會。';
   }
   if (rating.includes('凶')) {
     return '形勢不利時，耐心等待比盲目行動更聰明。';

@@ -52,8 +52,8 @@ export const hexagrams: Hexagram[] = [
     lines: [
       { judgment: '潛龍勿用', luck: 'yang', isChanging: false },
       { judgment: '見龍在田，利見大人', luck: 'yin', isChanging: true },
-      { judgment: '君子終日乾乾，夕惕若厲，无咎', luck: 'yang', isChanging: false },
-      { judgment: '或躍在淵，无咎', luck: 'yang', isChanging: false },
+      { judgment: '君子終日乾乾，夕惕若厲，無咎', luck: 'yang', isChanging: false },
+      { judgment: '或躍在淵，無咎', luck: 'yang', isChanging: false },
       { judgment: '飛龍在天，利見大人', luck: 'yin', isChanging: true },
       { judgment: '亢龍有悔', luck: 'yang', isChanging: false },
     ]
@@ -76,9 +76,9 @@ export const hexagrams: Hexagram[] = [
     health: '注意腸胃消化系統，女士注意婦科',
     lines: [
       { judgment: '履霜，堅冰至', luck: 'yang', isChanging: false },
-      { judgment: '直方大，不習无不利', luck: 'yin', isChanging: true },
-      { judgment: '含章可貞。或從王事，无成有終', luck: 'yang', isChanging: false },
-      { judgment: '括囊，无咎无譽', luck: 'yin', isChanging: true },
+      { judgment: '直方大，不習無不利', luck: 'yin', isChanging: true },
+      { judgment: '含章可貞。或從王事，無成有終', luck: 'yang', isChanging: false },
+      { judgment: '括囊，無咎無譽', luck: 'yin', isChanging: true },
       { judgment: '黃裳元吉', luck: 'yang', isChanging: false },
       { judgment: '龍戰於野，其血玄黃', luck: 'yang', isChanging: false },
     ]
@@ -102,8 +102,8 @@ export const hexagrams: Hexagram[] = [
     lines: [
       { judgment: '磐桓，利居貞，利建侯', luck: 'yang', isChanging: false },
       { judgment: '屯如邅如，乘馬班如。匪寇婚媾，女子貞不字，十年乃字', luck: 'yin', isChanging: true },
-      { judgment: '即鹿无虞，惟入於林中，君子幾不如舍，往吝', luck: 'yang', isChanging: false },
-      { judgment: '乘馬班如，求婚媾，往吉，无不利', luck: 'yin', isChanging: true },
+      { judgment: '即鹿無虞，惟入於林中，君子幾不如舍，往吝', luck: 'yang', isChanging: false },
+      { judgment: '乘馬班如，求婚媾，往吉，無不利', luck: 'yin', isChanging: true },
       { judgment: '屯其膏，小貞吉，大貞凶', luck: 'yang', isChanging: false },
       { judgment: '乘馬班如，泣血漣如', luck: 'yang', isChanging: false },
     ]
@@ -127,7 +127,7 @@ export const hexagrams: Hexagram[] = [
     lines: [
       { judgment: '發蒙，利用刑人，用說桎梏以往吝', luck: 'yang', isChanging: false },
       { judgment: '包蒙吉。納婦吉，子克家', luck: 'yin', isChanging: true },
-      { judgment: '勿用取女，見金夫，不有躬，无攸利', luck: 'yang', isChanging: false },
+      { judgment: '勿用取女，見金夫，不有躬，無攸利', luck: 'yang', isChanging: false },
       { judgment: '困蒙之吝，獨遠實也', luck: 'yin', isChanging: true },
       { judgment: '童蒙之吉，順以巽也', luck: 'yang', isChanging: false },
       { judgment: '擊蒙，不利為寇，利禦寇', luck: 'yang', isChanging: false },
@@ -150,7 +150,7 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情出現考驗，單身者需耐心，已婚者防第三者',
     health: '注意泌尿系統，夜尿頻密者需注意腎功能',
     lines: [
-      { judgment: '需於郊，利用恆，无咎', luck: 'yang', isChanging: false },
+      { judgment: '需於郊，利用恆，無咎', luck: 'yang', isChanging: false },
       { judgment: '需於沙，小有言，終吉', luck: 'yin', isChanging: true },
       { judgment: '需於泥，致寇至', luck: 'yang', isChanging: false },
       { judgment: '需於血，出自穴', luck: 'yin', isChanging: true },
@@ -176,9 +176,9 @@ export const hexagrams: Hexagram[] = [
     health: '注意腎臟及泌尿系統，防意外受傷',
     lines: [
       { judgment: '不永所事，小有言，終吉', luck: 'yang', isChanging: false },
-      { judgment: '不克讼，歸而逋，其邑人三百户，无眚', luck: 'yin', isChanging: true },
-      { judgment: '食舊德，貞厲，終吉。或從王事，无成', luck: 'yang', isChanging: false },
-      { judgment: '不克讼，自下讼之，或從王事无成', luck: 'yin', isChanging: true },
+      { judgment: '不克讼，歸而逋，其邑人三百户，無眚', luck: 'yin', isChanging: true },
+      { judgment: '食舊德，貞厲，終吉。或從王事，無成', luck: 'yang', isChanging: false },
+      { judgment: '不克讼，自下讼之，或從王事無成', luck: 'yin', isChanging: true },
       { judgment: '讼元吉，以中正也', luck: 'yang', isChanging: false },
       { judgment: '以御暴對飲食，終朝三襦之', luck: 'yang', isChanging: false },
     ]
@@ -190,7 +190,7 @@ export const hexagrams: Hexagram[] = [
     above: '坤',
     below: '坎',
     guaMeaning: '地下有水，泉水出地',
-    judgment: '貞，丈人吉，无咎',
+    judgment: '貞，丈人吉，無咎',
     judgmentTitle: '師，眾也，貞，正也',
     image: '地中有水，師；君子以容民畜眾',
     trigrams: '上坤為地，下坎為水，地中有水，聚而為眾',
@@ -201,10 +201,10 @@ export const hexagrams: Hexagram[] = [
     health: '注意泌尿系統及腎臟，長期病患者小心',
     lines: [
       { judgment: '師出以律，否臧凶', luck: 'yang', isChanging: false },
-      { judgment: '在師中，吉无咎，王三錫命', luck: 'yin', isChanging: true },
+      { judgment: '在師中，吉無咎，王三錫命', luck: 'yin', isChanging: true },
       { judgment: '師或輿尸，凶', luck: 'yang', isChanging: false },
-      { judgment: '師左次，无咎', luck: 'yin', isChanging: true },
-      { judgment: '田有禽，利執言，无咎。長子帥師，弟子輿尸，貞凶', luck: 'yang', isChanging: false },
+      { judgment: '師左次，無咎', luck: 'yin', isChanging: true },
+      { judgment: '田有禽，利執言，無咎。長子帥師，弟子輿尸，貞凶', luck: 'yang', isChanging: false },
       { judgment: '大君有命，開國承家，小人勿用', luck: 'yang', isChanging: false },
     ]
   },
@@ -215,22 +215,22 @@ export const hexagrams: Hexagram[] = [
     above: '坎',
     below: '坤',
     guaMeaning: '地上有水，水得地而流',
-    judgment: '吉。原筮元永貞，无咎。不寧方來，後夫凶',
+    judgment: '吉。原筮元永貞，無咎。不寧方來，後夫凶',
     judgmentTitle: '比，輔也，下順從也',
     image: '地上有水，比；先王以建萬國，親諸侯',
     trigrams: '上坎水，下坤地，水在地上親密無間',
     fortune: '運勢和悅，人際關係和諧，貴人多助',
     wealth: '財運廣進，利於合夥經營，忌獨斷專行',
-    career: '事業得下屬及團隊忠心效力，人和万事兴',
+    career: '事業得下屬及團隊忠心效力，人和萬事兴',
     relationships: '感情投緣，單身者有媒人介紹，已婚者夫唱婦隨',
     health: '注意泌尿系統及血液循環，整體良好',
     lines: [
-      { judgment: '有孚比之，无咎。有孚盈缶，終來有它吉', luck: 'yang', isChanging: false },
+      { judgment: '有孚比之，無咎。有孚盈缶，終來有它吉', luck: 'yang', isChanging: false },
       { judgment: '比之自內，貞吉', luck: 'yin', isChanging: true },
       { judgment: '比之匪人', luck: 'yang', isChanging: false },
       { judgment: '外比之，貞吉', luck: 'yin', isChanging: true },
       { judgment: '顯比，王用三驅，失前禽。邑人不誡，吉', luck: 'yang', isChanging: false },
-      { judgment: '比之无首，凶', luck: 'yang', isChanging: false },
+      { judgment: '比之無首，凶', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -242,7 +242,7 @@ export const hexagrams: Hexagram[] = [
     guaMeaning: '風在天上，蓄積之象',
     judgment: '亨。密雲不雨，自我西郊',
     judgmentTitle: '小畜，柔得位而上下應之',
-    image: '風上于天，小畜；君子以懿文德',
+    image: '風上於天，小畜；君子以懿文德',
     trigrams: '上巽風，下乾天，風在天上未成雨，蓄勢待發',
     fortune: '運勢小有成就，力量尚薄，不可冒進',
     wealth: '財運初聚，積少成多，穩健理財為宜',
@@ -253,7 +253,7 @@ export const hexagrams: Hexagram[] = [
       { judgment: '復自道，何其咎，吉', luck: 'yang', isChanging: false },
       { judgment: '牽復，吉', luck: 'yin', isChanging: true },
       { judgment: '輿脫輻，夫妻反目', luck: 'yang', isChanging: false },
-      { judgment: '有孚，血去惕出，无咎', luck: 'yin', isChanging: true },
+      { judgment: '有孚，血去惕出，無咎', luck: 'yin', isChanging: true },
       { judgment: '有孚攣如，富以其鄰', luck: 'yang', isChanging: false },
       { judgment: '既雨既處，尚德載，婦貞厲。月幾望，君子征凶', luck: 'yang', isChanging: false },
     ]
@@ -275,7 +275,7 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情道路不平，交往需真誠，不可玩弄感情',
     health: '注意足部及關節，運動時小心受傷',
     lines: [
-      { judgment: '素履，往无咎', luck: 'yang', isChanging: false },
+      { judgment: '素履，往無咎', luck: 'yang', isChanging: false },
       { judgment: '履道坦坦，幽人貞吉', luck: 'yin', isChanging: true },
       { judgment: '眇能視，足以攝跛能履，履之尾，真厲。象曰：眇能視，不足以有明。跛能履，不足以與行也', luck: 'yang', isChanging: false },
       { judgment: '履虎尾，愬愬終吉', luck: 'yin', isChanging: true },
@@ -298,11 +298,11 @@ export const hexagrams: Hexagram[] = [
     wealth: '財運大旺，投資得利，合作有利',
     career: '事業飛黃騰達，名利雙收的最佳時期',
     relationships: '感情美滿，單身者易覓佳緣，已婚者恩愛和諧',
-    health: '健康佳，整体運勢旺盛，注意春季養肝',
+    health: '健康佳，整體運勢旺盛，注意春季養肝',
     lines: [
       { judgment: '拔茅茹，以其彚，征吉', luck: 'yang', isChanging: false },
       { judgment: '包荒，用馮河，不遐遺，得尚於中行', luck: 'yin', isChanging: true },
-      { judgment: '无平不陂，无往不復，艱貞无咎。勿恤其孚，於食有福', luck: 'yang', isChanging: false },
+      { judgment: '無平不陂，無往不復，艱貞無咎。勿恤其孚，於食有福', luck: 'yang', isChanging: false },
       { judgment: '翩翩，不富以其鄰，不戒以孚', luck: 'yin', isChanging: true },
       { judgment: '帝乙歸妹，以祉元吉', luck: 'yang', isChanging: false },
       { judgment: '城復於隍，勿用師。自邑告命，貞吝', luck: 'yang', isChanging: false },
@@ -321,14 +321,14 @@ export const hexagrams: Hexagram[] = [
     trigrams: '上乾天，下坤地，天地之氣隔離，萬物不生',
     fortune: '運勢滞逆，诸事不順，宜守不宜動',
     wealth: '財運耗損，不宜投資，謹慎理財',
-    career: '事業阻礙多，小人当道，宜韜光養晦',
+    career: '事業阻礙多，小人當道，宜韜光養晦',
     relationships: '感情冷淡，單身者姻緣未至，已婚者防婚變',
     health: '健康下滑，注意腸胃及消化系統',
     lines: [
       { judgment: '拔茅茹，以其彚，貞吉亨', luck: 'yang', isChanging: false },
       { judgment: '包承，小人吉，大人否亨', luck: 'yin', isChanging: true },
       { judgment: '包羞', luck: 'yang', isChanging: false },
-      { judgment: '有命无咎，疇離祉', luck: 'yin', isChanging: true },
+      { judgment: '有命無咎，疇離祉', luck: 'yin', isChanging: true },
       { judgment: '休否，大人吉。其亡其亡，繫於苞桑', luck: 'yang', isChanging: false },
       { judgment: '傾否，先否後喜', luck: 'yang', isChanging: false },
     ]
@@ -350,12 +350,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情缘分深厚，單身者有愛情，已婚者夫幫妻助',
     health: '注意心臟及血液循環，整體良好',
     lines: [
-      { judgment: '同人於門，无咎', luck: 'yang', isChanging: false },
+      { judgment: '同人於門，無咎', luck: 'yang', isChanging: false },
       { judgment: '同人於宗，吝', luck: 'yin', isChanging: true },
       { judgment: '伏戎於莽，升其高陵，三歲不興', luck: 'yang', isChanging: false },
       { judgment: '乘其墉，弗克攻，吉', luck: 'yin', isChanging: true },
       { judgment: '同人，先號咷而後笑，大師克相遇', luck: 'yang', isChanging: false },
-      { judgment: '同人於郊，无悔', luck: 'yang', isChanging: false },
+      { judgment: '同人於郊，無悔', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -375,10 +375,10 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情美滿，異性緣佳，單身者易脫單',
     health: '健康佳，注意心火旺盛，清心寡慾為宜',
     lines: [
-      { judgment: '无交害，匪咎，艱則无咎', luck: 'yang', isChanging: false },
-      { judgment: '大車以載，有攸往，无咎', luck: 'yin', isChanging: true },
+      { judgment: '無交害，匪咎，艱則無咎', luck: 'yang', isChanging: false },
+      { judgment: '大車以載，有攸往，無咎', luck: 'yin', isChanging: true },
       { judgment: '公用亨於天子，小人弗克', luck: 'yang', isChanging: false },
-      { judgment: '匪其彭，无咎', luck: 'yin', isChanging: true },
+      { judgment: '匪其彭，無咎', luck: 'yin', isChanging: true },
       { judgment: '厥孚交如，威如，吉', luck: 'yang', isChanging: false },
       { judgment: '吉，自天祐之', luck: 'yang', isChanging: false },
     ]
@@ -403,7 +403,7 @@ export const hexagrams: Hexagram[] = [
       { judgment: '謙謙君子，用涉大川，吉', luck: 'yang', isChanging: false },
       { judgment: '鳴謙，貞吉', luck: 'yin', isChanging: true },
       { judgment: '勞謙君子，有終吉', luck: 'yang', isChanging: false },
-      { judgment: '无不利，撝謙', luck: 'yin', isChanging: true },
+      { judgment: '無不利，撝謙', luck: 'yin', isChanging: true },
       { judgment: '不撝則不信，則不履', luck: 'yang', isChanging: false },
       { judgment: '鳴謙，志未得也，可用行師，征邑國也', luck: 'yang', isChanging: false },
     ]
@@ -426,11 +426,11 @@ export const hexagrams: Hexagram[] = [
     health: '注意肝膽及筋骨，運動要適量',
     lines: [
       { judgment: '鳴豫，凶', luck: 'yang', isChanging: false },
-      { judgment: '介于石，不終日，貞吉', luck: 'yin', isChanging: true },
+      { judgment: '介於石，不終日，貞吉', luck: 'yin', isChanging: true },
       { judgment: '盱豫，悔，遲有悔', luck: 'yang', isChanging: false },
       { judgment: '由豫，大有得。勿疑，朋盍簪', luck: 'yin', isChanging: true },
-      { judgment: '貞吉，悔亡，乘事、時中、中无尤事', luck: 'yang', isChanging: false },
-      { judgment: '冥豫，成有渝，无咎', luck: 'yang', isChanging: false },
+      { judgment: '貞吉，悔亡，乘事、時中、中無尤事', luck: 'yang', isChanging: false },
+      { judgment: '冥豫，成有渝，無咎', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -440,7 +440,7 @@ export const hexagrams: Hexagram[] = [
     above: '兌',
     below: '震',
     guaMeaning: '澤中有雷，隨時之義',
-    judgment: '元亨利貞，无咎',
+    judgment: '元亨利貞，無咎',
     judgmentTitle: '隨，剛來而下柔，動而說',
     image: '澤中有雷，隨；君子以向晦入宴息',
     trigrams: '上兌澤，下震雷，澤中有雷，震動而澤說',
@@ -475,9 +475,9 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情出現問題根源，防備註定失敗的關係',
     health: '注意脾胃及腹部，舊病易復發',
     lines: [
-      { judgment: '幹父之蠱，有子，考无咎，厲終吉', luck: 'yang', isChanging: false },
+      { judgment: '幹父之蠱，有子，考無咎，厲終吉', luck: 'yang', isChanging: false },
       { judgment: '幹母之蠱，不可貞', luck: 'yin', isChanging: true },
-      { judgment: '幹父之蠱，小有悔，无大咎', luck: 'yang', isChanging: false },
+      { judgment: '幹父之蠱，小有悔，無大咎', luck: 'yang', isChanging: false },
       { judgment: '裕父之蠱，往見吝', luck: 'yin', isChanging: true },
       { judgment: '幹父之蠱，用譽', luck: 'yang', isChanging: false },
       { judgment: '不事王侯，高尚其事', luck: 'yang', isChanging: false },
@@ -490,9 +490,9 @@ export const hexagrams: Hexagram[] = [
     above: '坤',
     below: '兌',
     guaMeaning: '地上有澤，臨近之義',
-    judgment: '元亨利貞，至于八月有凶',
+    judgment: '元亨利貞，至於八月有凶',
     judgmentTitle: '臨，剛浸而長',
-    image: '澤上有地，臨；君子以教思无窮，容保民无疆',
+    image: '澤上有地，臨；君子以教思無窮，容保民無疆',
     trigrams: '上坤地，下兌澤，地在澤上，居高臨下',
     fortune: '運勢上揚，有領導之象，宜積極行動',
     wealth: '財運上揚，貴人多助，利於地產項目',
@@ -501,11 +501,11 @@ export const hexagrams: Hexagram[] = [
     health: '注意足部及口腔，戒吃辛辣',
     lines: [
       { judgment: '咸臨，貞吉', luck: 'yang', isChanging: false },
-      { judgment: '咸臨，吉，无不利', luck: 'yin', isChanging: true },
-      { judgment: '甘臨，无攸利。既憂之，无咎', luck: 'yang', isChanging: false },
-      { judgment: '至臨，无咎', luck: 'yin', isChanging: true },
+      { judgment: '咸臨，吉，無不利', luck: 'yin', isChanging: true },
+      { judgment: '甘臨，無攸利。既憂之，無咎', luck: 'yang', isChanging: false },
+      { judgment: '至臨，無咎', luck: 'yin', isChanging: true },
       { judgment: '知臨，大君之宜，吉', luck: 'yang', isChanging: false },
-      { judgment: '敦臨，吉，无咎', luck: 'yang', isChanging: false },
+      { judgment: '敦臨，吉，無咎', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -525,12 +525,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情霧裡看花，需要時間證明一切',
     health: '注意肝膽及神經系統，易抑鬱',
     lines: [
-      { judgment: '童觀，小人无咎，君子吝', luck: 'yang', isChanging: false },
+      { judgment: '童觀，小人無咎，君子吝', luck: 'yang', isChanging: false },
       { judgment: '窺觀，利女貞', luck: 'yin', isChanging: true },
       { judgment: '觀我生，进退', luck: 'yang', isChanging: false },
       { judgment: '觀國之光，利用賓於王', luck: 'yin', isChanging: true },
-      { judgment: '觀我生，君子无咎', luck: 'yang', isChanging: false },
-      { judgment: '觀其生，君子无咎', luck: 'yang', isChanging: false },
+      { judgment: '觀我生，君子無咎', luck: 'yang', isChanging: false },
+      { judgment: '觀其生，君子無咎', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -550,11 +550,11 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情阻礙多，防第三者介入',
     health: '注意口腔及消化系統，防牙痛',
     lines: [
-      { judgment: '履校滅趾，无咎', luck: 'yang', isChanging: false },
-      { judgment: '噬膚滅鼻，无咎', luck: 'yin', isChanging: true },
-      { judgment: '噬腊肉，遇毒，小吝，无咎', luck: 'yang', isChanging: false },
+      { judgment: '履校滅趾，無咎', luck: 'yang', isChanging: false },
+      { judgment: '噬膚滅鼻，無咎', luck: 'yin', isChanging: true },
+      { judgment: '噬腊肉，遇毒，小吝，無咎', luck: 'yang', isChanging: false },
       { judgment: '噬乾胏，得金矢，利艱貞，吉', luck: 'yin', isChanging: true },
-      { judgment: '噬干肉，得黃金，貞厲，无咎', luck: 'yang', isChanging: false },
+      { judgment: '噬干肉，得黃金，貞厲，無咎', luck: 'yang', isChanging: false },
       { judgment: '何校滅耳，凶', luck: 'yang', isChanging: false },
     ]
   },
@@ -567,7 +567,7 @@ export const hexagrams: Hexagram[] = [
     guaMeaning: '山下有火，山節飾物',
     judgment: '亨。小利有攸往',
     judgmentTitle: '賁亨，柔來而文剛，故亨',
-    image: '山下有火，賁；君子以明庶政，无敢折獄',
+    image: '山下有火，賁；君子以明庶政，無敢折獄',
     trigrams: '上艮山，下離火，山下有火，照亮山林',
     fortune: '運勢修飾包裝，外表光鮮，内在充實要靠個人',
     wealth: '財運包裝得當，利於裝飾或美容相關行業',
@@ -579,8 +579,8 @@ export const hexagrams: Hexagram[] = [
       { judgment: '賁其須', luck: 'yin', isChanging: true },
       { judgment: '賁如濡如，永貞吉', luck: 'yang', isChanging: false },
       { judgment: '賁如皤如，白馬翰如，匪寇婚媾', luck: 'yin', isChanging: true },
-      { judgment: '丘園為飾，白貢无咎', luck: 'yang', isChanging: false },
-      { judgment: '白賁，无咎', luck: 'yang', isChanging: false },
+      { judgment: '丘園為飾，白貢無咎', luck: 'yang', isChanging: false },
+      { judgment: '白賁，無咎', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -589,11 +589,11 @@ export const hexagrams: Hexagram[] = [
     symbol: '☷☷',
     above: '艮',
     below: '坤',
-    guaMeaning: '山地剝落，小人道长',
+    guaMeaning: '山地剝落，小人道長',
     judgment: '不利有攸往',
     judgmentTitle: '剝，剝也，柔變剛也',
     image: '山附於地，剝；上以厚下安宅',
-    trigrams: '上艮山，下坤地，山在地面上崩剝，陽氣消亡',
+    trigrams: '上艮山，下坤地，山在地麵上崩剝，陽氣消亡',
     fortune: '運勢極度惡化，不宜有任何行動',
     wealth: '財務耗損，不宜投資，理財要謹慎',
     career: '事業被人剝削，防失業或降職',
@@ -602,9 +602,9 @@ export const hexagrams: Hexagram[] = [
     lines: [
       { judgment: '剝床以足，蔑貞凶', luck: 'yang', isChanging: false },
       { judgment: '剝床以辨，蔑貞凶', luck: 'yin', isChanging: true },
-      { judgment: '剝之，无咎', luck: 'yang', isChanging: false },
+      { judgment: '剝之，無咎', luck: 'yang', isChanging: false },
       { judgment: '剝床以宮，凶', luck: 'yin', isChanging: true },
-      { judgment: '魚貫宮人，國君履之，終无咎', luck: 'yang', isChanging: false },
+      { judgment: '魚貫宮人，國君履之，終無咎', luck: 'yang', isChanging: false },
       { judgment: '碩果不食，君子得輿，小人剝廬', luck: 'yang', isChanging: false },
     ]
   },
@@ -615,8 +615,8 @@ export const hexagrams: Hexagram[] = [
     above: '坤',
     below: '震',
     guaMeaning: '雷在地中，陽氣復生',
-    judgment: '亨。出入无疾，朋來无咎。反復其道，七日來復，利有攸往',
-    judgmentTitle: '復亨，刚反，动而以順行',
+    judgment: '亨。出入無疾，朋來無咎。反復其道，七日來復，利有攸往',
+    judgmentTitle: '復亨，刚反，動而以順行',
     image: '雷在地中，復；先王以至日閉關，商旅不行',
     trigrams: '上坤地，下震雷，雷在地中，陽氣始生',
     fortune: '運勢好轉，萬物更新，宜把握新生機',
@@ -625,24 +625,24 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情重新開始，複合有望',
     health: '健康開始恢復，注意休息與營養',
     lines: [
-      { judgment: '不远复，无祗悔，元吉', luck: 'yang', isChanging: false },
+      { judgment: '不远复，無祗悔，元吉', luck: 'yang', isChanging: false },
       { judgment: '休复，吉', luck: 'yin', isChanging: true },
-      { judgment: '频复，厉无咎', luck: 'yang', isChanging: false },
+      { judgment: '频复，厉無咎', luck: 'yang', isChanging: false },
       { judgment: '中行独复', luck: 'yin', isChanging: true },
-      { judgment: '敦复，无悔', luck: 'yang', isChanging: false },
-      { judgment: '迷复，凶，有灾眚。用行师，终有大败，以其国君，凶；至于十年，不克征', luck: 'yang', isChanging: false },
+      { judgment: '敦复，無悔', luck: 'yang', isChanging: false },
+      { judgment: '迷复，凶，有灾眚。用行师，終有大败，以其国君，凶；至於十年，不克征', luck: 'yang', isChanging: false },
     ]
   },
   {
     id: 25,
-    name: '无妄',
+    name: '無妄',
     symbol: '☰☰',
     above: '乾',
     below: '震',
-    guaMeaning: '天下雷行，物與无妄',
+    guaMeaning: '天下雷行，物與無妄',
     judgment: '元亨利貞。其匪正有眚，不利有攸往',
-    judgmentTitle: '无妄之往，何之矣',
-    image: '天下雷行，无妄；先王以茂對時，育萬物',
+    judgmentTitle: '無妄之往，何之矣',
+    image: '天下雷行，無妄；先王以茂對時，育萬物',
     trigrams: '上乾天，下震雷，天下雷行，萬物自然',
     fortune: '運勢自然和諧，但防意外災祸',
     wealth: '財運自然而來，無需刻意追求',
@@ -650,12 +650,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情真誠為貴，勿忘記初心',
     health: '防意外傷害，注意筋骨及四肢',
     lines: [
-      { judgment: '无妄，往吉', luck: 'yang', isChanging: false },
+      { judgment: '無妄，往吉', luck: 'yang', isChanging: false },
       { judgment: '不耕获，不菑畬，則利用攸往', luck: 'yin', isChanging: true },
-      { judgment: '可貞，无咎', luck: 'yang', isChanging: false },
-      { judgment: '无妄之災，或繫之牛，行人之得，邑人之災', luck: 'yin', isChanging: true },
-      { judgment: '无妄之疾，勿藥有喜', luck: 'yang', isChanging: false },
-      { judgment: '无妄行，有眚，无攸利', luck: 'yang', isChanging: false },
+      { judgment: '可貞，無咎', luck: 'yang', isChanging: false },
+      { judgment: '無妄之災，或繫之牛，行人之得，邑人之災', luck: 'yin', isChanging: true },
+      { judgment: '無妄之疾，勿藥有喜', luck: 'yang', isChanging: false },
+      { judgment: '無妄行，有眚，無攸利', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -702,8 +702,8 @@ export const hexagrams: Hexagram[] = [
     lines: [
       { judgment: '舍爾靈龜，觀我朵頤，凶', luck: 'yang', isChanging: false },
       { judgment: '顛頤拂經，於丘頤，征凶', luck: 'yin', isChanging: true },
-      { judgment: '拂頤，貞凶，十年勿用，无攸利', luck: 'yang', isChanging: false },
-      { judgment: '顛頤，吉。虎視眈眈，其欲逐逐，无咎', luck: 'yin', isChanging: true },
+      { judgment: '拂頤，貞凶，十年勿用，無攸利', luck: 'yang', isChanging: false },
+      { judgment: '顛頤，吉。虎視眈眈，其欲逐逐，無咎', luck: 'yin', isChanging: true },
       { judgment: '拂經，居貞吉，不可涉大川', luck: 'yang', isChanging: false },
       { judgment: '由頤，厲吉。利涉大川', luck: 'yang', isChanging: false },
     ]
@@ -717,7 +717,7 @@ export const hexagrams: Hexagram[] = [
     guaMeaning: '澤滅木，大過之象',
     judgment: '棟橈，利有攸往，亨',
     judgmentTitle: '大過，大者過也',
-    image: '澤滅木，大過；君子以獨立不懼，遯世无悶',
+    image: '澤滅木，大過；君子以獨立不懼，遯世無悶',
     trigrams: '上兌澤，下巽風，澤水淹沒了風木，陰陽失調',
     fortune: '運勢太過，防物極必反，宜守成',
     wealth: '財務大進大出，風險極高',
@@ -725,12 +725,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情大風大浪，防生離死別',
     health: '注意肺部及呼吸系統，防突發疾病',
     lines: [
-      { judgment: '藉用白茅，无咎', luck: 'yang', isChanging: false },
+      { judgment: '藉用白茅，無咎', luck: 'yang', isChanging: false },
       { judgment: '枯楊生稊，老夫得其女妻', luck: 'yin', isChanging: true },
       { judgment: '棟橈，凶', luck: 'yang', isChanging: false },
       { judgment: '棟隆，吉；有它吝', luck: 'yin', isChanging: true },
-      { judgment: '枯楊生華，老婦得其士夫，无咎无譽', luck: 'yang', isChanging: false },
-      { judgment: '過涉之滅頂，凶，无咎', luck: 'yang', isChanging: false },
+      { judgment: '枯楊生華，老婦得其士夫，無咎無譽', luck: 'yang', isChanging: false },
+      { judgment: '過涉之滅頂，凶，無咎', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -753,8 +753,8 @@ export const hexagrams: Hexagram[] = [
       { judgment: '習坎，入於坎窞，凶', luck: 'yang', isChanging: false },
       { judgment: '坎有險，求小得', luck: 'yin', isChanging: true },
       { judgment: '來之坎坎，險且枕，入於坎窞，勿用', luck: 'yang', isChanging: false },
-      { judgment: '尊酒簋貳，用缶，納約自牖，終无咎', luck: 'yin', isChanging: true },
-      { judgment: '坎不盈，祗既平，无咎', luck: 'yang', isChanging: false },
+      { judgment: '尊酒簋貳，用缶，納約自牖，終無咎', luck: 'yin', isChanging: true },
+      { judgment: '坎不盈，祗既平，無咎', luck: 'yang', isChanging: false },
       { judgment: '係用徽纆，寘於叢棘，三歲不得，凶', luck: 'yang', isChanging: false },
     ]
   },
@@ -775,12 +775,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情美滿，夫唱婦隨',
     health: '注意眼睛及心臟，防視力退化',
     lines: [
-      { judgment: '履錯然，敬之，无咎', luck: 'yang', isChanging: false },
+      { judgment: '履錯然，敬之，無咎', luck: 'yang', isChanging: false },
       { judgment: '黃離，元吉', luck: 'yin', isChanging: true },
       { judgment: '日昃之離，不鼓缶而歌，則大耊之嗟，凶', luck: 'yang', isChanging: false },
       { judgment: '突如其來如，焚如，死如，棄如', luck: 'yin', isChanging: true },
       { judgment: '出涕沗若，戚嗟若，吉', luck: 'yang', isChanging: false },
-      { judgment: '王用出征，有嘉折首，獲匪其丑，无咎', luck: 'yang', isChanging: false },
+      { judgment: '王用出征，有嘉折首，獲匪其丑，無咎', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -804,7 +804,7 @@ export const hexagrams: Hexagram[] = [
       { judgment: '咸其腓，凶。居吉', luck: 'yin', isChanging: true },
       { judgment: '咸其股，執其隨，往吝', luck: 'yang', isChanging: false },
       { judgment: '貞吉悔亡，蹉跎之嗟，來之岩岩', luck: 'yin', isChanging: true },
-      { judgment: '咸其脢，无悔', luck: 'yang', isChanging: false },
+      { judgment: '咸其脢，無悔', luck: 'yang', isChanging: false },
       { judgment: '咸其輔頰舌', luck: 'yang', isChanging: false },
     ]
   },
@@ -815,7 +815,7 @@ export const hexagrams: Hexagram[] = [
     above: '震',
     below: '巽',
     guaMeaning: '雷風相與，恆久之意',
-    judgment: '亨，无咎，利貞，利有攸往',
+    judgment: '亨，無咎，利貞，利有攸往',
     judgmentTitle: '恆，久也，剛上而柔下',
     image: '雷風，恆；君子以立不易方',
     trigrams: '上震雷，下巽風，雷與風相交，永恆不變',
@@ -825,10 +825,10 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情穩定持久，夫妻情深',
     health: '注意肝膽及筋骨，長期調養為宜',
     lines: [
-      { judgment: '浚恆，貞凶，无攸利', luck: 'yang', isChanging: false },
+      { judgment: '浚恆，貞凶，無攸利', luck: 'yang', isChanging: false },
       { judgment: '恆其德，貞，夫人吉，男子凶', luck: 'yin', isChanging: true },
       { judgment: '不恆其德，或承之羞，貞吝', luck: 'yang', isChanging: false },
-      { judgment: '田无禽', luck: 'yin', isChanging: true },
+      { judgment: '田無禽', luck: 'yin', isChanging: true },
       { judgment: '恆其德，貞，吉', luck: 'yang', isChanging: false },
       { judgment: '振恆，凶', luck: 'yang', isChanging: false },
     ]
@@ -855,7 +855,7 @@ export const hexagrams: Hexagram[] = [
       { judgment: '係遯，有疾厲，畜臣妾吉', luck: 'yang', isChanging: false },
       { judgment: '好遯，君子吉，小人否', luck: 'yin', isChanging: true },
       { judgment: '嘉遯，貞吉', luck: 'yang', isChanging: false },
-      { judgment: '肥遯，无不利', luck: 'yang', isChanging: false },
+      { judgment: '肥遯，無不利', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -879,8 +879,8 @@ export const hexagrams: Hexagram[] = [
       { judgment: '貞吉', luck: 'yin', isChanging: true },
       { judgment: '小人用壯，君子用罔，貞厲。羝羊觸藩，羸其角', luck: 'yang', isChanging: false },
       { judgment: '貞吉悔亡，藩決不羸，壯於大輿之輹', luck: 'yin', isChanging: true },
-      { judgment: '喪羊於易，无悔', luck: 'yang', isChanging: false },
-      { judgment: '羝羊觸藩，不能退，不能遂，无攸利，艱則吉', luck: 'yang', isChanging: false },
+      { judgment: '喪羊於易，無悔', luck: 'yang', isChanging: false },
+      { judgment: '羝羊觸藩，不能退，不能遂，無攸利，艱則吉', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -893,19 +893,19 @@ export const hexagrams: Hexagram[] = [
     judgment: '康侯用錫馬蕃庶，晝日三接',
     judgmentTitle: '晉，進也，明出地上',
     image: '明出地上，晉；君子以自昭明德',
-    trigrams: '上離日，下坤地，太陽從地面升起',
+    trigrams: '上離日，下坤地，太陽從地麵升起',
     fortune: '運勢大吉，名利雙收，步步高升',
     wealth: '財運上揚，收益增加，陞官發財',
     career: '事業蒸蒸日上，知名度提升',
     relationships: '感情如日中天，單身者有官非桃花，已婚者夫貴妻榮',
     health: '注意心臟及視力，整體良好',
     lines: [
-      { judgment: '晉如摧如，貞吉。罔孚，裕无咎', luck: 'yang', isChanging: false },
+      { judgment: '晉如摧如，貞吉。罔孚，裕無咎', luck: 'yang', isChanging: false },
       { judgment: '晉如愁如，貞吉。受茲介福，於其王母', luck: 'yin', isChanging: true },
       { judgment: '眾允之，志上行', luck: 'yang', isChanging: false },
       { judgment: '晉如鼫鼠，貞厲', luck: 'yin', isChanging: true },
-      { judgment: '悔亡，失得勿恤，往吉，无不利', luck: 'yang', isChanging: false },
-      { judgment: '晉其角，維用伐邑，厲吉无咎，貞吝', luck: 'yang', isChanging: false },
+      { judgment: '悔亡，失得勿恤，往吉，無不利', luck: 'yang', isChanging: false },
+      { judgment: '晉其角，維用伐邑，厲吉無咎，貞吝', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -930,7 +930,7 @@ export const hexagrams: Hexagram[] = [
       { judgment: '明夷於南狩，得其大首，不可疾貞', luck: 'yang', isChanging: false },
       { judgment: '入於左腹，獲明夷之心，於出門庭', luck: 'yin', isChanging: true },
       { judgment: '箕子之明夷，利貞', luck: 'yang', isChanging: false },
-      { judgment: '不明晦，初登于天，照四國也；後入於地，失則也', luck: 'yang', isChanging: false },
+      { judgment: '不明晦，初登於天，照四國也；後入於地，失則也', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -951,7 +951,7 @@ export const hexagrams: Hexagram[] = [
     health: '注意心臟及眼睛，女士注意婦科',
     lines: [
       { judgment: '閑有家，悔亡', luck: 'yang', isChanging: false },
-      { judgment: '无攸遂，在中饋，貞吉', luck: 'yin', isChanging: true },
+      { judgment: '無攸遂，在中饋，貞吉', luck: 'yin', isChanging: true },
       { judgment: '家人嗃嗃，悔厲吉；婦子嘻嘻，終吝', luck: 'yang', isChanging: false },
       { judgment: '富家，大吉', luck: 'yin', isChanging: true },
       { judgment: '王假有家，勿恤吉', luck: 'yang', isChanging: false },
@@ -975,12 +975,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情睽離，單身者眼光過高，已婚者防隔閡',
     health: '注意心臟及眼睛，防小事釀成大病',
     lines: [
-      { judgment: '悔亡，喪馬勿逐，自復；見惡人无咎', luck: 'yang', isChanging: false },
-      { judgment: '遇主於巷，无咎', luck: 'yin', isChanging: true },
-      { judgment: '見輿曳，其牛掣，其人天且劓，无初有終', luck: 'yang', isChanging: false },
-      { judgment: '睽孤，遇元夫，交孚，厲无咎', luck: 'yin', isChanging: true },
+      { judgment: '悔亡，喪馬勿逐，自復；見惡人無咎', luck: 'yang', isChanging: false },
+      { judgment: '遇主於巷，無咎', luck: 'yin', isChanging: true },
+      { judgment: '見輿曳，其牛掣，其人天且劓，無初有終', luck: 'yang', isChanging: false },
+      { judgment: '睽孤，遇元夫，交孚，厲無咎', luck: 'yin', isChanging: true },
       { judgment: '悔亡，厥宗噬膚，往咎少有得', luck: 'yang', isChanging: false },
-      { judgment: '无咎，誠非本謀，乃集群力以致天災也', luck: 'yang', isChanging: false },
+      { judgment: '無咎，誠非本謀，乃集群力以致天災也', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1015,7 +1015,7 @@ export const hexagrams: Hexagram[] = [
     above: '震',
     below: '坎',
     guaMeaning: '雷雨作，解散之象',
-    judgment: '利西南，无攸往，其來復吉。有攸往，夙吉',
+    judgment: '利西南，無攸往，其來復吉。有攸往，夙吉',
     judgmentTitle: '解，險以動，動而免乎險',
     image: '雷雨作，解；君子以赦過宥罪',
     trigrams: '上震雷，下坎水，雷雨交加，萬物解散',
@@ -1025,12 +1025,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情隔閡消除，重新開始',
     health: '健康好轉，泌尿系統和關節要注意',
     lines: [
-      { judgment: '无咎', luck: 'yang', isChanging: false },
+      { judgment: '無咎', luck: 'yang', isChanging: false },
       { judgment: '田獲三狐，得黃矢，貞吉', luck: 'yin', isChanging: true },
       { judgment: '負且乘，致寇至，貞吝', luck: 'yang', isChanging: false },
       { judgment: '解而拇，朋至斯孚', luck: 'yin', isChanging: true },
       { judgment: 'Self必有與也，則吉', luck: 'yang', isChanging: false },
-      { judgment: '公用射隼於高墉之上，獲之，无不利', luck: 'yang', isChanging: false },
+      { judgment: '公用射隼於高墉之上，獲之，無不利', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1040,22 +1040,22 @@ export const hexagrams: Hexagram[] = [
     above: '艮',
     below: '兌',
     guaMeaning: '山下有澤，損下益上',
-    judgment: '有孚，元吉，无咎，可貞，利有攸往',
+    judgment: '有孚，元吉，無咎，可貞，利有攸往',
     judgmentTitle: '損，損下益上，其道上行',
     image: '山下有澤，損；君子以懲忿窒慾',
     trigrams: '上艮山，下兌澤，山下有澤，澤水浸蝕山體',
     fortune: '運勢有損，適當付出可換取更大收獲',
     wealth: '財務有所耗費，但用在刀刃上值得',
     career: '事業初期投資，長遠回報可觀',
-    relationships: '感情需要付出，單方面付出難持久',
+    relationships: '感情需要付出，單方麵付出難持久',
     health: '注意脾胃及肺部，防元氣耗損',
     lines: [
-      { judgment: '已事遄往，无咎，酌損之', luck: 'yang', isChanging: false },
+      { judgment: '已事遄往，無咎，酌損之', luck: 'yang', isChanging: false },
       { judgment: '利貞，征凶；損其實，用譽', luck: 'yin', isChanging: true },
       { judgment: '三人行，則損一人；一人行，則得其友', luck: 'yang', isChanging: false },
-      { judgment: '損其疾，使遄有喜，无咎', luck: 'yin', isChanging: true },
+      { judgment: '損其疾，使遄有喜，無咎', luck: 'yin', isChanging: true },
       { judgment: '或益之，十朋之龜弗克違，元吉', luck: 'yang', isChanging: false },
-      { judgment: '弗損益之，大吉，无咎，貞吉', luck: 'yang', isChanging: false },
+      { judgment: '弗損益之，大吉，無咎，貞吉', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1066,7 +1066,7 @@ export const hexagrams: Hexagram[] = [
     below: '震',
     guaMeaning: '風雷益，損益制衡',
     judgment: '利有攸往，利涉大川',
-    judgmentTitle: '益，損上益下，民說无疆',
+    judgmentTitle: '益，損上益下，民說無疆',
     image: '風雷，益；君子以見善則遷，有過則改',
     trigrams: '上巽風，下震雷，風雷相益，互相增益',
     fortune: '運勢大吉，得益之象，萬事興旺',
@@ -1075,9 +1075,9 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情如魚得水，單身者有意外緣分',
     health: '注意肝膽及神經系統，整體良好',
     lines: [
-      { judgment: '利用為大作，元吉，无咎', luck: 'yang', isChanging: false },
+      { judgment: '利用為大作，元吉，無咎', luck: 'yang', isChanging: false },
       { judgment: '或益之，十朋之龜弗克違，永貞吉。王用享於帝，吉', luck: 'yin', isChanging: true },
-      { judgment: '益之用凶事，无咎。有攸往中行，告公用圭', luck: 'yang', isChanging: false },
+      { judgment: '益之用凶事，無咎。有攸往中行，告公用圭', luck: 'yang', isChanging: false },
       { judgment: '中行，告公從。利用為依遷國', luck: 'yin', isChanging: true },
       { judgment: '有異婦得夢，無攸遂，在中饋，貞吉', luck: 'yang', isChanging: false },
       { judgment: '莫益之，或擊之，立心勿恆，凶', luck: 'yang', isChanging: false },
@@ -1090,7 +1090,7 @@ export const hexagrams: Hexagram[] = [
     above: '乾',
     below: '兌',
     guaMeaning: '澤上於天，夬決之象',
-    judgment: '揚于王庭，孚號有厲。告自邑，不利即戎，利有攸往',
+    judgment: '揚於王庭，孚號有厲。告自邑，不利即戎，利有攸往',
     judgmentTitle: '夬，決也，剛決柔也',
     image: '澤上於天，夬；君子以施祿及下，居德則忌',
     trigrams: '上乾天，下兌澤，澤水漲至天上，決堤之象',
@@ -1104,8 +1104,8 @@ export const hexagrams: Hexagram[] = [
       { judgment: '惕號，莫夜有戎，勿恤', luck: 'yin', isChanging: true },
       { judgment: '壯於頏，有凶。君子夬夬出行，終吉', luck: 'yang', isChanging: false },
       { judgment: '腎不勝，遂之，即次，無咎', luck: 'yin', isChanging: true },
-      { judgment: '莧陸夬夬，中行无咎', luck: 'yang', isChanging: false },
-      { judgment: '无號，終有凶', luck: 'yang', isChanging: false },
+      { judgment: '莧陸夬夬，中行無咎', luck: 'yang', isChanging: false },
+      { judgment: '無號，終有凶', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1126,10 +1126,10 @@ export const hexagrams: Hexagram[] = [
     health: '注意肝膽及四肢，防中毒',
     lines: [
       { judgment: '系於金柅，貞吉。有攸往，見凶，羸豕孚蹢躅', luck: 'yang', isChanging: false },
-      { judgment: '包有魚，无咎，不利賓', luck: 'yin', isChanging: true },
-      { judgment: '臀无皮，屬邑人凶', luck: 'yang', isChanging: false },
-      { judgment: '包无魚，起凶', luck: 'yin', isChanging: true },
-      { judgment: '有魚自來，无咎，實不行而名大也', luck: 'yang', isChanging: false },
+      { judgment: '包有魚，無咎，不利賓', luck: 'yin', isChanging: true },
+      { judgment: '臀無皮，屬邑人凶', luck: 'yang', isChanging: false },
+      { judgment: '包無魚，起凶', luck: 'yin', isChanging: true },
+      { judgment: '有魚自來，無咎，實不行而名大也', luck: 'yang', isChanging: false },
       { judgment: '角動而名不行，則無攸利', luck: 'yang', isChanging: false },
     ]
   },
@@ -1150,12 +1150,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情集合各方緣分，單身者有重要約會',
     health: '注意口腔及腸胃，防傳染病',
     lines: [
-      { judgment: '有孚不終，乃亂乃萃，若號，一握為笑，勿恤，往无咎', luck: 'yang', isChanging: false },
-      { judgment: '引吉，无咎，孚乃利用禴', luck: 'yin', isChanging: true },
-      { judgment: '萃如嗟如，无攸利，往小吝，无咎', luck: 'yang', isChanging: false },
-      { judgment: '大吉，无咎', luck: 'yin', isChanging: true },
-      { judgment: '萃有位，无咎。匪孚，元永貞，悔亡', luck: 'yang', isChanging: false },
-      { judgment: '齎咨涕洇，无咎', luck: 'yang', isChanging: false },
+      { judgment: '有孚不終，乃亂乃萃，若號，一握為笑，勿恤，往無咎', luck: 'yang', isChanging: false },
+      { judgment: '引吉，無咎，孚乃利用禴', luck: 'yin', isChanging: true },
+      { judgment: '萃如嗟如，無攸利，往小吝，無咎', luck: 'yang', isChanging: false },
+      { judgment: '大吉，無咎', luck: 'yin', isChanging: true },
+      { judgment: '萃有位，無咎。匪孚，元永貞，悔亡', luck: 'yang', isChanging: false },
+      { judgment: '齎咨涕洇，無咎', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1176,9 +1176,9 @@ export const hexagrams: Hexagram[] = [
     health: '注意肝膽及筋骨，穩步好轉',
     lines: [
       { judgment: '允升，大吉', luck: 'yang', isChanging: false },
-      { judgment: '孚乃利用禴，无咎', luck: 'yin', isChanging: true },
+      { judgment: '孚乃利用禴，無咎', luck: 'yin', isChanging: true },
       { judgment: '升虛邑', luck: 'yang', isChanging: false },
-      { judgment: '王用亨於岐山，无咎，貞吉', luck: 'yin', isChanging: true },
+      { judgment: '王用亨於岐山，無咎，貞吉', luck: 'yin', isChanging: true },
       { judgment: '升階，邑人見喜，大吉', luck: 'yang', isChanging: false },
       { judgment: '冥升，息利也，利心忡忡而未得也', luck: 'yang', isChanging: false },
     ]
@@ -1190,7 +1190,7 @@ export const hexagrams: Hexagram[] = [
     above: '坎',
     below: '兌',
     guaMeaning: '澤無水，困窮之象',
-    judgment: '亨，貞大人吉，无咎，有言不信',
+    judgment: '亨，貞大人吉，無咎，有言不信',
     judgmentTitle: '困，剛掩也，險以說，困而不失其所',
     image: '澤無水，困；君子以致命遂志',
     trigrams: '上坎水，下兌澤，澤中無水，困乏之象',
@@ -1201,7 +1201,7 @@ export const hexagrams: Hexagram[] = [
     health: '注意泌尿系統及腎臟，防慢性病',
     lines: [
       { judgment: '臀困於株木，入於幽谷，三歲不見', luck: 'yang', isChanging: false },
-      { judgment: '困於酒食，朱紱方來，利用享祀，征凶，无咎', luck: 'yin', isChanging: true },
+      { judgment: '困於酒食，朱紱方來，利用享祀，征凶，無咎', luck: 'yin', isChanging: true },
       { judgment: '困於石，據於蒺藜，入於其宮，不見其妻，凶', luck: 'yang', isChanging: false },
       { judgment: '來徐徐，困於金車，吝，有終', luck: 'yin', isChanging: true },
       { judgment: '劓刖，困於赤紱；乃徐有說，利用祭祀', luck: 'yang', isChanging: false },
@@ -1215,7 +1215,7 @@ export const hexagrams: Hexagram[] = [
     above: '坎',
     below: '巽',
     guaMeaning: '木上有水，井冽之象',
-    judgment: '改邑不改井，无喪无得，往來井井。汔至，亦未繘井，羸其瓶，凶',
+    judgment: '改邑不改井，無喪無得，往來井井。汔至，亦未繘井，羸其瓶，凶',
     judgmentTitle: '井養而不窮也',
     image: '木上有水，井；君子以勞民勸相',
     trigrams: '上坎水，下巽木，木上有水，井泉滋潤萬物',
@@ -1225,12 +1225,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情稳定而長久，平淡是真',
     health: '注意泌尿系統及腎臟，防慢性病',
     lines: [
-      { judgment: '井泥不食，舊井无禽', luck: 'yang', isChanging: false },
+      { judgment: '井泥不食，舊井無禽', luck: 'yang', isChanging: false },
       { judgment: '井谷射鮒，甕敝漏', luck: 'yin', isChanging: true },
       { judgment: '井渫不食，為我心惻；可用汲，王明，並受其福', luck: 'yang', isChanging: false },
-      { judgment: '井甃，无咎', luck: 'yin', isChanging: true },
+      { judgment: '井甃，無咎', luck: 'yin', isChanging: true },
       { judgment: '井冽寒泉食', luck: 'yang', isChanging: false },
-      { judgment: '井收勿幕，有可无处，凶', luck: 'yang', isChanging: false },
+      { judgment: '井收勿幕，有可無处，凶', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1251,10 +1251,10 @@ export const hexagrams: Hexagram[] = [
     health: '注意心臟及眼睛，防急性病',
     lines: [
       { judgment: '鞏用黃牛之革', luck: 'yang', isChanging: false },
-      { judgment: '己日乃革之，征吉，无咎', luck: 'yin', isChanging: true },
+      { judgment: '己日乃革之，征吉，無咎', luck: 'yin', isChanging: true },
       { judgment: '征凶，貞厲。革言三就，有孚', luck: 'yang', isChanging: false },
       { judgment: '悔亡，有孚改命，吉', luck: 'yin', isChanging: true },
-      { judgment: '大人虎變，君子豹變，小人革面，征凶，居貞吉', luck: 'yang', isChanging: false },
+      { judgment: '大人虎變，君子豹變，小人革麵，征凶，居貞吉', luck: 'yang', isChanging: false },
       { judgment: '己日乃孚，元亨利貞，悔亡', luck: 'yang', isChanging: false },
     ]
   },
@@ -1275,12 +1275,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情穩定，有復合或婚配之象',
     health: '注意心臟及眼睛，防燙傷',
     lines: [
-      { judgment: '鼎顛趾，利出否；得妾以其子，无咎', luck: 'yang', isChanging: false },
+      { judgment: '鼎顛趾，利出否；得妾以其子，無咎', luck: 'yang', isChanging: false },
       { judgment: '鼎有實，我仇有疾，不我能即，吉', luck: 'yin', isChanging: true },
       { judgment: '鼎耳革，其行塞，雉膏不食，方雨虧悔，終吉', luck: 'yang', isChanging: false },
       { judgment: '鼎折足，覆公餗，其形渥，凶', luck: 'yin', isChanging: true },
       { judgment: '鼎黃耳，金鉉，利貞', luck: 'yang', isChanging: false },
-      { judgment: '鼎玉鉉，大吉，无不利', luck: 'yang', isChanging: false },
+      { judgment: '鼎玉鉉，大吉，無不利', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1302,10 +1302,10 @@ export const hexagrams: Hexagram[] = [
     lines: [
       { judgment: '震來虩虩，後笑言啞啞，吉', luck: 'yang', isChanging: false },
       { judgment: '震來厲，億喪貝，躋於九陵，勿逐，七日得', luck: 'yin', isChanging: true },
-      { judgment: '震蘇蘇，震行无眚', luck: 'yang', isChanging: false },
+      { judgment: '震蘇蘇，震行無眚', luck: 'yang', isChanging: false },
       { judgment: '震遂泥', luck: 'yin', isChanging: true },
-      { judgment: '震往來厲，億无喪，有事', luck: 'yang', isChanging: false },
-      { judgment: '震索索，視矍矍，征凶。震不於其躬，於其鄰，无咎。婚媾有言', luck: 'yang', isChanging: false },
+      { judgment: '震往來厲，億無喪，有事', luck: 'yang', isChanging: false },
+      { judgment: '震索索，視矍矍，征凶。震不於其躬，於其鄰，無咎。婚媾有言', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1315,7 +1315,7 @@ export const hexagrams: Hexagram[] = [
     above: '艮',
     below: '艮',
     guaMeaning: '兼山，艮止之象',
-    judgment: '艮其背，不獲其身；行其庭，不見其人，无咎',
+    judgment: '艮其背，不獲其身；行其庭，不見其人，無咎',
     judgmentTitle: '艮，止也，時止則止，時行則行',
     image: '兼山，艮；君子以思不出其位',
     trigrams: '上下皆艮山，兩山重疊，靜止不動',
@@ -1325,10 +1325,10 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情冷靜期，防冷戰',
     health: '注意脾胃及背部，防職業病',
     lines: [
-      { judgment: '艮其趾，无咎。利永貞', luck: 'yang', isChanging: false },
+      { judgment: '艮其趾，無咎。利永貞', luck: 'yang', isChanging: false },
       { judgment: '艮其腓，不拯其隨，其心不快', luck: 'yin', isChanging: true },
       { judgment: '艮其限，厲薰心', luck: 'yang', isChanging: false },
-      { judgment: '艮其身，无咎', luck: 'yin', isChanging: true },
+      { judgment: '艮其身，無咎', luck: 'yin', isChanging: true },
       { judgment: '艮其輔，言有序，悔亡', luck: 'yang', isChanging: false },
       { judgment: '敦艮，吉', luck: 'yang', isChanging: false },
     ]
@@ -1350,10 +1350,10 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情按部就班，適合嫁娶',
     health: '注意脾胃及肝膽，慢慢調養',
     lines: [
-      { judgment: '鴻漸於干，小子厲，有言，无咎', luck: 'yang', isChanging: false },
+      { judgment: '鴻漸於干，小子厲，有言，無咎', luck: 'yang', isChanging: false },
       { judgment: '鴻漸於磐，飲食衎衎，吉', luck: 'yin', isChanging: true },
       { judgment: '鴻漸於陸，夫征不復，婦孕不育，凶；利禦寇', luck: 'yang', isChanging: false },
-      { judgment: '鴻漸於木，或得其桷，无咎', luck: 'yin', isChanging: true },
+      { judgment: '鴻漸於木，或得其桷，無咎', luck: 'yin', isChanging: true },
       { judgment: '鴻漸於陵，婦三歲不孕，終莫之勝，吉', luck: 'yang', isChanging: false },
       { judgment: '鴻漸於阿，其羽可用為儀，吉', luck: 'yang', isChanging: false },
     ]
@@ -1365,7 +1365,7 @@ export const hexagrams: Hexagram[] = [
     above: '震',
     below: '兌',
     guaMeaning: '澤上有雷，歸妹之象',
-    judgment: '征凶，无攸利',
+    judgment: '征凶，無攸利',
     judgmentTitle: '歸妹，天地之大義也',
     image: '澤上有雷，歸妹；君子以永終知敝',
     trigrams: '上震雷，下兌澤，雷在澤中，少女追求長男',
@@ -1380,7 +1380,7 @@ export const hexagrams: Hexagram[] = [
       { judgment: '歸妹以須，反歸以娣', luck: 'yang', isChanging: false },
       { judgment: '歸妹愆期，遲歸有時', luck: 'yin', isChanging: true },
       { judgment: '帝乙歸妹，其君之袂，不如其娣之袂良；月幾望，吉', luck: 'yang', isChanging: false },
-      { judgment: '女承筐无實，士刲羊无血，无攸利', luck: 'yang', isChanging: false },
+      { judgment: '女承筐無實，士刲羊無血，無攸利', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1400,12 +1400,12 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情豐富熱烈，社交豐富多彩',
     health: '注意心臟及眼睛，防過勞',
     lines: [
-      { judgment: '遇其配主，雖旬无咎，往有尚', luck: 'yang', isChanging: false },
+      { judgment: '遇其配主，雖旬無咎，往有尚', luck: 'yang', isChanging: false },
       { judgment: '豐其蔀，日中見斗，往得疑疾；有孚發若，吉', luck: 'yin', isChanging: true },
-      { judgment: '豐其沛，日中見昧；折其右肱，无咎', luck: 'yang', isChanging: false },
+      { judgment: '豐其沛，日中見昧；折其右肱，無咎', luck: 'yang', isChanging: false },
       { judgment: '豐其蔀，日中見斗；遇其夷主，吉', luck: 'yin', isChanging: true },
       { judgment: '來章，有慶譽，吉', luck: 'yang', isChanging: false },
-      { judgment: '豐其屋，蔀其家，窺其戶，闃其无人，三歲不見，凶', luck: 'yang', isChanging: false },
+      { judgment: '豐其屋，蔀其家，窺其戶，闃其無人，三歲不見，凶', luck: 'yang', isChanging: false },
     ]
   },
   {
@@ -1451,7 +1451,7 @@ export const hexagrams: Hexagram[] = [
     health: '注意肝膽及呼吸系統，防過敏',
     lines: [
       { judgment: '進退，利武人之貞', luck: 'yang', isChanging: false },
-      { judgment: '巽在床下，用史巫紛若，吉，无咎', luck: 'yin', isChanging: true },
+      { judgment: '巽在床下，用史巫紛若，吉，無咎', luck: 'yin', isChanging: true },
       { judgment: '頻巽，吝', luck: 'yang', isChanging: false },
       { judgment: '悔亡，田獲三品', luck: 'yin', isChanging: true },
       { judgment: '先庚三日，後庚三日，終吉', luck: 'yang', isChanging: false },
@@ -1500,11 +1500,11 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情防冷戰或隔閡加深',
     health: '注意腎臟及泌尿系統',
     lines: [
-      { judgment: '渙汗其大號，渙王居，无咎', luck: 'yang', isChanging: false },
+      { judgment: '渙汗其大號，渙王居，無咎', luck: 'yang', isChanging: false },
       { judgment: '渙奔其杌，悔亡', luck: 'yin', isChanging: true },
-      { judgment: '渙其躬，无悔', luck: 'yang', isChanging: false },
+      { judgment: '渙其躬，無悔', luck: 'yang', isChanging: false },
       { judgment: '渙其群，元吉；渙有丘，匪夷所思', luck: 'yin', isChanging: true },
-      { judgment: '渙其血去，逖出，无咎', luck: 'yang', isChanging: false },
+      { judgment: '渙其血去，逖出，無咎', luck: 'yang', isChanging: false },
       { judgment: '渙其機在人，大得志也', luck: 'yang', isChanging: false },
     ]
   },
@@ -1525,9 +1525,9 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情有節制，不會過度激烈',
     health: '注意腎臟及泌尿系統，節制飲食',
     lines: [
-      { judgment: '不出戶庭，无咎', luck: 'yang', isChanging: false },
+      { judgment: '不出戶庭，無咎', luck: 'yang', isChanging: false },
       { judgment: '不出門庭，凶，失時極也', luck: 'yin', isChanging: true },
-      { judgment: '不節若，則嗟若，无咎', luck: 'yang', isChanging: false },
+      { judgment: '不節若，則嗟若，無咎', luck: 'yang', isChanging: false },
       { judgment: '安節，亨', luck: 'yin', isChanging: true },
       { judgment: '甘節，吉，往有尚', luck: 'yang', isChanging: false },
       { judgment: '苦節，貞凶，悔亡', luck: 'yang', isChanging: false },
@@ -1553,8 +1553,8 @@ export const hexagrams: Hexagram[] = [
       { judgment: '虞吉，有它不燕', luck: 'yang', isChanging: false },
       { judgment: '鳴鶴在陰，其子和之；我有好爵，吾與爾靡之', luck: 'yin', isChanging: true },
       { judgment: '得敵，或鼓或罷，或泣或歌', luck: 'yang', isChanging: false },
-      { judgment: '月幾望，馬匹亡，无咎', luck: 'yin', isChanging: true },
-      { judgment: '有孚攣如，无咎', luck: 'yang', isChanging: false },
+      { judgment: '月幾望，馬匹亡，無咎', luck: 'yin', isChanging: true },
+      { judgment: '有孚攣如，無咎', luck: 'yang', isChanging: false },
       { judgment: '翰音登於天，凶', luck: 'yang', isChanging: false },
     ]
   },
@@ -1564,7 +1564,7 @@ export const hexagrams: Hexagram[] = [
     symbol: '☷☷',
     above: '震',
     below: '艮',
-    guaMeaning: '山上有雷，小有过越',
+    guaMeaning: '山上有雷，小有過越',
     judgment: '亨，利貞；可小事，不可大事，飛鳥遺之音，不宜上，宜下，大吉',
     judgmentTitle: '小過，小者過而亨也',
     image: '山上有雷，小過；君子以行過乎恭，喪過乎哀，用過乎儉',
@@ -1576,10 +1576,10 @@ export const hexagrams: Hexagram[] = [
     health: '注意肝膽及骨骼，小病防變大',
     lines: [
       { judgment: '飛鳥以凶', luck: 'yang', isChanging: false },
-      { judgment: '過其祖，遇其妣；不及其君，遇其臣，无咎', luck: 'yin', isChanging: true },
+      { judgment: '過其祖，遇其妣；不及其君，遇其臣，無咎', luck: 'yin', isChanging: true },
       { judgment: '過而不變，凶', luck: 'yang', isChanging: false },
-      { judgment: '无咎，弗過遇之；往厲必戒，勿用永貞', luck: 'yin', isChanging: true },
-      { judgment: '密雲不雨，自我西郊；公用射隼於高墉之上，獲之，无不利', luck: 'yang', isChanging: false },
+      { judgment: '無咎，弗過遇之；往厲必戒，勿用永貞', luck: 'yin', isChanging: true },
+      { judgment: '密雲不雨，自我西郊；公用射隼於高墉之上，獲之，無不利', luck: 'yang', isChanging: false },
       { judgment: '弗遇過之，亢龍有悔', luck: 'yang', isChanging: false },
     ]
   },
@@ -1600,7 +1600,7 @@ export const hexagrams: Hexagram[] = [
     relationships: '感情已成，防婚外情',
     health: '注意心腎及陰陽失調',
     lines: [
-      { judgment: '曳其輪，濡其尾，无咎', luck: 'yang', isChanging: false },
+      { judgment: '曳其輪，濡其尾，無咎', luck: 'yang', isChanging: false },
       { judgment: '婦喪其茀，勿逐，七日得', luck: 'yin', isChanging: true },
       { judgment: '高宗伐鬼方，三年克之，小人勿用', luck: 'yang', isChanging: false },
       { judgment: '繻有衣袽，終日戒', luck: 'yin', isChanging: true },
@@ -1615,7 +1615,7 @@ export const hexagrams: Hexagram[] = [
     above: '離',
     below: '坎',
     guaMeaning: '火在水上，未濟之象',
-    judgment: '亨，小狐汔濟，濡其尾，无攸利',
+    judgment: '亨，小狐汔濟，濡其尾，無攸利',
     judgmentTitle: '未濟亨，柔得中也',
     image: '火在水上，未濟；君子以慎辨物居方',
     trigrams: '上離火，下坎水，火在水上，陰陽未和',
@@ -1629,8 +1629,8 @@ export const hexagrams: Hexagram[] = [
       { judgment: '曳其輪，貞吉', luck: 'yin', isChanging: true },
       { judgment: '未濟，征凶，利涉大川', luck: 'yang', isChanging: false },
       { judgment: '貞吉，悔亡，震用伐鬼方，三年有賞於大國', luck: 'yin', isChanging: true },
-      { judgment: '貞吉，无悔，君子之光，有孚，吉', luck: 'yang', isChanging: false },
-      { judgment: '有孚於失誤，无咎，貞吉', luck: 'yang', isChanging: false },
+      { judgment: '貞吉，無悔，君子之光，有孚，吉', luck: 'yang', isChanging: false },
+      { judgment: '有孚於失誤，無咎，貞吉', luck: 'yang', isChanging: false },
     ]
   }
 ];
