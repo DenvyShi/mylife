@@ -171,7 +171,7 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
           <div className="space-y-5">
             <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
               <button onClick={() => setAccordionOpen(prev => prev === 'judgment' ? null : 'judgment')} className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-gold/5">
-                <span className="text-lg font-medium">查看卦辭原文</span>
+                <span style={{ fontSize: '1.125rem', fontWeight: 500 }}>查看卦辭原文</span>
                 <span className="text-lg" style={{ transform: accordionOpen === 'judgment' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {accordionOpen === 'judgment' && (
@@ -184,7 +184,7 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
             </div>
             <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
               <button onClick={() => setAccordionOpen(prev => prev === 'image' ? null : 'image')} className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-gold/5">
-                <span className="text-lg font-medium">查看象義說明</span>
+                <span style={{ fontSize: '1.125rem', fontWeight: 500 }}>查看象義說明</span>
                 <span className="text-lg" style={{ transform: accordionOpen === 'image' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {accordionOpen === 'image' && (
@@ -195,7 +195,7 @@ export default function ResultClient({ decoded, hexagramName, changedHexagramNam
             </div>
             <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(13,13,13,0.6)', border: '1px solid rgba(201,162,39,0.2)' }}>
               <button onClick={() => setAccordionOpen(prev => prev === 'lines' ? null : 'lines')} className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-gold/5">
-                <span className="text-lg font-medium">查看逐爻解讀</span>
+                <span style={{ fontSize: '1.125rem', fontWeight: 500 }}>查看逐爻解讀</span>
                 <span className="text-lg" style={{ transform: accordionOpen === 'lines' ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>▼</span>
               </button>
               {accordionOpen === 'lines' && (
