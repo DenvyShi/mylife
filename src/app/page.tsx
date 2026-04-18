@@ -272,13 +272,14 @@ export default function Home() {
 
   const renderHome = () => (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-12">
-      {/* Decorative Header */}
-      <div className="text-center mb-12 animate-fade-in">
-        <div className="text-gold opacity-40 text-sm tracking-widest mb-4" style={{ color: 'var(--gold)' }}>
-          ── 上古之術 ──
+
+      {/* ── Hero 區 ── */}
+      <div className="text-center mb-10 animate-fade-in">
+        <div className="text-sm tracking-widest mb-4 opacity-60" style={{ color: 'var(--gold)' }}>
+          三步開啟你的占卜之旅
         </div>
-        <div className="text-8xl mb-6 animate-float">☰</div>
-        <h1 className="text-5xl md:text-6xl font-bold tracking-wider mb-4" style={{ 
+        <div className="text-7xl mb-6 animate-float">☰</div>
+        <h1 className="text-5xl md:text-6xl font-bold tracking-wider mb-3" style={{
           fontFamily: "'Noto Serif TC', serif",
           color: 'var(--cream)',
           textShadow: '0 0 40px rgba(201, 162, 39, 0.3)'
@@ -286,48 +287,73 @@ export default function Home() {
           易經占卜
         </h1>
         <div className="text-lg tracking-widest mb-6 opacity-60" style={{ color: 'var(--gold)' }}>
-          蓍草法 · 文王遺風
+          蓍草法 · 傳承千年
         </div>
-        <div className="ornament-divider max-w-xs mx-auto mb-8">
+        <div className="ornament-divider max-w-xs mx-auto mb-6">
           ◆
         </div>
-        <p className="text-lg max-w-lg mx-auto leading-relaxed opacity-80 mb-12" style={{ color: 'var(--cream-dark)' }}>
-          誠心凝神，默念所問之事。<br/>
-          蓍草之數，陰陽之變，盡顯天機。
+        <p className="text-base max-w-lg mx-auto leading-relaxed opacity-80 mb-2" style={{ color: 'var(--cream-dark)', fontSize: '1rem' }}>
+          輸入你的問題，系統自動擲筊，馬上為你解讀卦象含義。
         </p>
       </div>
 
-      {/* Features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mb-12">
+      {/* ── 信任信號 ── */}
+      <div className="flex flex-wrap justify-center gap-6 mb-10 animate-slide-up" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
         {[
-          { icon: '🌿', title: '五十蓍草', desc: '傳統蓍草占法' },
-          { icon: '🔮', title: '六爻成卦', desc: '陰陽動靜變化' },
-          { icon: '📿', title: '象辭解讀', desc: '天機智慧指引' },
+          { icon: '🔒', title: '隱私保護', desc: '不留個資、不需要註冊' },
+          { icon: '📱', title: '操作簡單', desc: '三步完成，適合新手' },
+          { icon: '⚡', title: '即時結果', desc: '立即顯示解讀，無需等待' },
         ].map((item, i) => (
-          <div key={i} className={`text-center p-6 opacity-0 animate-slide-up stagger-${i + 1}`}
-               style={{ 
-                 animationFillMode: 'forwards',
-                 animationDelay: `${0.3 + i * 0.15}s`
-               }}>
-            <div className="text-4xl mb-3">{item.icon}</div>
-            <div className="font-medium mb-1" style={{ color: 'var(--gold)' }}>{item.title}</div>
-            <div className="text-sm opacity-60">{item.desc}</div>
+          <div key={i} className="flex items-center gap-3 px-4 py-2 rounded-lg" style={{ background: 'rgba(201,162,39,0.06)', border: '1px solid rgba(201,162,39,0.15)' }}>
+            <span className="text-2xl">{item.icon}</span>
+            <div className="text-left">
+              <div className="text-sm font-medium" style={{ color: 'var(--gold)' }}>{item.title}</div>
+              <div className="text-xs opacity-60">{item.desc}</div>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Start Button */}
+      {/* ── 使用步驟指引 ── */}
+      <div className="w-full max-w-2xl mb-10">
+        <div className="text-xs tracking-widest text-center mb-6 opacity-60" style={{ color: 'var(--gold)' }}>── 如何使用 ──</div>
+        <div className="space-y-4">
+          {[
+            { step: '1', title: '選擇問題', desc: '選擇你想問的事情類型，輸入問題內容' },
+            { step: '2', title: '稟告天地', desc: '按鈕擲筊，系統自動計算六次陰陽' },
+            { step: '3', title: '獲得解讀', desc: '馬上看到卦象含義和分析建議' },
+          ].map((item, i) => (
+            <div key={i} className={`flex items-start gap-4 p-4 rounded-lg animate-slide-up`}
+                 style={{ 
+                   background: 'rgba(30,20,20,0.95)', 
+                   border: '1px solid rgba(201,162,39,0.2)',
+                   animationDelay: `${0.3 + i * 0.15}s`,
+                   animationFillMode: 'forwards'
+                 }}>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-lg font-bold" style={{ background: 'rgba(201,162,39,0.15)', color: 'var(--gold)' }}>
+                {item.step}
+              </div>
+              <div className="pt-1">
+                <div className="font-medium mb-1" style={{ color: 'var(--gold)', fontSize: '1rem' }}>{item.title}</div>
+                <div className="text-sm opacity-70" style={{ fontSize: '0.95rem' }}>{item.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── CTA 按鈕 ── */}
       <button
         onClick={handleStart}
         className="trad-btn animate-pulse-glow"
-        style={{ animationDelay: '0.8s' }}
+        style={{ animationDelay: '0.8s', fontSize: '1.1rem', padding: '14px 36px' }}
       >
         開始占卜
       </button>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <div className="mt-12 text-center opacity-40 text-xs">
-        <p>匿名使用 · 客戶端計算 · 數據不回傳</p>
+        <p>✓ 匿名使用　✓ 不留記錄　✓ 免費使用</p>
       </div>
     </div>
   );
