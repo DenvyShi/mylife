@@ -82,6 +82,13 @@ export default function ResultClient() {
         useCORS: true,
         logging: false,
       });
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.font = '14px "Noto Serif TC", serif';
+        ctx.fillStyle = 'rgba(201,162,39,0.5)';
+        ctx.textAlign = 'right';
+        ctx.fillText('mylife.first.pet', canvas.width - 16, canvas.height - 12);
+      }
       const url = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = url;
@@ -261,7 +268,7 @@ export default function ResultClient() {
         {/* ── 操作區 ── */}
         <div className="text-center space-y-4">
           <div className="flex flex-wrap gap-3 justify-center">
-            <button onClick={handleSavePng} className="inline-block px-6 py-3 rounded-lg text-sm font-medium transition-all hover:scale-105" style={{ background: 'linear-gradient(135deg, #8B6914 0%, #D4AF37 100%)', color: '#0a0806' }}>💾 保存PNG</button>
+            <button onClick={handleSavePng} className="inline-block px-6 py-3 rounded-lg text-sm font-medium transition-all hover:scale-105" style={{ background: 'linear-gradient(135deg, #8B6914 0%, #D4AF37 100%)', color: '#0a0806' }}>💾 保存卦象</button>
             <Link href="/" className="inline-block px-6 py-3 rounded-lg text-sm font-medium transition-all hover:scale-105" style={{ background: 'linear-gradient(135deg, #7C1D1D 0%, #5C1515 100%)', border: '1px solid #C9A227', color: '#F5E6D3' }}>再問一題</Link>
           </div>
         </div>
