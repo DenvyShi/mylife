@@ -963,7 +963,7 @@ export default function Home() {
                 className="trad-btn"
                 style={{ background: 'linear-gradient(135deg, #8B6914 0%, #D4AF37 100%)', color: '#0a0806', fontSize: '1rem', padding: '12px 24px' }}
               >
-                💾 保存卦象
+                保存卦象
               </button>
               <button
                 onClick={handleReset}
@@ -977,7 +977,7 @@ export default function Home() {
                 className="trad-btn"
                 style={{ background: 'linear-gradient(135deg, #1E3A5F 0%, #0f1f33 100%)', fontSize: '1rem', padding: '12px 24px' }}
               >
-                📤 分享連結
+                分享連結
               </button>
               <button
                 onClick={handleReset}
