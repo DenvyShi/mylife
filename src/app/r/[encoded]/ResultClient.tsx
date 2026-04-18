@@ -25,28 +25,32 @@ export default function ResultClient() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const encoded = typeof params.encoded === 'string'
-      ? params.encoded
-      : Array.isArray(params.encoded) ? params.encoded[0] : undefined;
+    const init = async () => {
+      const resolved = await params;
+      const encoded = typeof resolved.encoded === 'string'
+        ? resolved.encoded
+        : Array.isArray(resolved.encoded) ? resolved.encoded[0] : undefined;
 
-    if (!encoded) {
-      setError('無效的連結');
-      return;
-    }
+      if (!encoded) {
+        setError('無效的連結');
+        return;
+      }
 
-    const decoded = decodeResult(encoded);
-    if (!decoded) {
-      setError('無法解析占卜結果');
-      return;
-    }
+      const decoded = decodeResult(encoded);
+      if (!decoded) {
+        setError('無法解析占卜結果');
+        return;
+      }
 
-    setData(decoded);
+      setData(decoded);
 
-    const h = hexagrams.find(x => x.id === decoded.hexagramId);
-    const ch = decoded.changedId ? hexagrams.find(x => x.id === decoded.changedId) : null;
+      const h = hexagrams.find(x => x.id === decoded.hexagramId);
+      const ch = decoded.changedId ? hexagrams.find(x => x.id === decoded.changedId) : null;
 
-    setHexagram(h || null);
-    setChangedHexagram(ch || null);
+      setHexagram(h || null);
+      setChangedHexagram(ch || null);
+    };
+    init();
   }, [params]);
 
   if (error || !data) {
